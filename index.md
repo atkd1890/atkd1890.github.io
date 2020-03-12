@@ -35,7 +35,7 @@ roughly everything
 ## Made in Vietnam, assembled in Kumamoto, designed in Tokyo
 
 ### Internet presence ∞
-[atkd1890.me](https://atkd1890.me), [Facebook](https://fb.me/atkd1890), [Instagram](https://instagram.com/atkd1890), [Twitter](https://twitter.com/atkd1890), [LinkedIn](https://linkedin.com/in/atkd1890), [Behance](https://behance.net/atkd1890), [Steam](https://steamcommunity.com/id/atkd1890), [Last.fm](https://last.fm/user/atkd1890)
+[Facebook](https://fb.me/atkd1890), [Instagram](https://instagram.com/atkd1890), [Twitter](https://twitter.com/atkd1890), [LinkedIn](https://linkedin.com/in/atkd1890), [Behance](https://behance.net/atkd1890), [Steam](https://steamcommunity.com/id/atkd1890), [Last.fm](https://last.fm/user/atkd1890)
 
 ### Work presence 2015 TO NOW
 - [taihen.vn](https://taihen.vn) - We make media stuff
@@ -62,5 +62,5 @@ roughly everything
 
 
 ```
-atkd1890@gmail.com
+[https://atkd1890.me](https://atkd1890.me) // [atkd1890@gmail.com](mailto:atkd1890@gmail.com)
 ```
