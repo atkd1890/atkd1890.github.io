@@ -64,7 +64,7 @@ roughly everything
 - [ATKD Gaming](https://fb.me/atkdgame) - YouTube Gamer
 - [NHAT Music](https://fb.me/atkdmix) - Producer
 
-### Adventures 2009 TO NOW
+### Adventures
 - Pale Blue Dot - Inside Tokyo 2017-now
 - One man's laughter - Kumamoto in pixels 2010-2017
 - ACROSSASIA - From Singapore to South Korea 2011-2012
