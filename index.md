@@ -2,7 +2,7 @@
 
 ---
 
-## Vietnamese creator, developer, entrepreneur
+## A creator, developer, entrepreneur
 
 ### What I learned about the world after many years
 ```
@@ -70,4 +70,4 @@ roughly everything
 - ACROSSASIA - From Singapore to South Korea 2011-2012
 - The new horizon - Arrive in Japan 2009
 
-[Back-to-top](#vietnamese-creator-developer-entrepreneur)
+[Back-to-top](#shenlong-nguyen)
