@@ -44,21 +44,21 @@ roughly everything
 
 ## Made in Vietnam, assembled in Japan
 
-### Internet presence ∞
+### Internet presence
 [atkd1890@gmail.com](mailto:atkd1890@gmail.com), [atkd1890.me](https://atkd1890.me), [Facebook](https://fb.me/atkd1890), [Instagram](https://instagram.com/atkd1890), [Twitter](https://twitter.com/atkd1890), [LinkedIn](https://linkedin.com/in/atkd1890), [Behance](https://behance.net/atkd1890), [Steam](https://steamcommunity.com/id/atkd1890), [Last.fm](https://last.fm/user/atkd1890)
 
-### Work presence 2015 TO NOW
+### Work presence NOW
 - [taihen.vn](https://taihen.vn) - We make media stuff
 - [amela.vn](https://amela.vn) - We make technology stuff
 
-### Previously 2009 TO 2015
+### Work presence previously
 - bravesoft.co.jp -  I learned to blow up stuff
 - koifamily.jp - I learned to operate stuff
 - aclass.jp - I learned to build stuff
 - vysajp.org - I learned to care about stuff
 - I was a freelancer, learned to make stuff
 
-### Side hustles 2009 TO NOW
+### Side hustles
 - [Long Mười Ngón](https://fb.me/atkdvlog) - Blogger
 - [Thần Long](https://fb.me/atkdfic) - Author
 - [ATKD Gaming](https://fb.me/atkdgame) - YouTube Gamer
