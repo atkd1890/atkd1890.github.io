@@ -1,37 +1,66 @@
-## Welcome to GitHub Pages
+# Shenlong Nguyen 👓
 
-You can use the [editor on GitHub](https://github.com/atkd1890/atkd1890.github.io/edit/master/index.md) to maintain and preview the content for your website in Markdown files.
+---
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## Vietnamese creator, developer, entrepreneur
 
-### Markdown
+### What I learned about the world after many years
+🙃🙃🙃
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+### What I learned about the computers
+- Obj-C/Swift, Android
+- Unity
+- React Native
+- HTML, CSS
+- React, Node, PHP, Python
+- MySQL, REST
+- AWS, GCP
+- Adobe Creative
+- Ableton Live
+- SEO/SEM
+- Social Media
+- *and many others*
 
-```markdown
-Syntax highlighted code block
+### What I learned about entrepreneurship
+keep going keep going keep going
 
-# Header 1
-## Header 2
-### Header 3
+### What I'm learning now
+roughly everything
 
-- Bulleted
-- List
+### What I want next some years
+10 heads, get married, a supercar
 
-1. Numbered
-2. List
+---
 
-**Bold** and _Italic_ and `Code` text
+## Made in Vietnam, assembled in Kumamoto, designed in Tokyo
 
-[Link](url) and ![Image](src)
+### Internet presence ∞
+[atkd1890.me](https://atkd1890.me), [Facebook](https://fb.me/atkd1890), [Instagram](https://instagram.com/atkd1890), [Twitter](https://twitter.com/atkd1890), [LinkedIn](https://linkedin.com/in/atkd1890), [Behance](https://behance.net/atkd1890), [Steam](https://steamcommunity.com/id/atkd1890), [Last.fm](https://last.fm/user/atkd1890)
+
+### Work presence 2015 TO NOW
+- [taihen.vn](https://taihen.vn) - We make media stuff
+- [amela.vn](https://amela.vn) - We make technology stuff
+
+### Previously 2009 TO 2015
+- bravesoft.co.jp -  I learned to blow up stuff
+- koifamily.jp - I learned to operate stuff
+- aclass.jp - I learned to build stuff
+- vysajp.org - I learned to care about stuff
+- I was a freelancer, learned to make stuff
+
+### Side hustles 2009 TO NOW
+- [Long Mười Ngón](https://fb.me/atkdvlog) - Blogger
+- [Thần Long](https://fb.me/atkdfic) - Author
+- [ATKD Gaming](https://fb.me/atkdgame) - YouTube Gamer
+- [NHAT Music](https://fb.me/atkdmix) - Producer
+
+### Adventures 2009 TO NOW
+- Pale Blue Dot - Inside Tokyo 2017-now
+- One man's laughter - Kumamoto in pixels 2010-2017
+- ACROSSASIA - From Singapore to South Korea 2011-2012
+- The new horizon - Arrive in Japan 2009
+
+
 ```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/atkd1890/atkd1890.github.io/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+atkd1890@gmail.com
+```
