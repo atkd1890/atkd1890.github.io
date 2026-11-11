@@ -123,11 +123,11 @@ Demo data phải có cờ `placeholder: true` và hiện nhãn "demo data" trên
 
 ### Phase 1 — Scaffold & deploy
 
-- [ ] Init Eleventy v3 (ESM), cấu trúc `src/_data`, `src/_includes`, `src/work`, `src/blog`, `src/lab`, `src/tools`, `src/assets`
-- [ ] `.gitignore`, `package.json`, `eleventy.config.js`
-- [ ] Workflow deploy Pages + workflow PR
-- [ ] Hướng dẫn bật Pages source = GitHub Actions (chủ site tự bấm)
-- [ ] LICENSE (CC BY 4.0 cho nội dung + MIT cho code), cập nhật README phần local dev
+- [x] Init Eleventy v3 (ESM), cấu trúc `src/_data`, `src/_includes`, `src/work`, `src/blog`, `src/lab`, `src/tools`, `src/assets`
+- [x] `.gitignore`, `package.json`, `eleventy.config.js`
+- [x] Workflow deploy Pages + workflow PR
+- [x] Hướng dẫn bật Pages source = GitHub Actions (chủ site tự bấm, xem README)
+- [x] LICENSE (CC BY 4.0 cho nội dung + MIT cho code), cập nhật README phần local dev
 - [ ] Trang placeholder lên được `atkd1890.github.io`
 
 ### Phase 2 — Data pipeline

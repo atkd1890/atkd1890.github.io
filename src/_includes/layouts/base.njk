@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="{{ lang or site.lang }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if title and title != site.title %}{{ title }} · {% endif %}{{ site.title }}</title>
+  <meta name="description" content="{{ summary or site.tagline }}">
+  <link rel="canonical" href="{{ site.url }}{{ page.url }}">
+  <meta name="color-scheme" content="light dark">
+  <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <main id="main" class="wrap">
+    {{ content | safe }}
+  </main>
+  <footer class="wrap site-footer">
+    <nav aria-label="Elsewhere">
+      <a href="{{ site.hub }}">atkd1890.me</a>
+      <a href="{{ site.github }}">GitHub</a>
+      <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+    </nav>
+    <p class="meta">
+      Content <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · Code MIT ·
+      <a href="https://github.com/{{ site.repo }}/edit/{{ site.branch }}/{{ page.inputPath | replace('./', '') }}">Edit on GitHub</a> ·
+      Built <time datetime="{{ site.buildTime | isoDate }}">{{ site.buildTime | isoDate | truncate(10, true, '') }}</time>
+    </p>
+  </footer>
+</body>
+</html>

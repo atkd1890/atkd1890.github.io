@@ -111,14 +111,36 @@ Bắt buộc. Vi phạm thì build hoặc PR fail.
 
 ## Chạy local
 
-Sẽ bổ sung ở Phase 1 (scaffold).
+Yêu cầu Node 22 (xem `.nvmrc`).
+
+```bash
+npm ci
+npm start        # dev server tại http://localhost:8080
+npm run build    # build ra _site/
+```
+
+`SHOWCASE_TOKEN` là tùy chọn. Không có token thì build dùng snapshot (từ Phase 2).
+
+### Cấu trúc
+
+```
+eleventy.config.js
+src/
+  _data/            site.js, showcase.yml, github.js
+  _includes/        layouts/, interactive/ (Web Components cho explainer)
+  assets/           css/, js/, img/
+  blog/ work/ lab/ tools/
+.github/workflows/  deploy.yml (push main + cron + manual), pr.yml (build + preview artifact)
+```
+
+### Bật GitHub Pages (làm một lần)
+
+Settings → Pages → Build and deployment → Source: **GitHub Actions**. Workflow `Deploy` sẽ lo phần còn lại.
 
 ## License
 
-- Nội dung (bài viết, case study, hình ảnh): [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
-- Code: MIT
-
-File LICENSE sẽ được thêm ở Phase 1.
+- Nội dung (bài viết, case study, hình ảnh): [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/), xem [LICENSE-CONTENT](LICENSE-CONTENT)
+- Code: MIT, xem [LICENSE](LICENSE)
 
 ## Liên hệ
 
