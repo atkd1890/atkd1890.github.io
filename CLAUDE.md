@@ -79,6 +79,18 @@ The leak guard is required in CI, for the build and for PRs:
 - Filter the stars → `link` feed: no private repos, no work-related orgs (list in a secret).
 - Never write the denylist or private repo names to disk inside the repo, not even in logs that become artifacts.
 
+## Definition of done (every role)
+
+The site has to prove one person can do every role. A task is done only when it holds up from each angle that applies. Roadmap tasks are tagged `[design]`, `[eng]`, `[ops]`, `[qa]`, `[sec]`, `[mkt]` or `[pm]`.
+
+- **Design:** uses tokens only (no hard-coded colors or sizes), works in light and dark, at 375px and 1280px, and meets WCAG AA contrast.
+- **Engineering:** type-checks, stays inside the performance budget, and loads no JS on pages that don't need it.
+- **DevOps:** CI is green, actions are pinned, and no new secret is added without a scope note in README.
+- **Testing:** new logic has a unit test, UI behavior has an e2e test, and axe reports no serious or critical issue.
+- **Security:** the leak guard passes, and no private name or identity detail appears in output, commits or PR text.
+- **Marketing:** every public page has a title, summary and OG image, and copy follows the style guide (numbers before adjectives).
+- **Lead/PM:** a decision with lasting impact gets an ADR in `docs/adr/`, and the change is noted in the changelog.
+
 ## Voice and craft
 
 - Show off, with numbers. Prefer numbers and diagrams over adjectives.
