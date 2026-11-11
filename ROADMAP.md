@@ -65,6 +65,22 @@ Tổng quan dự án ở [README.md](README.md), luật cho agent ở [CLAUDE.md
 
 ---
 
+## Vai trò (tư duy full-stack)
+
+Site phải chứng minh một người làm được mọi vai trò, không chỉ code. Mỗi task ngoài phần lõi có tag vai trò:
+
+| Tag | Vai trò | Bằng chứng hiện ra trên site |
+|---|---|---|
+| `[design]` | Designer | Brand, design tokens, mockup, motion/sound, case study `atkd-ui` |
+| `[eng]` | Engineer | Kiến trúc, type-check, performance budget, Web Components |
+| `[ops]` | DevOps | CI/CD, branch protection, Dependabot, uptime, rollback, số liệu build trên `/colophon` |
+| `[qa]` | Tester | Unit/e2e/visual/a11y test, Lighthouse CI, link checker, canary cho leak guard |
+| `[sec]` | Security | Leak guard, secret scanning, CSP, `security.txt` |
+| `[mkt]` | Marketer | Positioning, style guide, content calendar, SEO, launch, đo lường không analytics |
+| `[pm]` | Lead / PM | Project board, milestones, ADR, changelog, retro |
+
+Task không có tag là phần lõi của phase.
+
 ## Phases
 
 ### Phase 0 — Audit (KHÔNG push, KHÔNG xoá history)
@@ -77,7 +93,7 @@ Tổng quan dự án ở [README.md](README.md), luật cho agent ở [CLAUDE.md
 - [x] Liệt kê repo có Pages, Releases, mẫu stars
 - [x] Bundle history cũ ra ngoài repo (local), tạo orphan `main` với identity persona + email noreply
 - [x] Chốt danh sách showcase (xem "Showcase đã chốt" bên dưới)
-- [ ] Force-push `main`, đổi default branch, xoá `master` trên remote
+- [x] Force-push `main`, đổi default branch, xoá `master` trên remote
 - [ ] *(defer, chủ site làm sau)* Sửa profile GitHub: name, ẩn email, location, bio, twitter, tắt hireable. Không chặn các phase khác, nhưng phải xong trước khi site được quảng bá
 
 #### Showcase đã chốt (codename tạm, dạng kebab-case dễ hiểu)
@@ -109,7 +125,7 @@ Demo data phải có cờ `placeholder: true` và hiện nhãn "demo data" trên
 - Link về hub atkd1890.me.
 - Không giữ link mạng xã hội cá nhân, vì chúng nối handle với danh tính thật.
 
-**Git history (13 commit, public).** Có Gmail trong author và nội dung, tên thật trong author, tên công ty trong nội dung, UA analytics ID và địa danh. Đề xuất (chờ duyệt):
+**Git history (13 commit, public).** Có Gmail trong author và nội dung, tên thật trong author, tên công ty trong nội dung, UA analytics ID và địa danh. Đã xử lý ngày 2026-11-12:
 1. `git bundle create ~/<nơi-an-toàn>/atkd1890.github.io-legacy.bundle --all` (chỉ để local).
 2. Tạo branch orphan `main` với identity persona + email noreply.
 3. Đổi default branch sang `main`, chuyển Pages source sang Actions (chủ site tự bấm), rồi force-push / xoá `master` trên remote.
@@ -129,25 +145,56 @@ Demo data phải có cờ `placeholder: true` và hiện nhãn "demo data" trên
 - [x] Hướng dẫn bật Pages source = GitHub Actions (chủ site tự bấm, xem README)
 - [x] LICENSE (CC BY 4.0 cho nội dung + MIT cho code), cập nhật README phần local dev
 - [ ] Trang placeholder lên được `atkd1890.github.io`
+- [ ] `[ops]` Branch protection cho `main`: bắt buộc qua PR, check `PR check` phải pass, cấm force-push
+- [ ] `[ops]` Pin mọi action theo commit SHA, `permissions` tối thiểu cho từng job; Dependabot cho npm + GitHub Actions
+- [ ] `[sec]` Bật secret scanning + push protection cho repo
+- [ ] `[eng]` Lint/format: Prettier, Stylelint, ESLint; chạy trong `pr.yml`
+- [ ] `[pm]` GitHub Project board cho ROADMAP: mỗi phase là một milestone, mỗi task là một issue có label vai trò
 
 ### Phase 2 — Data pipeline
 
-- [ ] `showcase.yml` với các mục `TODO` + validate schema
+- [ ] `showcase.yml` với các mục `TODO` + validate schema (cho phép `repo: null`, `placeholder: true`)
 - [ ] `github.js`: stats (ngôn ngữ, commit theo năm, heatmap, repo theo era/domain, hoạt động gần nhất → codename), tools (topic `atkd-tool`), releases, stars
 - [ ] Không có token → fallback snapshot, không crash
 - [ ] Xác minh quyền tối thiểu của `SHOWCASE_TOKEN`
-- [ ] Leak guard script + chạy trong CI
+- [ ] Leak guard script + chạy trong CI (khớp tên repo private theo nguyên từ)
+- [ ] `[qa]` Unit test (`node --test`) cho schema validator, `github.js` (mock API) và leak guard
+- [ ] `[qa]` Fixture "canary" cho leak guard: một chuỗi giả cố tình cài vào để chứng minh guard bắt được, chạy mỗi CI
+- [ ] `[eng]` Type-check JS bằng JSDoc + `tsc --checkJs --noEmit`
+- [ ] `[pm]` ADR đầu tiên trong `docs/adr/`: chọn 11ty, GitHub-native, leak guard. ADR là bằng chứng tư duy lead
+
+### Phase 2.5 — Design direction (mới)
+
+Làm trước Phase 3. Không code trang, chỉ chốt hướng.
+
+- [ ] `[design]` Chốt câu hỏi 13: dùng token từ `atkd-ui` (public) hay dựng token riêng cho site
+- [ ] `[design]` Brand: wordmark "ATKD Coding", favicon/app icon, màu nhận diện cho 4 era
+- [ ] `[design]` Type scale, grid, spacing, radius, elevation dưới dạng token; contrast đạt WCAG AA cả light lẫn dark
+- [ ] `[design]` Motion principles: thời lượng, easing, chỗ được dùng; bản reduced-motion
+- [ ] `[design]` Sound design: bộ âm click/hover nhỏ, âm lượng, chỗ được phát (mặc định tắt)
+- [ ] `[design]` Component inventory: repo card, evidence badge, era timeline, stat tile, heatmap, stream item, palette
+- [ ] `[design]` Mockup home ở 375px và 1280px, light và dark → chủ site duyệt
+- [ ] `[design]` Template OG image (dùng lại ở Phase 7)
+- [ ] `[mkt]` Positioning: 1 câu định vị (câu hỏi 2), 3 thông điệp chính, đối tượng đọc (engineer, tech lead, founder)
+- [ ] `[mkt]` Style guide giọng văn: số liệu trước tính từ, độ dài câu, cách viết tiêu đề, từ cấm
 
 ### Phase 3 — Home + craft
 
 - [ ] Đủ 8 section theo thứ tự. Mobile-first, kiểm tra ở 375px
 - [ ] Command palette ⌘K, phím tắt (`g h`, `g b`, `/`, `?`)
 - [ ] Nút âm thanh (mặc định tắt), theme toggle, link "edit on GitHub"
+- [ ] `[eng]` Performance budget: JS mỗi trang ≤ 30 KB gzip, CSS ≤ 20 KB, không font chặn render; CI fail nếu vượt
+- [ ] `[qa]` Playwright e2e: palette, phím tắt, theme toggle, sound mặc định tắt
+- [ ] `[qa]` Visual regression: screenshot 375/1280 × light/dark, so với baseline trong PR
+- [ ] `[qa]` axe-core trong CI: 0 lỗi accessibility mức serious/critical
+- [ ] `[design]` Review triển khai so với mockup, ghi chênh lệch
 
 ### Phase 4 — Case study `/work/<codename>`
 
 - [ ] Template theo khung case study/postmortem
 - [ ] 1 bài nháp mẫu từ dữ liệu chủ site đưa, không bịa số
+- [ ] `[design]` Case study cho `atkd-ui`: quá trình thiết kế (vấn đề → token → component → áp dụng cho nhiều repo)
+- [ ] `[mkt]` Mỗi case study có 1 câu tóm tắt dùng được cho mạng xã hội + OG riêng
 
 ### Phase 5 — Blog
 
@@ -159,6 +206,9 @@ Demo data phải có cờ `placeholder: true` và hiện nhãn "demo data" trên
 - [ ] Issue template `blog-idea`, labels `blog-idea` / `blog-draft`, PR template (checklist: leak guard, số liệu có nguồn, ảnh sạch EXIF)
 - [ ] 1 bài `til` + 1 bài `link` mẫu viết tay, để test luồng PR → merge → publish
 - [ ] Hạ tầng explainer tương tác + 1 component demo
+- [ ] `[qa]` Validate feed (Atom hợp lệ), test bộ lọc type/tag/series
+- [ ] `[mkt]` Content calendar: nhịp xuất bản mục tiêu cho từng type (vd til 3/tuần, log 1/tuần, deep-dive 1/quý)
+- [ ] `[mkt]` Cross-post có `canonical` trỏ về site (dev.to, Zenn/Qiita nếu có bài JA)
 
 ### Phase 6 — /tools, /lab, /uses, /colophon
 
@@ -166,11 +216,15 @@ Demo data phải có cờ `placeholder: true` và hiện nhãn "demo data" trên
 - [ ] `/lab`: kiến trúc ATKD OS (Mermaid, mức trừu tượng), danh sách thí nghiệm, `lab/benchmark/SPEC.md` (nháp, chờ duyệt), bảng xếp hạng benchmark
 - [ ] `/uses`: khung + `TODO`
 - [ ] `/colophon`: pipeline thật, sinh một phần từ cấu hình (version 11ty, workflows)
+- [ ] `[ops]` "Proof of craft" trên `/colophon`, tự cập nhật từ CI: điểm Lighthouse, số test, thời gian build, dung lượng JS/CSS, số ADR, lần deploy gần nhất
+- [ ] `[pm]` `/colophon` liệt kê ADR và CHANGELOG của chính site
 
 ### Phase 7 — SEO / share / search
 
 - [ ] OG image sinh lúc build (home, case study, blog, tool)
 - [ ] Pagefind, sitemap, robots, 404, canonical
+- [ ] `[mkt]` Structured data JSON-LD (Person là persona, không tên thật; BlogPosting; SoftwareApplication cho tool)
+- [ ] `[sec]` CSP qua `<meta>`, SRI cho mọi script ngoài, `/.well-known/security.txt` (hi@atkd1890.me)
 
 ### Phase 8 — Snapshot theo năm
 
@@ -180,6 +234,20 @@ Demo data phải có cờ `placeholder: true` và hiện nhãn "demo data" trên
 
 - [ ] Lighthouse ≥ 95, check link ngoài, leak guard pass, đọc tay lại toàn bộ output
 - [ ] Test bàn phím (palette, phím tắt), reduced-motion, âm thanh mặc định tắt
+- [ ] `[qa]` Lighthouse CI chạy trên mỗi PR với budget, không chỉ một lần
+- [ ] `[qa]` Link checker (lychee) chạy theo cron hằng tuần, tự mở issue khi có link chết
+- [ ] `[qa]` HTML validation; test trên Safari iOS, Chrome Android, Firefox
+- [ ] `[ops]` Uptime check theo cron (Actions), mở issue khi site không trả 200
+- [ ] `[ops]` Runbook rollback: deploy lại bản cũ bằng re-run workflow của commit trước
+
+### Phase 10 — Launch & growth (mới)
+
+- [ ] `[mkt]` Điều kiện launch: profile GitHub đã sửa, có ít nhất 1 case study, 5 bài blog, 1 tool
+- [ ] `[mkt]` Bài launch: "Building a GitHub-native site" (deep-dive, chính site là case study)
+- [ ] `[mkt]` Kênh: Show HN, Reddit (r/webdev, r/gamedev tùy bài), X, cộng đồng VN/JP, YouTube ATKD Coding
+- [ ] `[mkt]` Đo lường không cần analytics: GitHub traffic API (views/clones/referrers của repo), stars, số người đọc RSS ước lượng; tổng hợp tự động vào `log` hằng tuần
+- [ ] `[mkt]` Profile README `atkd1890/atkd1890` đồng bộ dữ liệu với site (câu hỏi 9)
+- [ ] `[pm]` Retro sau launch: viết thành 1 bài `note` hoặc postmortem
 
 ---
 
