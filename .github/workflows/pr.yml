@@ -1,0 +1,27 @@
+name: PR check
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      # Phase 5: frontmatter validation. Phase 2: leak guard on changed .md + _site.
+      # No secrets here on purpose: PRs build from the snapshot fallback.
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: preview-${{ github.event.pull_request.number }}
+          path: _site
+          retention-days: 7

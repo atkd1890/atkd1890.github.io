@@ -1,0 +1,43 @@
+/* Design tokens. Placeholder until the design system decision (ROADMAP Q13). */
+:root {
+  --bg: #fbfbfa;
+  --fg: #16161a;
+  --muted: #5d5d66;
+  --accent: #2f6fde;
+  --line: #e4e4e7;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --measure: 42rem;
+  --space: 1rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f0f12; --fg: #ececf1; --muted: #a0a0ab; --accent: #7aa7ff; --line: #26262c;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f0f12; --fg: #ececf1; --muted: #a0a0ab; --accent: #7aa7ff; --line: #26262c;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 1rem/1.6 var(--font-sans);
+}
+a { color: var(--accent); text-underline-offset: 0.2em; }
+.wrap { max-width: var(--measure); margin: 0 auto; padding: 0 var(--space); }
+.skip { position: absolute; left: -999px; }
+.skip:focus { left: var(--space); top: var(--space); }
+
+.hero { padding: 18vh 0 2rem; }
+.hero h1 { font: 700 clamp(2.25rem, 8vw, 3.5rem)/1.05 var(--font-mono); margin: 0; letter-spacing: -0.02em; }
+.tagline { color: var(--muted); font-size: 1.125rem; margin: 0.75rem 0 0; }
+.status { border-top: 1px solid var(--line); padding: 1.5rem 0 3rem; }
+.status h2 { font: 600 0.8rem/1 var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+
+.site-footer { border-top: 1px solid var(--line); padding-top: 1.5rem; padding-bottom: 3rem; color: var(--muted); font-size: 0.875rem; }
+.site-footer nav { display: flex; flex-wrap: wrap; gap: 0.5rem 1.25rem; }
+.meta { margin-top: 0.75rem; }
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
