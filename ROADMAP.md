@@ -77,8 +77,8 @@ Tổng quan dự án ở [README.md](README.md), luật cho agent ở [CLAUDE.md
 - [x] Liệt kê repo có Pages, Releases, mẫu stars
 - [x] Bundle history cũ ra ngoài repo (local), tạo orphan `main` với identity persona + email noreply
 - [x] Chốt danh sách showcase (xem "Showcase đã chốt" bên dưới)
-- [ ] Chủ site tự sửa profile GitHub (xem kết quả bên dưới)
-- [ ] Force-push `main`, đổi default branch, xoá `master` trên remote. Chỉ làm sau khi profile đã sửa
+- [ ] Force-push `main`, đổi default branch, xoá `master` trên remote
+- [ ] *(defer, chủ site làm sau)* Sửa profile GitHub: name, ẩn email, location, bio, twitter, tắt hireable. Không chặn các phase khác, nhưng phải xong trước khi site được quảng bá
 
 #### Showcase đã chốt (codename tạm, dạng kebab-case dễ hiểu)
 
@@ -90,6 +90,7 @@ Codename không được trùng hoặc gần trùng tên repo private.
 | `signal-desk` | ai / system | Bot tín hiệu cho tài chính cá nhân | card + case-study |
 | `deal-hunters` | system | Nhóm bot tự động hoá tài chính cá nhân | card (gộp, chỉ số liệu tổng hợp) |
 | `atkd-ui` | system | Design system dùng chung cho mọi repo trong tài khoản: thể hiện tư duy designer, không chỉ engineer | card + case-study, có thể nâng lên open-source |
+| `shift-board` | system | Sản phẩm freelance cho một khách hàng doanh nghiệp: quản lý chấm công/ca làm. Chỉ mô tả trừu tượng, tên khách hàng phải nằm trong denylist | card |
 | `mmo-ui-kit` | indie-game | Bộ UI/script cho client một game MMO (2016–2020) | card |
 | `demo-mobile-*` | mobile | **Demo data / lorem ipsum** | card placeholder |
 | `demo-game-*` | indie-game | **Demo data / lorem ipsum** | card placeholder |
