@@ -1,109 +1,66 @@
-# CLAUDE.md
+# Rule cho agent
 
-Instructions for AI agents working in this repo. The overview is in [README.md](README.md) and the phases are in [ROADMAP.md](ROADMAP.md). Read both before starting a phase.
+Đọc trước khi làm việc: specs ở [README.md](README.md), việc còn mở ở [ROADMAP.md](ROADMAP.md), quyết định đã chốt ở [docs/adr](docs/adr/README.md).
 
-## What this repo is
+Design: spec ở [docs/design/DESIGN.md](docs/design/DESIGN.md), hình ở artifact https://claude.ai/artifact/RXYDQoYg6Z91vRdaQEk6rR (private, cần đăng nhập đúng tài khoản). Khi làm giao diện, đọc bằng tool Artifact (action `read`): `project/canvas.json` rồi chỉ các artboard liên quan.
 
-The public home of the **ATKD Coding** persona, built on Eleventy and deployed to GitHub Pages through Actions. The hub site atkd1890.me lives in a **different repo** and only links here via `/coding`. **Never touch that repo.**
+- Tokens, chữ, component: `Main.dc.html`
+- Home: `HomeMobile.dc.html` (390px), `HomeDesktop.dc.html` (1440px, có palette ⌘K)
+- Blog và bài viết: `Blog.dc.html`
+- Case study: `CaseStudy.dc.html`
 
-## Hard rules (persona and privacy)
+Phần core (token, font, góc vuông, motif terminal) đồng bộ với design hub atkd1890.me, persona "Coding — Terminal". DESIGN.md là spec, artifact chỉ tham khảo về hình ảnh; hai bên lệch nhau thì hỏi chủ dự án.
 
-ATKD Coding is an anonymous persona. These rules override convenience, every time.
+## Persona và quyền riêng tư
 
-1. **No identity leaks.** Never write the owner's real name, any past or current employer, client names, the personal Gmail address, phone, home address, or local machine paths into any file that gets committed or rendered. Contact is `hi@atkd1890.me` only.
-2. **Private repo names never reach output or the repo.** Not in HTML, feeds, JSON, OG images, commit messages, PR bodies, docs or `showcase.yml`. Use codenames. The codename → repo mapping lives only in the `SHOWCASE_REPOS` secret (ADR 0002).
-3. **Opt-in only.** Render only what `showcase.yml` declares. Never auto-list private repos.
-4. **Private repos contribute numbers, not code.** Never commit data, code or text copied from a private repo.
-5. **Client and employer work is abstract.** Domain, scale and role. No names, no identifiable details.
-6. **THN boundary.** THN is a separate org outside this account. Its Vietnam–Japan niche tools and projects stay out unless the owner approves each one. Repos owned by `atkd1890` are not THN.
-7. **Codenames are readable kebab-case** (e.g. `signal-desk`) and must never equal or closely resemble a private repo name. The leak guard should match private repo names as whole tokens, because some are generic words.
-8. **Demo data is labelled.** Placeholder showcase entries carry `placeholder: true` and render a visible "demo data" label.
-9. **Never fabricate.** No invented links, numbers, quotes or project details. If a value is unknown, write `TODO` (or labelled demo data, see rule 8) and list it at the end of the phase report.
-10. **The site never calls an LLM** and holds no agent secrets. Blog-writing agents live in a separate repo (`atkd-stack`). This repo only defines the content contract and the CI gate.
+ATKD Coding là persona ẩn danh. Các luật này luôn được ưu tiên hơn sự tiện lợi.
 
-## Git rules
+- Không ghi tên thật, nơi làm việc cũ hay hiện tại, tên khách hàng, email cá nhân, SĐT, địa chỉ, path máy local vào bất kỳ file nào được commit hoặc render. Liên hệ chỉ dùng `hi@atkd1890.me`.
+- Tên repo private không bao giờ xuất hiện trong HTML, feed, JSON, OG image, commit message, PR, docs hay `showcase.yml`. Dùng codename dạng kebab-case, không trùng hay gần giống tên repo. Mapping codename → repo chỉ nằm trong secret `SHOWCASE_REPOS` ([ADR 0002](docs/adr/0002-private-repo-mapping-in-secrets.md)).
+- Chỉ hiện những gì `showcase.yml` khai báo. Repo private chỉ đóng góp số liệu, không commit code, dữ liệu hay chữ copy từ repo private.
+- Dự án công ty/khách hàng chỉ mô tả trừu tượng: domain, quy mô, vai trò.
+- THN là org riêng, không nằm trong tài khoản này. Tool hay dự án của THN chỉ đưa vào khi chủ dự án duyệt từng cái.
+- Không bịa link, số liệu, trích dẫn hay chi tiết dự án. Chưa có thì để `TODO`, hoặc dùng demo data có `placeholder: true` và nhãn "demo data" trên site; ghi việc còn thiếu vào ROADMAP.
+- Site không gọi LLM và không chứa secret của agent. Agent viết blog nằm ở repo `atkd-stack`; repo này chỉ định nghĩa hợp đồng nội dung và CI gác cổng.
+- Không đụng tới repo atkd1890.me (hub); hub chỉ link sang đây. Muốn đổi bên đó thì đề xuất cho chủ dự án.
 
-- **Don't push or force-push** until the owner approves the Phase 0 history plan. After that, push only when asked.
-- **Commit identity:** the repo-local identity is `ATKD Coding <2776097+atkd1890@users.noreply.github.com>`. Check `git config user.email` before committing. Never commit with the personal Gmail address.
-- Keep commits small, one phase or sub-step each. Messages must not include private repo names.
-- The new default branch is `main`, an orphan branch. The old `master` history is archived locally as a bundle and is never pushed again.
+## Code
 
-## Architecture conventions
+- Eleventy v3 (ESM), Nunjucks. CSS thuần chỉ dùng token, không hardcode màu, font, bo góc.
+- JS cho người xem: vanilla hoặc Web Components, chỉ tải ở trang cần dùng. Component cho explainer nằm ở `src/_includes/interactive/`. Mermaid và Pagefind chạy lúc build.
+- File trong `src/_data/*.js` chỉ được có `export default`; logic để ở `lib/` và có test.
+- Dữ liệu GitHub chỉ đi qua `whitelist()` trong `lib/github-data.js`, mọi số liệu gắn theo codename. Không có token thì dùng snapshot (chỉ số liệu tổng hợp), không bao giờ crash.
+- Leak guard bắt buộc trong CI. Không ghi denylist hay tên repo private ra đĩa trong repo, kể cả log thành artifact. Log chỉ in `file:dòng` và số thứ tự luật.
+- Mỗi trang có link "Edit on GitHub" trỏ tới file nguồn.
 
-- Eleventy v3, ESM (`eleventy.config.js`), Nunjucks templates.
-- Layout: `src/_data`, `src/_includes`, `src/work`, `src/blog`, `src/lab`, `src/tools`, `src/assets`.
-- Plain CSS. Design tokens on `:root`, dark mode via `prefers-color-scheme` plus a manual toggle (`data-theme`). **[docs/design/DESIGN.md](docs/design/DESIGN.md) is the design source of truth.** It stays in sync at core level with the atkd1890.me hub design (persona "Coding — Terminal"). Use tokens only; no ad-hoc colors, fonts or radii.
-- Client JS: vanilla or Web Components, loaded only on pages that need it. Interactive explainer components live in `src/_includes/interactive/`.
-- Mermaid renders to SVG at build time. No client-side Mermaid.
-- Pagefind indexes at build time.
-- `src/_data/github.js`:
-  - GraphQL via `@11ty/eleventy-fetch` with a cache;
-  - reads `SHOWCASE_TOKEN` (fine-grained PAT, read-only, scoped to the showcase repos);
-  - **exports whitelisted fields only**, and maps private repo activity to codenames before export;
-  - with no token, falls back to a committed snapshot of **aggregates only**. Never crash.
-- `showcase.yml` allows `repo: null` for projects that aren't on GitHub and for demo data.
-- Tools catalog = public repos with topic `atkd-tool`. Adding a tool needs no site change.
-- Every page links "edit on GitHub" to its source file.
+## Việc chủ dự án tự làm
 
-## Content contract
+Thứ gì chủ dự án phải tự điền hoặc cập nhật về sau (secret, file riêng tư, chữ `TODO`, token có hạn, cài đặt trên giao diện web) thì trong cùng thay đổi phải thêm vào bảng "Tùy chỉnh và bảo trì" của README: nằm ở đâu, khi nào sửa, cách làm. Nếu chứa dữ liệu riêng tư thì thêm template dữ liệu giả ở `config/examples/`. File thật nằm ở `../.config/atkd1890.github.io/` cạnh repo (thư mục cha không phải git repo), đẩy lên bằng `npm run secrets:push`, không bao giờ commit.
 
-The frontmatter schema and the PR flow are in README → "Content contract". Validation runs at build time and invalid frontmatter must fail the build. `source: agent` posts show an "AI-assisted" badge.
+## Definition of done
 
-### showcase.yml schema
+Site phải chứng minh một người làm được mọi vai trò. Trước khi báo xong một task, tự kiểm tra đủ các vai trò dưới đây; vai trò nào không liên quan thì ghi "không áp dụng" trong báo cáo, không bỏ qua im lặng.
 
-```yaml
-- codename: TODO
-  repo: "@secret"           # or null. NEVER a real name: the mapping lives in the SHOWCASE_REPOS secret (ADR 0002)
-  public_repo: null
-  era: mobile | indie-game | system | ai
-  domain: TODO
-  role: TODO
-  stack: []
-  years: "2019–2021"
-  status: shipped | live | archived | wip
-  summary: "TODO"
-  metrics: []               # [{label, value}], only numbers the owner approved
-  evidence: [card]          # card | case-study | demo | open-source
-  media: []
-  demo_url: null
-  featured: false
-  placeholder: false        # true = demo data, rendered with a "demo data" label; requires repo: null
-  order: 0
-```
+- **design:** chỉ dùng token; đúng DESIGN.md và artifact hoặc đã hỏi khi lệch; kiểm tra ở 375px và 1280px, light và dark; tương phản đạt WCAG AA; focus nhìn rõ.
+- **eng:** `npm run check` qua; trong ngân sách hiệu năng; không tải JS ở trang không cần.
+- **ops:** workflow `Deploy` và `PR check` xanh; action pin theo SHA; secret mới có ghi phạm vi trong README.
+- **qa:** logic mới có unit test; hành vi giao diện có e2e (khi đã có bộ e2e); không có lỗi axe mức serious hay critical.
+- **sec:** leak guard sạch, kể cả `npm run leak-guard:local` với dữ liệu thật; không lộ tên riêng hay danh tính trong output, commit, PR.
+- **mkt:** mỗi trang public có title, summary, OG image; chữ theo giọng văn (số liệu trước tính từ).
+- **pm:** xoá task đã xong khỏi ROADMAP, thêm việc mới phát sinh; quyết định có ảnh hưởng lâu dài ghi ADR; thay đổi người xem thấy được ghi CHANGELOG.
 
-## Leak guard
+## Giọng văn và craft
 
-The leak guard is required in CI, for the build and for PRs:
+- Show off nhưng có số liệu. Ưu tiên con số và sơ đồ hơn tính từ.
+- Mobile-first, kiểm tra ở 375px. Lighthouse ≥ 95.
+- ⌘K / Ctrl+K mở command palette (điều hướng, tìm kiếm Pagefind, đổi theme). Phím tắt `g h`, `g b`, `/`, `?`.
+- Nút âm thanh **mặc định tắt**. Tôn trọng `prefers-reduced-motion`. Micro-interaction không được làm chậm hay chặn việc đọc.
+- License: nội dung CC BY 4.0, code MIT; ghi ở README, footer và `/colophon`.
 
-- Scan `_site/` and the changed `.md` files for private repo names (from the API at build time) and the denylist (from a secret).
-- Check EXIF on all images.
-- Filter the stars → `link` feed: no private repos, no work-related orgs (list in a secret).
-- Never write the denylist or private repo names to disk inside the repo, not even in logs that become artifacts.
+## Git
 
-## Owner-maintained items
-
-Anything the owner must fill in or keep updated later (a secret, private config, `TODO` copy, an expiring token, a setting in some UI) MUST be added in the same change to README → "Tùy chỉnh và bảo trì": where it lives, when to update it, how. If it holds private data, also add a fake-data template under `config/examples/`. Real private files live next to the repo in `../.config/atkd.github.io/` (the parent folder is not a git repo) and are pushed with `npm run secrets:push`. Never commit them.
-
-## Definition of done (every role)
-
-The site has to prove one person can do every role. A task is done only when it holds up from each angle that applies. Roadmap tasks are tagged `[design]`, `[eng]`, `[ops]`, `[qa]`, `[sec]`, `[mkt]` or `[pm]`.
-
-- **Design:** uses tokens only (no hard-coded colors or sizes), works in light and dark, at 375px and 1280px, and meets WCAG AA contrast.
-- **Engineering:** type-checks, stays inside the performance budget, and loads no JS on pages that don't need it.
-- **DevOps:** CI is green, actions are pinned, and no new secret is added without a scope note in README.
-- **Testing:** new logic has a unit test, UI behavior has an e2e test, and axe reports no serious or critical issue.
-- **Security:** the leak guard passes, and no private name or identity detail appears in output, commits or PR text.
-- **Marketing:** every public page has a title, summary and OG image, and copy follows the style guide (numbers before adjectives).
-- **Lead/PM:** a decision with lasting impact gets an ADR in `docs/adr/`, and the change is noted in the changelog.
-
-## Voice and craft
-
-- Show off, with numbers. Prefer numbers and diagrams over adjectives.
-- Mobile-first, checked at 375px. Lighthouse ≥ 95.
-- ⌘K / Ctrl+K command palette (navigation, Pagefind search, theme). Shortcuts: `g h`, `g b`, `/`, `?`.
-- Sound toggle, **off by default**. Respect `prefers-reduced-motion`.
-- Micro-interactions must never slow the page or block reading.
-
-## License
-
-Content is CC BY 4.0. Code is MIT. State this in README, the footer and `/colophon`.
+- Identity của repo là `ATKD Coding <2776097+atkd1890@users.noreply.github.com>`. Kiểm tra `git config user.email` trước khi commit, không bao giờ commit bằng email cá nhân.
+- Nhánh mặc định là `main`. History cũ chỉ nằm trong bundle ở `../_archive/`, không push lại.
+- Commit nhỏ theo task, message dạng `type: mô tả` (`feat`, `fix`, `docs`, `test`, `ci`, `chore`), không chứa tên repo private.
+- Không push nếu chủ dự án chưa bảo.
+- Docs viết lại cho đúng hiện trạng, không nối thêm ghi chú hay ngày vào dòng cũ.

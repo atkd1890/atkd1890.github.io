@@ -1,21 +1,20 @@
-# ADR 0002 — Private repo names live in secrets, not in showcase.yml
+# 0002. Tên repo private nằm trong secret, không nằm trong `showcase.yml`
 
-- Status: accepted
-- Date: 2026-11-12
+Ngày: 2026-11-12
 
-## Context
+## Bối cảnh
 
-The first schema for `showcase.yml` had a `repo: owner/private-repo` field, there only so stats could be fetched. This repo is public, though, so committing that field would publish every private repo name. That breaks the rule that private names never leave private.
+Schema đầu tiên của `showcase.yml` có field `repo: owner/private-repo`, chỉ để lấy số liệu. Nhưng repo này public, nên commit field đó là công khai luôn tên mọi repo private. Điều này phá luật "tên private không bao giờ ra ngoài".
 
-## Decision
+## Quyết định
 
-- In `showcase.yml`, `repo` may only be `null` or `"@secret"`. The validator rejects anything else, so a real name fails the build.
-- The codename → repo mapping lives in the `SHOWCASE_REPOS` secret as JSON. Locally it comes from a file outside the repo (`SHOWCASE_REPOS_FILE`).
-- `lib/github-data.js` keys every per-repo result by codename, and a final `whitelist()` rebuilds the payload from allowed keys only.
-- The committed fallback (`src/_data/snapshot/github.json`) holds aggregates only.
+- Trong `showcase.yml`, `repo` chỉ được là `null` hoặc `"@secret"`. Bộ validate từ chối mọi giá trị khác, nên ghi tên thật là build fail.
+- Mapping codename → repo nằm trong secret `SHOWCASE_REPOS` dạng JSON. Một codename có thể gồm nhiều repo. Ở local đọc từ file ngoài repo (`SHOWCASE_REPOS_FILE`).
+- `lib/github-data.js` gắn mọi kết quả theo codename, và `whitelist()` dựng lại payload chỉ từ các key được phép.
+- Snapshot commit trong repo (`src/_data/snapshot/github.json`) chỉ chứa số liệu tổng hợp.
 
-## Consequences
+## Hệ quả
 
-- Adding a project takes two steps: an entry in `showcase.yml` and a key in the secret.
-- The leak guard gets its list of repo names from the same secret, so the mapping also drives detection.
-- Fork PRs don't see the secret. They build from the snapshot and get the reduced leak check.
+- Thêm một dự án cần hai bước: một mục trong `showcase.yml` và một key trong secret.
+- Leak guard lấy danh sách tên repo từ chính secret này, nên mapping cũng là nguồn để phát hiện.
+- PR từ fork không thấy secret: build bằng snapshot và chạy leak guard bản rút gọn.

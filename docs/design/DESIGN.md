@@ -6,6 +6,17 @@ Tài liệu nguồn chuẩn cho giao diện của site. Lấy từ bản thiết
 
 **Nguyên tắc đồng bộ:** đồng bộ ở mức **core** (token màu, font, hình dạng, motif, kích thước chạm, theme contract). Không tái hiện 100%: bio page bên hub là one-page cho mobile, còn site này có home, blog, case study, lab, tools…
 
+## Mục lục
+
+- [1. Bản sắc: "Terminal"](#1-bản-sắc-terminal)
+- [2. Token màu](#2-token-màu)
+- [3. Chữ](#3-chữ)
+- [4. Hình dạng và kích thước](#4-hình-dạng-và-kích-thước)
+- [5. Thanh điều khiển](#5-thanh-điều-khiển)
+- [6. Motion](#6-motion)
+- [7. Liên kết với hub](#7-liên-kết-với-hub)
+- [8. Phần site tự thiết kế thêm](#8-phần-site-tự-thiết-kế-thêm-ngoài-phạm-vi-hub)
+
 ## 1. Bản sắc: "Terminal"
 
 - Mỗi khối nội dung là **một lệnh terminal**: nhãn section viết dạng prompt (`$ whoami`, `$ ls work/`, `$ git log --oneline`, `$ cat`, `$ mail`).
