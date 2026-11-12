@@ -58,7 +58,8 @@ Phần lớn công việc nằm trong repo private và không được public. V
 3. **Repo private chỉ đóng góp số liệu.** Chỉ có số liệu tổng hợp, không có code.
 4. **Code chỉ ở hai dạng.** Hoặc là đoạn trích viết lại, hoặc nằm trong repo public (thư viện tách ra, tools, demo mới).
 5. **Dự án công ty/khách hàng chỉ mô tả trừu tượng.** Nêu domain, quy mô, vai trò; không nêu tên.
-6. **Không bịa số.** Chưa có thì để `TODO`, hoặc dùng demo data có nhãn.
+6. **Kín đáo, không ẩn danh tuyệt đối.** Nối persona với tài khoản GitHub hay hub cũng được; chỉ giữ kín dữ liệu công việc và liên lạc cá nhân ([ADR 0005](docs/adr/0005-privacy-level.md)).
+7. **Không bịa số.** Chưa có thì để `TODO`, hoặc dùng demo data có nhãn.
 
 ### Các tầng bằng chứng
 
@@ -167,7 +168,8 @@ Bắt buộc. Vi phạm thì build hoặc PR fail. Lý do ở [ADR 0003](docs/ad
   - tên repo private, khớp nguyên từ (lấy từ `SHOWCASE_REPOS` và từ API, không lưu trong repo);
   - các mục trong denylist, không phân biệt hoa thường và dấu (secret `LEAK_DENYLIST`);
   - EXIF trong ảnh JPEG, PNG, WebP;
-  - chuỗi canary cài sẵn (self-test chạy mỗi lần CI).
+  - chuỗi canary cài sẵn (self-test chạy mỗi lần CI);
+  - tên và email tác giả, committer của commit: chỉ chấp nhận email noreply của GitHub, không khớp denylist.
 - Log chỉ in `file:dòng` và số thứ tự luật, không in giá trị bị khớp, vì log CI là public.
 - `lib/github-data.js` chỉ xuất các field nằm trong whitelist, mọi số liệu gắn theo codename.
 - Feed `link` lấy từ stars loại bỏ repo private và các owner trong secret `STARS_EXCLUDE_OWNERS`.

@@ -5,17 +5,29 @@
 //   node scripts/leak-guard.js --self-test
 //   flags: --require-denylist   fail if no denylist is configured (use on main)
 //          --fetch-private      also list private repo names via SHOWCASE_TOKEN
+//          --commits=<range>    also check author/committer of commits in <range> ("HEAD" = last commit)
 //
 // Inputs (never committed): LEAK_DENYLIST (newline list) or LEAK_DENYLIST_FILE,
 // SHOWCASE_REPOS / SHOWCASE_REPOS_FILE (repo names), LEAK_REPO_NAMES (newline list).
 import { readFileSync, readdirSync, statSync, mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
-import { buildRules, scanText, hasExif, isText, isImage, describe, CANARY } from '../lib/leak-guard.js';
+import { execFileSync } from 'node:child_process';
+import {
+  buildRules,
+  scanText,
+  hasExif,
+  isText,
+  isImage,
+  describe,
+  CANARY,
+  checkCommitMeta,
+} from '../lib/leak-guard.js';
 import { gql } from '../lib/github-api.js';
 
 const args = process.argv.slice(2);
-const flags = new Set(args.filter((a) => a.startsWith('--')));
+const flags = new Set(args.filter((a) => a.startsWith('--') && !a.startsWith('--commits=')));
+const commitRange = args.find((a) => a.startsWith('--commits='))?.slice('--commits='.length);
 const paths = args.filter((a) => !a.startsWith('--'));
 
 /** @param {string} p @returns {string[]} */
@@ -112,7 +124,7 @@ function selfTest() {
 
 async function main() {
   if (flags.has('--self-test')) process.exit(selfTest() ? 0 : 1);
-  if (!paths.length) {
+  if (!paths.length && !commitRange) {
     console.error('usage: leak-guard <paths...> | --self-test');
     process.exit(2);
   }
@@ -126,7 +138,17 @@ async function main() {
     console.warn(`${msg}; checking repo names, canary and EXIF only`);
   }
   const files = paths.flatMap(walk);
-  const hits = scan(files, buildRules(lists));
+  const rules = buildRules(lists);
+  const hits = scan(files, rules);
+  if (commitRange) {
+    const range = commitRange === 'HEAD' ? ['-1', 'HEAD'] : [commitRange];
+    const log = execFileSync('git', ['log', '--format=%H%x09%an%x09%ae%x09%cn%x09%ce', ...range, '--'], {
+      encoding: 'utf8',
+    });
+    const lines = log.split('\n').filter(Boolean);
+    hits.push(...checkCommitMeta(lines, rules));
+    console.log(`leak-guard: ${lines.length} commit(s) checked`);
+  }
   console.log(
     `leak-guard: ${files.length} files, ${lists.repoNames.length} repo names, ${lists.denylist.length} denylist entries`,
   );

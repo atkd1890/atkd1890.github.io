@@ -65,3 +65,20 @@ test('EXIF detection for JPEG, PNG and WebP', () => {
   assert.equal(hasExif(webp('EXIF'), 'a.webp'), true);
   assert.equal(hasExif(webp('VP8 '), 'a.webp'), false);
 });
+
+import { checkCommitMeta } from '../lib/leak-guard.js';
+
+test('commit metadata: only noreply emails pass, denylisted names fail, values never printed', () => {
+  const rules = buildRules({ denylist: ['Real Person'] });
+  const ok = 'a'.repeat(40) + '\tatkd1890\t1+atkd1890@users.noreply.github.com\tGitHub\tnoreply@github.com';
+  const badMail = 'b'.repeat(40) + '\tatkd1890\tme@gmail.com\tatkd1890\t1+atkd1890@users.noreply.github.com';
+  const badName =
+    'c'.repeat(40) +
+    '\tReal Person\t1+atkd1890@users.noreply.github.com\tatkd1890\t1+atkd1890@users.noreply.github.com';
+  assert.deepEqual(checkCommitMeta([ok], rules), []);
+  const out = checkCommitMeta([badMail, badName], rules);
+  assert.equal(out.length, 2);
+  assert.match(out[0], /^commit bbbbbbb: author email is not a GitHub noreply address$/);
+  assert.match(out[1], /^commit ccccccc: author\/committer matches denylist entry #0$/);
+  for (const m of out) assert.equal(/gmail|Real Person/i.test(m), false);
+});
