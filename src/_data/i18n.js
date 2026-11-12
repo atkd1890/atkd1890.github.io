@@ -4,9 +4,9 @@
 
 export default {
   langs: [
-    { code: 'vi', prefix: '', label: 'VI', name: 'Tiếng Việt' },
-    { code: 'en', prefix: '/en', label: 'EN', name: 'English' },
-    { code: 'ja', prefix: '/ja', label: 'JA', name: '日本語' },
+    { code: 'vi', prefix: '', label: 'VI', name: 'Tiếng Việt', locale: 'vi_VN' },
+    { code: 'en', prefix: '/en', label: 'EN', name: 'English', locale: 'en_US' },
+    { code: 'ja', prefix: '/ja', label: 'JA', name: '日本語', locale: 'ja_JP' },
   ],
   t: {
     vi: {
@@ -80,13 +80,13 @@ export default {
       data: 'Dữ liệu',
       contributions: 'lượt đóng góp',
       shortcutsHint: 'nhấn ? để xem phím tắt',
-      paletteInput: 'Tìm trang, dự án và thao tác',
-      palettePlaceholder: 'đi tới, mở, bật tắt…',
+      paletteInput: 'Tìm trang, bài viết, dự án và thao tác',
+      palettePlaceholder: 'đi tới, tìm bài, bật tắt…',
       results: 'Kết quả',
       noMatch: 'Không có kết quả.',
       paletteFoot: '↑↓ di chuyển · ↵ mở · esc đóng · ? phím tắt',
       close: 'đóng',
-      groups: { go: 'Đi tới', work: 'Dự án', action: 'Thao tác', link: 'Liên kết' },
+      groups: { go: 'Đi tới', work: 'Dự án', action: 'Thao tác', link: 'Liên kết', search: 'Blog' },
       items: {
         home: 'Trang chủ',
         trajectory: 'Hành trình',
@@ -186,13 +186,13 @@ export default {
       data: 'Data',
       contributions: 'contributions',
       shortcutsHint: 'press ? for shortcuts',
-      paletteInput: 'Search pages, work and actions',
-      palettePlaceholder: 'go to, open, toggle…',
+      paletteInput: 'Search pages, posts, work and actions',
+      palettePlaceholder: 'go to, search posts, toggle…',
       results: 'Results',
       noMatch: 'No match.',
       paletteFoot: '↑↓ move · ↵ open · esc close · ? shortcuts',
       close: 'close',
-      groups: { go: 'Go', work: 'Work', action: 'Action', link: 'Link' },
+      groups: { go: 'Go', work: 'Work', action: 'Action', link: 'Link', search: 'Blog' },
       items: {
         home: 'Home',
         trajectory: 'Trajectory',
@@ -292,13 +292,13 @@ export default {
       data: 'データ',
       contributions: 'コントリビューション',
       shortcutsHint: '? でショートカット一覧',
-      paletteInput: 'ページ、仕事、操作を検索',
-      palettePlaceholder: '移動、開く、切り替え…',
+      paletteInput: 'ページ、記事、仕事、操作を検索',
+      palettePlaceholder: '移動、記事を検索、切り替え…',
       results: '結果',
       noMatch: '該当なし。',
       paletteFoot: '↑↓ 移動 · ↵ 開く · esc 閉じる · ? ショートカット',
       close: '閉じる',
-      groups: { go: '移動', work: '仕事', action: '操作', link: 'リンク' },
+      groups: { go: '移動', work: '仕事', action: '操作', link: 'リンク', search: '記事' },
       items: {
         home: 'ホーム',
         trajectory: 'これまでの歩み',

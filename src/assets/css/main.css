@@ -432,6 +432,14 @@ kbd {
   flex: 1;
   min-width: 0;
 }
+.pal-detail {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: var(--fs-11);
+  color: var(--muted);
+}
 .pal-empty {
   color: var(--muted);
   cursor: default;

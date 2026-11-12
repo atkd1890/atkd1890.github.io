@@ -1,0 +1,9 @@
+---
+permalink: /.well-known/security.txt
+eleventyExcludeFromCollections: true
+---
+{#- RFC 9116. Expires is refreshed on every build (the daily deploy keeps it within a year). -#}
+Contact: mailto:{{ site.email }}
+Expires: {{ site.buildTime | securityExpires }}
+Preferred-Languages: vi, en, ja
+Canonical: {{ site.url }}/.well-known/security.txt

@@ -7,6 +7,7 @@ import { heatmap, topLanguages, eraSummary, selectedWork } from './lib/home.js';
 import { paletteItems } from './lib/palette.js';
 import { tr, fmt } from './lib/i18n.js';
 import { fold } from './lib/leak-guard.js';
+import { ogPath, jsonLd, inlineJson, cspHash } from './lib/seo.js';
 import {
   validatePost,
   duplicateVersions,
@@ -100,6 +101,15 @@ export default function (eleventyConfig) {
       day: 'numeric',
       timeZone: 'UTC',
     }).format(d),
+  );
+  eleventyConfig.addFilter('ogPath', ogPath);
+  eleventyConfig.addFilter('jsonLd', (/** @type {any} */ page, /** @type {any} */ site) =>
+    inlineJson(jsonLd(page, site)),
+  );
+  eleventyConfig.addFilter('cspHash', cspHash);
+  // security.txt Expires: 180 days after the build (RFC 9116 asks for less than a year).
+  eleventyConfig.addFilter('securityExpires', (/** @type {Date} */ d) =>
+    new Date(new Date(d).getTime() + 180 * 864e5).toISOString().replace(/\.\d{3}Z$/, 'Z'),
   );
   eleventyConfig.addFilter('heatmap', heatmap);
   eleventyConfig.addFilter('topLanguages', topLanguages);
