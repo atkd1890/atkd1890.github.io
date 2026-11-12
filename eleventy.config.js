@@ -1,4 +1,5 @@
 // Eleventy v3 config (ESM). See CLAUDE.md for conventions.
+/** @param {any} eleventyConfig Eleventy UserConfig (no published types) */
 export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
   eleventyConfig.addPassthroughCopy({ "src/.nojekyll": ".nojekyll" });
@@ -10,8 +11,8 @@ export default function (eleventyConfig) {
     }
   }
 
-  eleventyConfig.addFilter("isoDate", (d) => new Date(d).toISOString());
-  eleventyConfig.addFilter("year", (d) => new Date(d).getUTCFullYear());
+  eleventyConfig.addFilter("isoDate", (/** @type {string|number|Date} */ d) => new Date(d).toISOString());
+  eleventyConfig.addFilter("year", (/** @type {string|number|Date} */ d) => new Date(d).getUTCFullYear());
 
   return {
     dir: { input: "src", includes: "_includes", data: "_data", output: "_site" },

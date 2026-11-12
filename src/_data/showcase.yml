@@ -1,0 +1,153 @@
+# Showcase registry. The site renders ONLY what is declared here (opt-in).
+# Schema and rules: CLAUDE.md → "showcase.yml schema". Validated at build time.
+#
+# `repo` is NEVER a real repo name in this file (this repo is public):
+#   "@secret" → stats come from the private mapping in the SHOWCASE_REPOS secret
+#               (JSON {codename: "owner/repo"}), see docs/adr/0002.
+#   null      → no GitHub stats (off-GitHub project or demo data).
+# Public repos go in `public_repo`.
+
+- codename: atkd-os
+  repo: "@secret"
+  public_repo: null
+  era: ai
+  domain: Personal AI lab across a Mac and a GPU box
+  role: TODO
+  stack: [TODO]
+  years: "2026–"
+  status: wip
+  summary: "TODO"
+  metrics: []
+  evidence: [card, case-study]
+  media: []
+  demo_url: null
+  featured: true
+  placeholder: false
+  order: 1
+
+- codename: signal-desk
+  repo: "@secret"
+  public_repo: null
+  era: ai
+  domain: Signal bot for personal finance
+  role: TODO
+  stack: [Python]
+  years: "2026–"
+  status: live
+  summary: "TODO"
+  metrics: []
+  evidence: [card, case-study]
+  media: []
+  demo_url: null
+  featured: true
+  placeholder: false
+  order: 2
+
+- codename: atkd-ui
+  repo: "@secret"
+  public_repo: null
+  era: system
+  domain: Design system shared by every repo on the account
+  role: TODO
+  stack: [CSS]
+  years: "2026–"
+  status: live
+  summary: "TODO"
+  metrics: []
+  evidence: [card, case-study]
+  media: []
+  demo_url: null
+  featured: true
+  placeholder: false
+  order: 3
+
+- codename: deal-hunters
+  repo: "@secret"
+  public_repo: null
+  era: system
+  domain: A fleet of personal-finance automation bots
+  role: TODO
+  stack: [Python]
+  years: "2026–"
+  status: live
+  summary: "TODO"
+  metrics: []
+  evidence: [card]
+  media: []
+  demo_url: null
+  featured: true
+  placeholder: false
+  order: 4
+
+- codename: shift-board
+  repo: "@secret"
+  public_repo: null
+  era: system
+  domain: Freelance attendance and shift product for a business client
+  role: TODO
+  stack: [JavaScript]
+  years: "2026"
+  status: shipped
+  summary: "TODO"
+  metrics: []
+  evidence: [card]
+  media: []
+  demo_url: null
+  featured: true
+  placeholder: false
+  order: 5
+
+- codename: mmo-ui-kit
+  repo: "@secret"
+  public_repo: null
+  era: indie-game
+  domain: UI and scripting kit for an MMO game client
+  role: TODO
+  stack: [Lua]
+  years: "2016–2020"
+  status: archived
+  summary: "TODO"
+  metrics: []
+  evidence: [card]
+  media: []
+  demo_url: null
+  featured: true
+  placeholder: false
+  order: 6
+
+# Demo data until real mobile / indie-game projects are added (ROADMAP Q10).
+- codename: demo-mobile-1
+  repo: null
+  public_repo: null
+  era: mobile
+  domain: "Lorem ipsum mobile app"
+  role: TODO
+  stack: [Swift, Kotlin]
+  years: "TODO"
+  status: shipped
+  summary: "Lorem ipsum dolor sit amet."
+  metrics: []
+  evidence: [card]
+  media: []
+  demo_url: null
+  featured: false
+  placeholder: true
+  order: 90
+
+- codename: demo-game-1
+  repo: null
+  public_repo: null
+  era: indie-game
+  domain: "Lorem ipsum indie game"
+  role: TODO
+  stack: [Unity]
+  years: "TODO"
+  status: shipped
+  summary: "Lorem ipsum dolor sit amet."
+  metrics: []
+  evidence: [card]
+  media: []
+  demo_url: null
+  featured: false
+  placeholder: true
+  order: 91

@@ -26,11 +26,19 @@ jobs:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      - run: npm run check # typecheck + unit tests + leak guard self-test
       - run: npm run build
         env:
-          # Phase 2: github.js reads this; build must still pass without it.
+          GITHUB_TOKEN: ${{ github.token }}
           SHOWCASE_TOKEN: ${{ secrets.SHOWCASE_TOKEN }}
-      # Phase 2: leak guard runs here and fails the build on any hit.
+          SHOWCASE_REPOS: ${{ secrets.SHOWCASE_REPOS }}
+          STARS_EXCLUDE_OWNERS: ${{ secrets.STARS_EXCLUDE_OWNERS }}
+      - name: Leak guard
+        run: node scripts/leak-guard.js _site --require-denylist --fetch-private
+        env:
+          LEAK_DENYLIST: ${{ secrets.LEAK_DENYLIST }}
+          SHOWCASE_REPOS: ${{ secrets.SHOWCASE_REPOS }}
+          SHOWCASE_TOKEN: ${{ secrets.SHOWCASE_TOKEN }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
