@@ -22,9 +22,11 @@ jobs:
       - run: npm run check # typecheck + unit tests + leak guard self-test
       # Phase 5: frontmatter validation.
       # Preview builds use public data only (no SHOWCASE_TOKEN): private stats come from the snapshot.
+      # Preview and tests include drafts (DRAFTS=1), so the leak guard checks drafts before they merge.
       - run: npm run build
         env:
           GITHUB_TOKEN: ${{ github.token }}
+          DRAFTS: '1'
       - run: npm run budget
       - run: npx playwright install --with-deps chromium
       - run: npx playwright test # e2e + axe on the built _site, 375px and 1280px

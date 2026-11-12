@@ -34,6 +34,7 @@ Mức riêng tư là **kín đáo, không phải ẩn danh tuyệt đối** ([AD
 - Dữ liệu GitHub chỉ đi qua `whitelist()` trong `lib/github-data.js`, mọi số liệu gắn theo codename. Không có token thì dùng snapshot (chỉ số liệu tổng hợp), không bao giờ crash.
 - Leak guard bắt buộc trong CI. Không ghi denylist hay tên repo private ra đĩa trong repo, kể cả log thành artifact. Log chỉ in `file:dòng` và số thứ tự luật.
 - Mỗi trang có link "Edit on GitHub" trỏ tới file nguồn.
+- Blog: theo [docs/content.md → Viết một bài](docs/content.md#viết-một-bài). Media chỉ từ thứ có thật: ảnh chụp bằng `npm run screenshot`, sơ đồ Mermaid qua `npm run diagrams`, số liệu có nguồn. Không dùng ảnh AI tạo hay ảnh stock. Bài do agent soạn có `source: agent`.
 
 ## Việc chủ dự án tự làm
 

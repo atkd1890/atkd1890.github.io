@@ -1,0 +1,5 @@
+flowchart LR
+  idea[Issue blog-idea] --> draft[PR post/slug]
+  draft --> ci{CI: schema, leak guard, e2e}
+  ci -->|green| merge[Merge]
+  merge --> pages[GitHub Pages]

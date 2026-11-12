@@ -1,0 +1,54 @@
+---
+layout: layouts/base.njk
+---
+{%- set t = i18n.t[L.code] -%}
+{%- set long = type | isLong -%}
+{%- set headings = content | toc if long else [] -%}
+{%- set nav = collections.posts | seriesNav(collections.posts | selectByUrl(page.url)) if series else { prev: null, next: null } -%}
+{%- set versions = collections.posts | versionsOf(slug) -%}
+<article class="post post-{{ type }}{% if long %} post-long{% endif %}" aria-labelledby="post-title">
+  <header class="post-head">
+    <p class="prompt">cat blog/{{ date | year }}/{{ slug }}.md</p>
+    <div class="badges">
+      <a class="badge badge-accent" href="{{ L.prefix }}/blog/type/{{ type }}/">{{ t.blog.types[type] }}</a>
+      {% if series %}<a class="badge badge-prompt" href="{{ L.prefix }}/blog/series/{{ series }}/">{{ t.blog.series }}: {{ series }}</a>{% endif %}
+      {% if source == 'agent' %}<span class="badge badge-hash" title="agent_run: {{ agent_run }}">{{ t.blog.aiAssisted }}</span>{% endif %}
+    </div>
+    <h1 id="post-title">{{ title }}</h1>
+    <p class="post-meta">
+      <time datetime="{{ date | isoDay }}">{{ date | postDate(L.code) }}</time>
+      {% if long %}· {{ t.blog.minRead | fmt({ n: content | readingTime(lang) }) }}{% endif %}
+      {% for c in codenames %}· <a href="{{ L.prefix }}/#work-{{ c }}">{{ c }}</a>{% endfor %}
+    </p>
+    {% if long %}<p class="post-lead">{{ summary }}</p>{% endif %}
+    {% if type == 'link' %}<a class="cta" href="{{ url }}" rel="noopener"><span>{{ url | replace('https://', '') }}</span><span aria-hidden="true">-&gt;</span></a>{% endif %}
+  </header>
+
+  {% if headings.length > 2 %}
+  <nav class="post-toc" aria-labelledby="toc-title">
+    <p id="toc-title" class="comment">{{ t.blog.onThisPage }}</p>
+    <ol>{% for h in headings %}<li><a href="#{{ h.id }}">{{ h.text }}</a></li>{% endfor %}</ol>
+  </nav>
+  {% endif %}
+
+  <div class="prose">
+    {{ content | safe }}
+  </div>
+
+  <footer class="post-foot">
+    {% if tags.length %}<p class="post-tags">{% for tag in tags %}<a href="{{ L.prefix }}/blog/tag/{{ tag }}/">#{{ tag }}</a> {% endfor %}</p>{% endif %}
+    {% if nav.prev or nav.next %}
+    <nav class="series-nav" aria-label="{{ t.blog.series }}">
+      {% if nav.prev %}<a href="{{ nav.prev.url }}" rel="prev"><span class="comment">{{ t.blog.prev }}</span>{{ nav.prev.data.title }}</a>{% endif %}
+      {% if nav.next %}<a href="{{ nav.next.url }}" rel="next"><span class="comment">{{ t.blog.next }}</span>{{ nav.next.data.title }}</a>{% endif %}
+    </nav>
+    {% endif %}
+    {%- set others = [] -%}
+    {%- for l in i18n.langs %}{% if versions[l.code] and l.code != lang %}{% set others = (others.push(l), others) %}{% endif %}{% endfor -%}
+    {% if others.length %}
+    <p class="comment">{{ t.blog.alsoIn }} {% for l in others %}<a href="{{ versions[l.code] }}" hreflang="{{ l.code }}" lang="{{ l.code }}">{{ l.name }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</p>
+    {% endif %}
+    <p><a href="{{ L.prefix }}/blog/">&lt;- {{ t.blog.backToBlog }}</a></p>
+  </footer>
+</article>
+{% for c in interactive %}<script type="module" src="/assets/interactive/{{ c }}.js"></script>{% endfor %}

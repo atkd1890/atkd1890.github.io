@@ -10,6 +10,7 @@ Spec về nội dung của site: chiến lược, từng section của home, cá
   - [Loại bài](#loại-bài)
   - [Series](#series)
   - [Explainer tương tác](#explainer-tương-tác)
+- [Viết một bài](#viết-một-bài)
 - [Tools](#tools)
 - [Snapshot theo năm](#snapshot-theo-năm)
 
@@ -57,6 +58,22 @@ Theo thứ tự, mockup ở artboard `HomeMobile` và `HomeDesktop`:
 
 - Bài `deep-dive` được nhúng Web Components từ `src/_includes/interactive/`. JS chỉ load trên trang có dùng.
 - Mục tiêu: 1–2 bài đinh về game/system (đề tài chốt sau).
+
+## Viết một bài
+
+- **File**: `src/blog/<năm>/<YYYY-MM-DD>-<slug>.md` cho bản tiếng Việt, thêm `.en.md` hoặc `.ja.md` cho bản dịch, cùng `slug`. URL: `/blog/<slug>/`, `/en/blog/<slug>/`, `/ja/blog/<slug>/`.
+- **Frontmatter** theo hợp đồng ở README, có thêm `interactive: [<component>]` (tuỳ chọn). Sai một field là build fail kèm tên file và field.
+- **Nháp**: `draft: true` chỉ build khi `DRAFTS=1` (preview của PR, e2e), không bao giờ lên production.
+- **Ảnh** đặt cạnh bài: `src/blog/<năm>/<slug>/…`.
+- **Ảnh chụp màn hình thật**, có light và dark, tự đổi theo theme:
+  ```sh
+  npm run screenshot -- https://atkd1890.github.io/ src/blog/2026/<slug>/home 1280 800
+  ```
+  Trong bài: `{% shot "/blog/2026/<slug>/home", "Mô tả", 1280, 800 %}`.
+- **Sơ đồ**: viết Mermaid vào `src/blog/<năm>/<slug>/<tên>.mmd`, chạy `npm run diagrams` để sinh `.svg` (màu là biến CSS, tự đổi theo theme), commit cả hai. Trong bài: `{% diagram "blog/2026/<slug>/<tên>", "Mô tả" %}`.
+- **Component tương tác**: Web Component ở `src/_includes/interactive/<tên>.js`, chỉ tải ở bài liệt kê nó trong `interactive`. Hiện có `leak-guard-demo` (gõ một câu, xem leak guard có chặn không, với denylist giả).
+- **Bài do agent soạn**: `source: agent` và `agent_run`; site hiện nhãn "AI hỗ trợ viết".
+- **Quy trình**: issue `blog-idea` → nhánh `post/<slug>` → PR có label `blog-draft` → CI (schema, leak guard trên cả nháp, e2e, preview artifact) → merge là xuất bản. Trang `/blog/` có nút "Viết bài mới trên GitHub" mở sẵn frontmatter.
 
 ## Tools
 
