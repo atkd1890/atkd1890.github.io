@@ -5,8 +5,10 @@ import markdownItAnchor from 'markdown-it-anchor';
 import { rssPlugin } from '@11ty/eleventy-plugin-rss';
 import { heatmap, topLanguages, eraSummary, selectedWork } from './lib/home.js';
 import { paletteItems } from './lib/palette.js';
+import { where } from './lib/filters.js';
 import { tr, fmt } from './lib/i18n.js';
 import { fold } from './lib/leak-guard.js';
+import { ogPath, jsonLd, inlineJson, cspHash } from './lib/seo.js';
 import {
   validatePost,
   duplicateVersions,
@@ -18,6 +20,8 @@ import {
   toc,
   isoDay,
   LONG_TYPES,
+  releaseEntries,
+  releaseUrl,
 } from './lib/blog.js';
 
 /** Heading ids: VI/EN become ASCII ("Bài toán chính" → "bai-toan-chinh"), Japanese letters are kept ("要点"). @param {string} s */
@@ -84,11 +88,17 @@ export default function (eleventyConfig) {
     return posts.sort((/** @type {any} */ a, /** @type {any} */ b) => b.date - a.date);
   });
 
+  // Posts plus GitHub releases of public tools, newest first: blog index, feeds and the home stream.
+  const stream = (/** @type {any} */ api) =>
+    [...api.getFilteredByGlob('src/blog/*/*.md'), ...releaseEntries(api.getAll()[0]?.data.github?.releases ?? [])].sort(
+      (a, b) => b.date - a.date,
+    );
+  eleventyConfig.addCollection('stream', stream);
+
   eleventyConfig.addCollection('blogPages', (/** @type {any} */ api) => {
-    const posts = api.getFilteredByGlob('src/blog/*/*.md');
     // Languages come from global data, so /blog/ exists in every language even before the first post.
     const langs = api.getAll()[0]?.data.i18n.langs ?? [{ code: 'vi', prefix: '' }];
-    return blogPages(posts, langs);
+    return blogPages(stream(api), langs);
   });
 
   eleventyConfig.addFilter('isoDate', (/** @type {string|number|Date} */ d) => new Date(d).toISOString());
@@ -100,6 +110,16 @@ export default function (eleventyConfig) {
       day: 'numeric',
       timeZone: 'UTC',
     }).format(d),
+  );
+  eleventyConfig.addFilter('releaseUrl', releaseUrl);
+  eleventyConfig.addFilter('ogPath', ogPath);
+  eleventyConfig.addFilter('jsonLd', (/** @type {any} */ page, /** @type {any} */ site) =>
+    inlineJson(jsonLd(page, site)),
+  );
+  eleventyConfig.addFilter('cspHash', cspHash);
+  // security.txt Expires: 180 days after the build (RFC 9116 asks for less than a year).
+  eleventyConfig.addFilter('securityExpires', (/** @type {Date} */ d) =>
+    new Date(new Date(d).getTime() + 180 * 864e5).toISOString().replace(/\.\d{3}Z$/, 'Z'),
   );
   eleventyConfig.addFilter('heatmap', heatmap);
   eleventyConfig.addFilter('topLanguages', topLanguages);
@@ -118,12 +138,8 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter('selectByUrl', (/** @type {any[]} */ list, /** @type {string} */ url) =>
     (list ?? []).find((p) => p.url === url),
   );
-  // Nunjucks' selectattr only tests truthiness; `where` filters by equality.
-  eleventyConfig.addFilter(
-    'where',
-    (/** @type {any[]} */ list, /** @type {string} */ key, /** @type {unknown} */ value) =>
-      (list ?? []).filter((x) => x?.[key] === value),
-  );
+  // Nunjucks' selectattr only tests truthiness; `where` filters by equality. Keys may be paths: 'data.type'.
+  eleventyConfig.addFilter('where', where);
   eleventyConfig.addFilter('limit', (/** @type {unknown[]} */ list, /** @type {number} */ n) =>
     (list ?? []).slice(0, n),
   );
@@ -131,9 +147,11 @@ export default function (eleventyConfig) {
   // {% diagram "blog/2026/<slug>/architecture", "Mô tả" %} inlines a pre-rendered Mermaid SVG
   // (scripts/render-diagrams.js) whose colors are CSS variables, so it follows the theme toggle.
   eleventyConfig.addShortcode('diagram', (/** @type {string} */ path, /** @type {string} */ alt) => {
+    // Mermaid sets its own role; replace it so the figure reads as one image with the caption as its name.
     const svg = readFileSync(`src/${path}.svg`, 'utf8').replace(
-      /<svg\b/,
-      `<svg role="img" aria-label="${alt.replace(/"/g, '&quot;')}"`,
+      /<svg\b[^>]*>/,
+      (tag) =>
+        `${tag.slice(0, -1).replace(/\srole="[^"]*"/, '')} role="img" aria-label="${alt.replace(/"/g, '&quot;')}">`,
     );
     return `<figure class="diagram" tabindex="0">${svg}<figcaption>${alt}</figcaption></figure>`;
   });

@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-// Renders every src/blog/**/*.mmd (Mermaid) to an .svg next to it (dev-time; outputs are committed).
+// Renders every src/{blog,lab}/**/*.mmd (Mermaid) to an .svg next to it (dev-time; outputs are committed).
 // Colors are rendered as unique placeholders, then swapped for CSS variables, so the inlined SVG
 // follows the site theme (light/dark, manual toggle) without two versions.
 // Element ids derive from the file path, so re-rendering an unchanged diagram gives the same SVG.
 // Usage: node scripts/render-diagrams.js
+/* global mermaid -- loaded into the page by addScriptTag */
 import { chromium } from '@playwright/test';
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
@@ -44,7 +45,7 @@ const theme = {
 /** @param {string} p @returns {string[]} */
 const walk = (p) =>
   readdirSync(p).flatMap((n) => (statSync(join(p, n)).isDirectory() ? walk(join(p, n)) : [join(p, n)]));
-const files = walk('src/blog').filter((f) => f.endsWith('.mmd'));
+const files = ['src/blog', 'src/lab'].flatMap(walk).filter((f) => f.endsWith('.mmd'));
 if (!files.length) {
   console.log('diagrams: none');
   process.exit(0);

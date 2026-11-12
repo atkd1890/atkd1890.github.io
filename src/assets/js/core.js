@@ -1,7 +1,8 @@
 // Pure logic for the command palette and keyboard shortcuts. No DOM: unit-tested with node:test.
 
 /**
- * @typedef {{id: string, group: string, label: string, hint?: string, href?: string, action?: string, keywords?: string}} Item
+ * @typedef {{id: string, group: string, label: string, hint?: string, href?: string, action?: string, keywords?: string, detail?: string}} Item
+ * @typedef {{url: string, meta?: {title?: string}, excerpt?: string}} SearchHit Pagefind result data
  */
 
 /**
@@ -73,4 +74,27 @@ export function createSequencer(bindings, timeout = 1000) {
 /** Theme cycle stored in localStorage: system → explicit opposite → system. @param {'light'|'dark'} current */
 export function nextTheme(current) {
   return current === 'dark' ? 'light' : 'dark';
+}
+
+/** Shortest query that triggers full-text search. */
+export const SEARCH_MIN = 2;
+
+/**
+ * Pagefind hits → palette items. The excerpt's <mark> tags are dropped: the palette renders text only.
+ * @param {SearchHit[]} hits @param {string} group @returns {Item[]}
+ */
+export function searchItems(hits, group) {
+  return hits.map((h, i) => ({
+    id: `search-${i}`,
+    group,
+    label: h.meta?.title || h.url,
+    href: h.url,
+    detail: (h.excerpt ?? '')
+      .replace(/<[^>]*>/g, '')
+      .replace(/&#39;/g, "'")
+      .replace(/&quot;/g, '"')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&amp;/g, '&'),
+  }));
 }

@@ -1,6 +1,6 @@
 // Craft layer: theme toggle, sound toggle, ⌘K command palette, keyboard shortcuts.
 // Progressive enhancement: every control is hidden until this module runs.
-import { filterItems, step, createSequencer, nextTheme } from './core.js';
+import { filterItems, step, createSequencer, nextTheme, searchItems, SEARCH_MIN } from './core.js';
 
 const root = document.documentElement;
 const media = matchMedia('(prefers-color-scheme: dark)');
@@ -81,12 +81,16 @@ const list = palette?.querySelector('[role="listbox"]');
 const items = JSON.parse(document.getElementById('palette-items')?.textContent || '[]');
 /** @type {import('./core.js').Item[]} */
 let shown = [];
+/** @type {import('./core.js').Item[]} full-text results for the current query */
+let found = [];
 let active = -1;
 
-function render() {
+/** @param {boolean} [keepActive] keep the selection when async search results arrive */
+function render(keepActive = false) {
   if (!list || !input) return;
-  shown = filterItems(items, input.value);
-  active = shown.length ? 0 : -1;
+  const before = active;
+  shown = [...filterItems(items, input.value), ...found];
+  active = shown.length ? (keepActive ? Math.min(Math.max(before, 0), shown.length - 1) : 0) : -1;
   list.replaceChildren(
     ...shown.map((item, i) => {
       const li = document.createElement('li');
@@ -100,6 +104,12 @@ function render() {
       label.className = 'pal-label';
       label.textContent = item.label;
       li.append(group, label);
+      if (item.detail) {
+        const detail = document.createElement('span');
+        detail.className = 'pal-detail';
+        detail.textContent = item.detail;
+        label.append(detail);
+      }
       if (item.hint) {
         const hint = document.createElement('kbd');
         hint.textContent = item.hint;
@@ -139,17 +149,48 @@ function run(item) {
   }
 }
 
+/* ---------- full-text search: Pagefind index built at deploy, loaded on the first real query ---------- */
+/** @type {Promise<any>|null} */
+let pagefind = null;
+let searchSeq = 0;
+
+async function search() {
+  const seq = ++searchSeq;
+  const q = input?.value.trim() ?? '';
+  if (q.length < SEARCH_MIN) return;
+  try {
+    const url = '/pagefind/pagefind.js'; // variable, so bundlers and the budget check leave it alone
+    pagefind ??= import(url);
+    const pf = await pagefind;
+    const res = await pf.debouncedSearch(q, {}, 150);
+    if (!res || seq !== searchSeq) return; // a newer query took over
+    const hits = await Promise.all(res.results.slice(0, 5).map((/** @type {any} */ r) => r.data()));
+    if (seq !== searchSeq) return;
+    found = searchItems(hits, list?.getAttribute('data-search-group') || 'search');
+    render(true);
+  } catch {
+    // No index (local `npm start`) or offline: the palette keeps working without full-text results.
+  }
+}
+
+function onInput() {
+  found = [];
+  render();
+  search();
+}
+
 function openPalette() {
   if (!palette || !input) return;
   help?.close();
   input.value = '';
+  found = [];
   render();
   palette.showModal();
   input.focus();
   tick(660);
 }
 
-input?.addEventListener('input', render);
+input?.addEventListener('input', onInput);
 input?.addEventListener('keydown', (e) => {
   if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
     e.preventDefault();

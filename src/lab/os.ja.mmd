@@ -1,0 +1,13 @@
+flowchart LR
+  subgraph stack["atkd-stack · 非公開 · 計画中"]
+    A1["showcase-sync エージェント"]
+    A2["ブログエージェント"]
+    A3["ベンチマーク実行"]
+  end
+  subgraph site["atkd1890.github.io · 公開"]
+    PR["プルリクエスト"] --> CI{"check · gitleaks · leak guard"}
+    CI -->|"持ち主がマージ"| D["Deploy → Pages"]
+  end
+  A1 -->|"showcase.yml + シークレット"| PR
+  A2 -->|"記事、source: agent"| PR
+  A3 -->|"ベンチマーク結果"| PR

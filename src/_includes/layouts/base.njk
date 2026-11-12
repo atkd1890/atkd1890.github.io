@@ -5,14 +5,40 @@
 {%- set t = i18n.t[L.code] -%}
 {%- set home = L.prefix + '/' -%}
 {%- set description = summary | tr(L.code) if summary else site.tagline | tr(L.code) -%}
+{%- set pageTitle -%}{% if title and title != site.title %}{{ title | tr(L.code) }} · {% endif %}{{ site.title }}{%- endset -%}
+{#- The only inline script. CSP allows it by hash, so changing it updates the policy automatically. -#}
+{%- set themeScript = "try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}" -%}
 <!doctype html>
 <html lang="{{ L.code }}" data-home="{{ home }}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% if title and title != site.title %}{{ title | tr(L.code) }} · {% endif %}{{ site.title }}</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' {{ themeScript | cspHash | safe }} 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
+  <title>{{ pageTitle }}</title>
   <meta name="description" content="{{ description }}">
   <link rel="canonical" href="{{ site.url }}{{ page.url }}">
+  <meta property="og:type" content="{{ 'article' if postSlug else 'website' }}">
+  <meta property="og:site_name" content="{{ site.title }}">
+  <meta property="og:title" content="{{ pageTitle }}">
+  <meta property="og:description" content="{{ description }}">
+  <meta property="og:url" content="{{ site.url }}{{ page.url }}">
+  <meta property="og:image" content="{{ site.url }}{{ page.url | ogPath }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{ pageTitle }}">
+  <meta property="og:locale" content="{{ L.locale }}">
+  <meta name="twitter:card" content="summary_large_image">
+  {%- if postSlug %}
+  <meta property="article:published_time" content="{{ date | isoDay }}">
+  <meta property="article:section" content="{{ t.blog.types[type] }}">
+  {%- endif %}
+  {%- if postSlug %}
+  <script type="application/ld+json">{{ { kind: 'post', url: page.url, title: title, description: description, lang: L.code, date: date, image: site.url + (page.url | ogPath) } | jsonLd(site) | safe }}</script>
+  {%- elif page.url == home %}
+  <script type="application/ld+json">{{ { kind: 'home', url: page.url, description: description, lang: L.code } | jsonLd(site) | safe }}</script>
+  {%- elif jsonLdKind == 'tools' %}
+  <script type="application/ld+json">{{ { kind: 'tools', url: page.url, tools: github.tools } | jsonLd(site) | safe }}</script>
+  {%- endif %}
   {%- if postSlug %}
   {%- set versions = collections.posts | versionsOf(postSlug) %}
   {%- for l in i18n.langs %}{% if versions[l.code] %}
@@ -31,7 +57,7 @@
   <link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.webmanifest">
-  <script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
+  <script>{{ themeScript | safe }}</script>
   <link rel="preload" href="/assets/fonts/jetbrains-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/main.css">
   <script type="module" src="/assets/js/craft.js"></script>
@@ -76,7 +102,7 @@
     </ol>
   </nav>
   {%- endif %}
-  <main id="main" class="wrap{% if wide %} wide{% endif %}">
+  <main id="main" class="wrap{% if wide %} wide{% endif %}"{% if searchable != false %} data-pagefind-body{% endif %}>
     {{ content | safe }}
   </main>
   <footer class="wrap{% if wide %} wide{% endif %} site-footer">
@@ -85,6 +111,8 @@
       <a href="{{ site.hub }}">atkd1890.me</a>
       <a href="{{ site.github }}">GitHub</a>
       <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+      <a href="{{ L.prefix }}/uses/">/{{ t.usesLink }}</a>
+      <a href="{{ L.prefix }}/colophon/">/{{ t.colophonLink }}</a>
     </nav>
     <p class="meta">
       {{ t.license }} <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · Code MIT ·
@@ -99,9 +127,9 @@
       <span aria-hidden="true">$</span>
       <label for="pal-q" class="visually-hidden">{{ t.paletteInput }}</label>
       <input id="pal-q" type="text" role="combobox" aria-expanded="true" aria-controls="pal-list" aria-autocomplete="list" autocomplete="off" spellcheck="false" placeholder="{{ t.palettePlaceholder }}">
-      <form method="dialog"><button class="ctl">esc<span class="visually-hidden"> {{ t.close }}</span></button></form>
+      <form method="dialog"><button type="submit" class="ctl">esc<span class="visually-hidden"> {{ t.close }}</span></button></form>
     </div>
-    <ul id="pal-list" role="listbox" aria-label="{{ t.results }}" data-no-match="{{ t.noMatch }}"></ul>
+    <ul id="pal-list" role="listbox" aria-label="{{ t.results }}" data-no-match="{{ t.noMatch }}" data-search-group="{{ t.groups.search }}"></ul>
     <p class="pal-foot">{{ t.paletteFoot }}</p>
   </dialog>
   <dialog id="shortcuts" class="dialog" aria-labelledby="shortcuts-title">
@@ -116,7 +144,7 @@
       <dt><kbd>?</kbd></dt><dd>{{ t.shortcuts.help }}</dd>
       <dt><kbd>esc</kbd></dt><dd>{{ t.shortcuts.close }}</dd>
     </dl>
-    <form method="dialog"><button class="ctl ctl-wide">{{ t.close }}</button></form>
+    <form method="dialog"><button type="submit" class="ctl ctl-wide">{{ t.close }}</button></form>
   </dialog>
   <script type="application/json" id="palette-items">{{ showcase | paletteItems(site, t, L.prefix) | dump | safe }}</script>
 </body>

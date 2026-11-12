@@ -7,3 +7,4 @@ _site/
 .claude/
 test-results/
 playwright-report/
+lighthouse/

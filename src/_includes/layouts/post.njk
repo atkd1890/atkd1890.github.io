@@ -25,7 +25,7 @@ layout: layouts/base.njk
   </header>
 
   {% if headings.length > 2 %}
-  <nav class="post-toc" aria-labelledby="toc-title">
+  <nav class="post-toc" aria-labelledby="toc-title" data-pagefind-ignore>
     <p id="toc-title" class="comment">{{ t.blog.onThisPage }}</p>
     <ol>{% for h in headings %}<li><a href="#{{ h.id }}">{{ h.text }}</a></li>{% endfor %}</ol>
   </nav>
@@ -35,7 +35,7 @@ layout: layouts/base.njk
     {{ content | safe }}
   </div>
 
-  <footer class="post-foot">
+  <footer class="post-foot" data-pagefind-ignore>
     {% if tags.length %}<p class="post-tags">{% for tag in tags %}<a href="{{ L.prefix }}/blog/tag/{{ tag }}/">#{{ tag }}</a> {% endfor %}</p>{% endif %}
     {% if nav.prev or nav.next %}
     <nav class="series-nav" aria-label="{{ t.blog.series }}">

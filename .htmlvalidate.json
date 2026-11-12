@@ -1,0 +1,11 @@
+{
+  "extends": ["html-validate:recommended"],
+  "rules": {
+    "no-trailing-whitespace": "off",
+    "doctype-style": "off",
+    "no-inline-style": "off",
+    "prefer-native-element": ["error", { "exclude": ["listbox", "combobox"] }],
+    "long-title": ["error", { "maxlength": 120 }],
+    "valid-id": ["error", { "relaxed": true }]
+  }
+}

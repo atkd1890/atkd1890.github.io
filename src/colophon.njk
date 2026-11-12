@@ -1,0 +1,90 @@
+---
+layout: layouts/base.njk
+basePath: /colophon/
+pagination:
+  data: i18n.langs
+  size: 1
+  alias: L
+permalink: '{{ L.prefix }}/colophon/'
+eleventyComputed:
+  title: '{{ i18n.t[L.code].colophon.title }}'
+  summary: '{{ i18n.t[L.code].colophon.summary }}'
+---
+{#- How the site is built. Numbers come from src/_data/craft.js (read from the repo at build time). -#}
+{%- set t = i18n.t[L.code] -%}
+{%- set c = t.colophon -%}
+{%- set suffix = '' if L.code == 'vi' else '.' + L.code -%}
+{%- set repoUrl = 'https://github.com/' + site.repo + '/blob/' + site.branch + '/' -%}
+<section class="section" aria-labelledby="colophon-title">
+  <p class="prompt">cat colophon.md</p>
+  <h1 id="colophon-title">{{ c.title }}</h1>
+  <p class="comment">{{ c.intro }}</p>
+</section>
+
+<section class="section" id="proof" aria-labelledby="proof-title">
+  <p class="prompt">npm run check --stats</p>
+  <h2 id="proof-title">{{ c.proof }}</h2>
+  <div class="tiles tiles-3">
+    <div class="tile"><span class="value">{{ craft.tests.unit }}</span><span class="label">{{ c.tiles.unit }}</span></div>
+    <div class="tile"><span class="value">{{ craft.tests.e2e }}</span><span class="label">{{ c.tiles.e2e }}</span></div>
+    <div class="tile"><span class="value">{{ craft.workflows.length }}</span><span class="label">{{ c.tiles.workflows }}</span></div>
+    <div class="tile"><span class="value">{{ craft.adrs.length }}</span><span class="label">{{ c.tiles.adrs }}</span></div>
+    <div class="tile"><span class="value">{{ (craft.bytes.js / 1024) | round(1) }} KB</span><span class="label">{{ c.tiles.js }}</span></div>
+    <div class="tile"><span class="value">{{ (craft.bytes.css / 1024) | round(1) }} KB</span><span class="label">{{ c.tiles.css }}</span></div>
+  </div>
+  <p class="comment">{{ c.proofNote }}</p>
+</section>
+
+<section class="section" id="stack" aria-labelledby="stack-title">
+  <p class="prompt">cat package.json .nvmrc</p>
+  <h2 id="stack-title">{{ c.stack }}</h2>
+  <ul class="kv">
+    <li><span>{{ c.node }}</span><span>{{ craft.node }}</span></li>
+    {% for s in craft.stack %}<li><span>{{ s.name }}</span><span>{{ s.version }}</span></li>{% endfor %}
+  </ul>
+</section>
+
+<section class="section" id="pipeline" aria-labelledby="pipeline-title">
+  <p class="prompt">ls .github/workflows/</p>
+  <h2 id="pipeline-title">{{ c.pipeline }}</h2>
+  {% diagram "blog/2026/github-native-portfolio/architecture" + suffix, c.pipelineIntro %}
+  <div class="prose">
+    <table>
+      <thead><tr><th scope="col">{{ c.cols.name }}</th><th scope="col">{{ c.cols.triggers }}</th><th scope="col">{{ c.cols.jobs }}</th></tr></thead>
+      <tbody>
+        {% for w in craft.workflows %}
+        <tr>
+          <td><a href="{{ repoUrl }}.github/workflows/{{ w.file }}">{{ w.name }}</a></td>
+          <td>{{ w.triggers | join(', ') }}{% for cr in w.cron %} <code>{{ cr }}</code>{% endfor %}</td>
+          <td>{{ w.jobs | join(', ') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section class="section" id="decisions" aria-labelledby="decisions-title">
+  <p class="prompt">ls docs/adr/</p>
+  <h2 id="decisions-title">{{ c.decisions }}</h2>
+  <ol class="links"{% if L.code != 'vi' %} lang="vi"{% endif %}>
+    {% for a in craft.adrs %}<li><a href="{{ repoUrl }}{{ a.file }}">{{ a.num }}. {{ a.title }}</a></li>{% endfor %}
+  </ol>
+</section>
+
+<section class="section" id="changelog" aria-labelledby="changelog-title">
+  <p class="prompt">head CHANGELOG.md</p>
+  <h2 id="changelog-title">{{ c.changelog }}</h2>
+  <ul class="links"{% if L.code != 'vi' %} lang="vi"{% endif %}>
+    {% for e in craft.changelog | limit(5) %}<li><time datetime="{{ e.date }}">{{ e.date }}</time> · {{ e.title }}</li>{% endfor %}
+  </ul>
+  <p><a href="{{ repoUrl }}CHANGELOG.md">-&gt; {{ c.changelogAll }}</a></p>
+</section>
+
+<section class="section" id="license" aria-labelledby="license-title">
+  <p class="prompt">cat LICENSE LICENSE-CONTENT</p>
+  <h2 id="license-title">{{ c.license }}</h2>
+  <p>{{ c.licenseBody }}</p>
+  <h2 id="security-title">{{ c.security }}</h2>
+  <p>{{ c.securityBody }} <a href="/.well-known/security.txt">/.well-known/security.txt</a></p>
+</section>

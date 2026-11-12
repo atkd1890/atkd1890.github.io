@@ -63,7 +63,7 @@ Theo theme contract của hub, mỗi persona bắt buộc có đủ `--bg --fg -
 
 - **Display / UI / code:** JetBrains Mono 400 và 700, tự host (subset latin + vietnamese, gói `@fontsource/jetbrains-mono`, OFL-1.1). Đây là webfont duy nhất.
 - **Body dài** (blog, case study): font hệ thống sans. Đây là điểm **mở rộng** so với hub: bài dài đọc bằng monospace rất mệt.
-- **`:lang(ja)`:** luôn dùng font hệ thống.
+- **`:lang(ja)`:** luôn dùng font hệ thống: Hiragino Sans (Apple), Yu Gothic (Windows), Noto Sans JP / Noto Sans CJK JP (Android, Linux).
 - **Thang chữ** `--fs-N` = N px: 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24. Tiêu đề co giãn: `--fs-h1` (hero), `--fs-h2` (section), `--fs-stat` (số trong tile).
 - H1 hero: 700, line-height 1.05, letter-spacing −0.03em, một dòng.
 
@@ -99,7 +99,7 @@ Trên mobile: nhãn shell + ⌘K + âm thanh + theme, một hàng. Từ 1024px c
 
 - **Favicon:** `src/assets/icons/favicon.svg`, chữ "CO" trong khung, tự đổi màu theo light/dark. Ở ≤ 32px chỉ dùng "CO" vì `<CO/>` không đọc được.
 - **Touch icon và manifest:** PNG 180/192/512 có đủ `<CO/>`, render bằng `node scripts/gen-icons.js` với chính JetBrains Mono của site; file kết quả được commit.
-- **OG image 1200×630** (artboard Nhận diện, sinh lúc build ở Phase 7): nền tối cố định, thanh shell, dòng lệnh theo loại trang, badge theo type, tiêu đề tự co (tối đa 3 dòng), mark + "ATKD Coding" + domain, dải 4 màu era ở đáy. Chỉ dùng chữ có sẵn trong frontmatter.
+- **OG image 1200×630** (artboard Nhận diện), mọi trang đều có, chụp lúc build bằng `scripts/og.js` với CSS của site: nền tối cố định, thanh shell kèm mã ngôn ngữ, dòng lệnh theo loại trang (`cat` cho bài viết, `cd` cho trang khác), badge theo type của bài, tiêu đề tự co từ 60px xuống 40px để vừa tối đa 3 dòng, mô tả tối đa 2 dòng, mark + "ATKD Coding" + domain, dải 4 màu era ở đáy. Chữ lấy từ `og:title`, `og:description` và `article:section` của trang đã build.
 
 ## 9. Liên kết với hub
 

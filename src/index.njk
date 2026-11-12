@@ -2,6 +2,7 @@
 layout: layouts/base.njk
 title: ATKD Coding
 wide: true
+searchable: false
 basePath: /
 nav: [trajectory, work, signals, stream, lab]
 pagination:
@@ -123,7 +124,7 @@ permalink: '{{ L.prefix }}/index.html'
   <section class="section" id="stream" aria-labelledby="stream-title">
     <p class="prompt">git log --all --oneline</p>
     <h2 id="stream-title">{{ t.stream }}</h2>
-    {%- set latest = collections.posts | pickVersions(L.code) | limit(6) -%}
+    {%- set latest = collections.stream | pickVersions(L.code) | limit(6) -%}
     {% if latest.length %}
     <ol class="stream">
       {% for p in latest %}
@@ -149,6 +150,7 @@ permalink: '{{ L.prefix }}/index.html'
       <ul class="cards">
         {% for tool in github.tools %}{% if loop.index <= 3 %}<li class="card"><h3><a href="{{ tool.homepage or tool.url }}">{{ tool.name }}</a></h3><p>{{ tool.description }}</p></li>{% endif %}{% endfor %}
       </ul>
+      <p><a href="{{ L.prefix }}/tools/">-&gt; {{ t.toolsPage.title }}</a></p>
       {% else %}
       <p class="comment empty">{{ t.emptyTools }}</p>
       {% endif %}
@@ -158,6 +160,7 @@ permalink: '{{ L.prefix }}/index.html'
       <p class="prompt">lab bench --latest</p>
       <h2 id="lab-title">{{ t.lab }}</h2>
       <p class="comment empty">{{ t.emptyLab }}</p>
+      <p><a href="{{ L.prefix }}/lab/">-&gt; {{ t.labPage.more }}</a></p>
     </section>
   </div>
 </div>

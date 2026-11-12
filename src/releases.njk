@@ -5,7 +5,7 @@ pagination:
   size: 1
   alias: rel
   addAllPagesToCollections: false
-permalink: "/blog/release/{{ rel.repo | replace('/', '-') | slugify }}-{{ rel.tag | slugify }}/"
+permalink: '{{ rel | releaseUrl }}'
 eleventyComputed:
   title: '{{ rel.repo }} {{ rel.tag }}'
 ---
