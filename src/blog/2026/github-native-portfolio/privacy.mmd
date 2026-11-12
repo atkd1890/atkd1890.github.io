@@ -1,0 +1,9 @@
+flowchart LR
+  repos[(Repo private)] -->|token chỉ đọc metadata| fetch[Lấy ngôn ngữ, ngày, lượt đóng góp]
+  secret[[Secret: codename ↔ repo]] --> fetch
+  fetch --> codename[Gắn số liệu theo codename]
+  codename --> wl{Whitelist field}
+  wl --> site[HTML]
+  site --> guard{Leak guard}
+  guard -->|sạch| deploy[Deploy]
+  guard -->|có tên cấm| stop[Dừng build]

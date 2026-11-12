@@ -1,0 +1,11 @@
+flowchart LR
+  subgraph gh[GitHub]
+    issue[Issue: ý tưởng] --> pr[PR: bản nháp]
+    pr --> ci{Actions: kiểm tra}
+    ci -->|xanh| merge[Merge]
+    merge --> build[Actions: build]
+    cron[Cron hằng ngày] --> build
+    api[(GraphQL API)] --> build
+    build --> pages[Pages]
+  end
+  priv[(Repo private)] -. chỉ con số .-> api
