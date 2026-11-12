@@ -2,8 +2,8 @@
 // Never crashes the build: any failure falls back to the snapshot and logs a warning.
 //
 // Env (see README → "Secrets"):
-//   SHOWCASE_TOKEN   fine-grained PAT, read-only, scoped to showcase repos → private stats
-//   GITHUB_TOKEN     any token (Actions provides one) → public data: heatmap, tools, releases, stars
+//   SHOWCASE_TOKEN   fine-grained PAT, all repos, Metadata: read-only ONLY (no code access) → languages, dates (ADR 0004)
+//   GITHUB_TOKEN     any token (Actions provides one) → public data: heatmap, contributions/year, tools, releases, stars
 //   SHOWCASE_REPOS   JSON {codename: "owner/repo" | ["owner/a", "owner/b"]}; or SHOWCASE_REPOS_FILE pointing to such a JSON file
 //   STARS_EXCLUDE_OWNERS  comma list of owners to drop from the stars feed
 import { readFileSync } from "node:fs";
@@ -52,11 +52,11 @@ export async function load() {
         if (e.repo !== "@secret") continue;
         const repos = repoList(map[e.codename]);
         if (!repos.length) { warn(`no mapping for codename ${e.codename}`); continue; }
-        try { byCodename[e.codename] = mergeRaw(await Promise.all(repos.map((r) => fetchRepo(privateToken, r, user.id)))); }
+        try { byCodename[e.codename] = mergeRaw(await Promise.all(repos.map((r) => fetchRepo(privateToken, r)))); }
         catch (err) { warn(`stats for ${e.codename} failed: ${/** @type {Error} */ (err).message}`); }
       }
     } else warn("no SHOWCASE_TOKEN, private stats skipped");
-    Object.assign(out, buildSignals(byCodename, showcase, user.heatmap));
+    Object.assign(out, buildSignals(byCodename, showcase, user));
   } catch (err) { warn(`signals failed, keeping snapshot: ${/** @type {Error} */ (err).message}`); Object.assign(out, { signals: base.signals, codenames: base.codenames, demo: base.demo }); }
 
   try {

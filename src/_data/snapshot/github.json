@@ -3,8 +3,8 @@
   "source": "snapshot",
   "demo": true,
   "signals": {
-    "commitsByYear": {},
-    "totalCommits": 0,
+    "contributionsByYear": {},
+    "totalContributions": 0,
     "languages": [],
     "heatmap": [],
     "reposByEra": {},

@@ -147,10 +147,50 @@ Settings → Pages → Build and deployment → Source: **GitHub Actions**. Work
 |---|---|---|
 | `LEAK_DENYLIST` | **Có** (deploy fail nếu thiếu) | Mỗi dòng một chuỗi cấm: tên thật, công ty/khách hàng, email cá nhân, SĐT, địa chỉ, path máy local, tên service nội bộ. Khớp không phân biệt hoa thường và dấu |
 | `SHOWCASE_REPOS` | Nên có | JSON `{"codename": "owner/repo"}`, hoặc một danh sách `["owner/a", "owner/b"]` khi một codename gồm nhiều repo, cho các mục `repo: "@secret"`. Xem [ADR 0002](docs/adr/0002-private-repo-mapping-in-secrets.md) |
-| `SHOWCASE_TOKEN` | Nên có | Fine-grained PAT, chỉ đọc (xem bên dưới) |
+| `SHOWCASE_TOKEN` | Nên có | Fine-grained PAT, tất cả repo, chỉ Metadata read-only (xem bên dưới) |
 | `STARS_EXCLUDE_OWNERS` | Tùy chọn | Danh sách owner/org cách nhau bằng dấu phẩy, sẽ bị loại khỏi feed stars |
 
-`GITHUB_TOKEN` do Actions tự cấp, dùng cho dữ liệu public (heatmap, tools, releases, stars).
+`GITHUB_TOKEN` do Actions tự cấp, dùng cho dữ liệu public: heatmap, contributions theo năm (cả private, vì profile đã bật "Include private contributions"), tools, releases, stars.
+
+**Tạo `SHOWCASE_TOKEN` với quyền tối thiểu** (github.com → Settings → Developer settings → Fine-grained tokens), xem [ADR 0004](docs/adr/0004-metadata-only-token.md):
+
+- Resource owner: `atkd1890`. Đặt hạn dùng và lịch nhắc gia hạn.
+- Repository access: **All repositories**. Không phải sửa token mỗi khi tạo repo mới, và leak guard tự biết tên mọi repo private.
+- Repository permissions: **chỉ Metadata: Read-only**. **Không cấp Contents**, nên token không đọc được code. Account permissions: không cấp gì.
+- Token chỉ được truyền vào job deploy trên `main`, không bao giờ vào workflow PR.
+
+Không có token thì build dùng snapshot (từ Phase 2).
+
+### Cấu trúc
+
+```
+eleventy.config.js
+lib/                showcase-schema.js, github-api.js, github-data.js, leak-guard.js (logic thuần, có test)
+scripts/            leak-guard.js (CLI)
+tests/              node --test
+docs/               design/DESIGN.md, adr/
+src/
+  _data/            site.js, showcase.yml (+ showcase.js validate), github.js, snapshot/
+  _includes/        layouts/, interactive/ (Web Components cho explainer)
+  assets/           css/, js/, img/
+  blog/ work/ lab/ tools/
+.github/workflows/  deploy.yml (push main + cron + manual), pr.yml (build + preview artifact)
+```
+
+### Bật GitHub Pages (làm một lần)
+
+Settings → Pages → Build and deployment → Source: **GitHub Actions**. Workflow `Deploy` sẽ lo phần còn lại.
+
+### Secrets (Settings → Secrets and variables → Actions)
+
+| Secret | Bắt buộc | Nội dung |
+|---|---|---|
+| `LEAK_DENYLIST` | **Có** (deploy fail nếu thiếu) | Mỗi dòng một chuỗi cấm: tên thật, công ty/khách hàng, email cá nhân, SĐT, địa chỉ, path máy local, tên service nội bộ. Khớp không phân biệt hoa thường và dấu |
+| `SHOWCASE_REPOS` | Nên có | JSON `{"codename": "owner/repo"}`, hoặc một danh sách `["owner/a", "owner/b"]` khi một codename gồm nhiều repo, cho các mục `repo: "@secret"`. Xem [ADR 0002](docs/adr/0002-private-repo-mapping-in-secrets.md) |
+| `SHOWCASE_TOKEN` | Nên có | Fine-grained PAT, tất cả repo, chỉ Metadata read-only (xem bên dưới) |
+| `STARS_EXCLUDE_OWNERS` | Tùy chọn | Danh sách owner/org cách nhau bằng dấu phẩy, sẽ bị loại khỏi feed stars |
+
+`GITHUB_TOKEN` do Actions tự cấp, dùng cho dữ liệu public: heatmap, contributions theo năm (cả private, vì profile đã bật "Include private contributions"), tools, releases, stars.
 
 **Tạo `SHOWCASE_TOKEN` với quyền tối thiểu** (github.com → Settings → Developer settings → Fine-grained tokens):
 
