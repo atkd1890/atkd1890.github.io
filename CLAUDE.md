@@ -82,7 +82,7 @@ The leak guard is required in CI, for the build and for PRs:
 
 ## Owner-maintained items
 
-Anything the owner must fill in or keep updated later (a secret, private config, `TODO` copy, an expiring token, a setting in some UI) MUST be added in the same change to README → "Tùy chỉnh và bảo trì": where it lives, when to update it, how. If it holds private data, also add a fake-data template under `config/examples/`. Real private files live next to the repo in `../.config/atkd-coding/` (the parent folder is not a git repo) and are pushed with `npm run secrets:push`. Never commit them.
+Anything the owner must fill in or keep updated later (a secret, private config, `TODO` copy, an expiring token, a setting in some UI) MUST be added in the same change to README → "Tùy chỉnh và bảo trì": where it lives, when to update it, how. If it holds private data, also add a fake-data template under `config/examples/`. Real private files live next to the repo in `../.config/atkd.github.io/` (the parent folder is not a git repo) and are pushed with `npm run secrets:push`. Never commit them.
 
 ## Definition of done (every role)
 
