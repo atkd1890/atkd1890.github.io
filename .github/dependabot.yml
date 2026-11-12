@@ -1,0 +1,21 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      eleventy:
+        patterns:
+          - '@11ty/*'
+      fonts:
+        patterns:
+          - '@fontsource*'
+      types:
+        patterns:
+          - '@types/*'
+          - typescript
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
