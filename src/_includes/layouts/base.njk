@@ -7,14 +7,17 @@
   <meta name="description" content="{{ summary or site.tagline }}">
   <link rel="canonical" href="{{ site.url }}{{ page.url }}">
   <meta name="color-scheme" content="light dark">
+  <link rel="preload" href="/assets/fonts/jetbrains-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/main.css">
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
+  <div class="titlebar" aria-hidden="true">~/atkd-coding — zsh</div>
   <main id="main" class="wrap">
     {{ content | safe }}
   </main>
   <footer class="wrap site-footer">
+    <p class="prompt">cat links.txt</p>
     <nav aria-label="Elsewhere">
       <a href="{{ site.hub }}">atkd1890.me</a>
       <a href="{{ site.github }}">GitHub</a>
