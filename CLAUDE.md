@@ -11,7 +11,7 @@ The public home of the **ATKD Coding** persona, built on Eleventy and deployed t
 ATKD Coding is an anonymous persona. These rules override convenience, every time.
 
 1. **No identity leaks.** Never write the owner's real name, any past or current employer, client names, the personal Gmail address, phone, home address, or local machine paths into any file that gets committed or rendered. Contact is `hi@atkd1890.me` only.
-2. **Private repo names never reach output.** Not in HTML, feeds, JSON, OG images, commit messages, PR bodies or docs. Use codenames. `showcase.yml`'s `repo:` field exists only so stats can be fetched; templates must never read it.
+2. **Private repo names never reach output or the repo.** Not in HTML, feeds, JSON, OG images, commit messages, PR bodies, docs or `showcase.yml`. Use codenames. The codename → repo mapping lives only in the `SHOWCASE_REPOS` secret (ADR 0002).
 3. **Opt-in only.** Render only what `showcase.yml` declares. Never auto-list private repos.
 4. **Private repos contribute numbers, not code.** Never commit data, code or text copied from a private repo.
 5. **Client and employer work is abstract.** Domain, scale and role. No names, no identifiable details.
@@ -53,7 +53,7 @@ The frontmatter schema and the PR flow are in README → "Content contract". Val
 
 ```yaml
 - codename: TODO
-  repo: owner/private-repo  # stats only, NEVER rendered
+  repo: "@secret"           # or null. NEVER a real name: the mapping lives in the SHOWCASE_REPOS secret (ADR 0002)
   public_repo: null
   era: mobile | indie-game | system | ai
   domain: TODO
@@ -67,6 +67,7 @@ The frontmatter schema and the PR flow are in README → "Content contract". Val
   media: []
   demo_url: null
   featured: false
+  placeholder: false        # true = demo data, rendered with a "demo data" label; requires repo: null
   order: 0
 ```
 

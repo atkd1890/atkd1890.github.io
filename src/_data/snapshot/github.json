@@ -1,0 +1,18 @@
+{
+  "generatedAt": "2026-11-12T00:00:00Z",
+  "source": "snapshot",
+  "demo": true,
+  "signals": {
+    "commitsByYear": {},
+    "totalCommits": 0,
+    "languages": [],
+    "heatmap": [],
+    "reposByEra": {},
+    "activeCodenames": 0,
+    "latest": null
+  },
+  "codenames": {},
+  "tools": [],
+  "releases": [],
+  "stars": []
+}

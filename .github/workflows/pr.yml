@@ -12,14 +12,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
-      # Phase 5: frontmatter validation. Phase 2: leak guard on changed .md + _site.
-      # No secrets here on purpose: PRs build from the snapshot fallback.
+      - run: npm run check # typecheck + unit tests + leak guard self-test
+      # Phase 5: frontmatter validation.
+      # Preview builds use public data only (no SHOWCASE_TOKEN): private stats come from the snapshot.
       - run: npm run build
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Leak guard (site + changed Markdown)
+        run: |
+          changed=$(git diff --name-only --diff-filter=AM "origin/${{ github.base_ref }}...HEAD" -- '*.md' || true)
+          node scripts/leak-guard.js _site $changed
+        env:
+          # Present for same-repo PRs, absent for forks (guard still checks canary + EXIF).
+          LEAK_DENYLIST: ${{ secrets.LEAK_DENYLIST }}
+          SHOWCASE_REPOS: ${{ secrets.SHOWCASE_REPOS }}
       - uses: actions/upload-artifact@v4
         with:
           name: preview-${{ github.event.pull_request.number }}

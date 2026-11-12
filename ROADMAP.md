@@ -153,15 +153,17 @@ Demo data phải có cờ `placeholder: true` và hiện nhãn "demo data" trên
 
 ### Phase 2 — Data pipeline
 
-- [ ] `showcase.yml` với các mục `TODO` + validate schema (cho phép `repo: null`, `placeholder: true`)
-- [ ] `github.js`: stats (ngôn ngữ, commit theo năm, heatmap, repo theo era/domain, hoạt động gần nhất → codename), tools (topic `atkd-tool`), releases, stars
-- [ ] Không có token → fallback snapshot, không crash
-- [ ] Xác minh quyền tối thiểu của `SHOWCASE_TOKEN`
-- [ ] Leak guard script + chạy trong CI (khớp tên repo private theo nguyên từ)
-- [ ] `[qa]` Unit test (`node --test`) cho schema validator, `github.js` (mock API) và leak guard
-- [ ] `[qa]` Fixture "canary" cho leak guard: một chuỗi giả cố tình cài vào để chứng minh guard bắt được, chạy mỗi CI
-- [ ] `[eng]` Type-check JS bằng JSDoc + `tsc --checkJs --noEmit`
-- [ ] `[pm]` ADR đầu tiên trong `docs/adr/`: chọn 11ty, GitHub-native, leak guard. ADR là bằng chứng tư duy lead
+- [x] `showcase.yml` với các mục `TODO` + validate schema (`repo` chỉ được là `null` hoặc `"@secret"`, có `placeholder: true`)
+- [x] `github.js`: stats (ngôn ngữ, commit theo năm, heatmap, repo theo era/domain, hoạt động gần nhất → codename), tools (topic `atkd-tool`), releases, stars
+- [x] Không có token → fallback snapshot, không crash
+- [x] Hướng dẫn quyền tối thiểu của `SHOWCASE_TOKEN` (README: Contents + Metadata read-only, chỉ chọn repo trong mapping)
+- [ ] Chủ site tạo PAT + 4 secret (`LEAK_DENYLIST`, `SHOWCASE_REPOS`, `SHOWCASE_TOKEN`, `STARS_EXCLUDE_OWNERS`). **Deploy sẽ fail nếu thiếu `LEAK_DENYLIST`**
+- [ ] Heatmap: contribution calendar công khai gần như trống (3 lượt/năm) vì profile tắt "Include private contributions". Hoặc bật setting đó, hoặc tự dựng heatmap từ ngày commit của repo trong mapping
+- [x] Leak guard script + chạy trong CI (khớp tên repo private theo nguyên từ, denylist không phân biệt dấu, EXIF, không in giá trị bị khớp)
+- [x] `[qa]` Unit test (`node --test`) cho schema validator, transform của `github.js` và leak guard
+- [x] `[qa]` Fixture "canary" cho leak guard: một chuỗi giả cố tình cài vào để chứng minh guard bắt được, chạy mỗi CI
+- [x] `[eng]` Type-check JS bằng JSDoc + `tsc --checkJs --noEmit`
+- [x] `[pm]` ADR 0001–0003 trong `docs/adr/`: GitHub-native + 11ty, mapping repo nằm trong secret, leak guard
 
 ### Phase 2.5 — Design direction (mới)
 
