@@ -9,3 +9,4 @@ test-results/
 playwright-report/
 lighthouse/
 craft-stats/
+snapshot-out/

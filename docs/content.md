@@ -94,5 +94,6 @@ Theo thứ tự, mockup ở artboard `HomeMobile` và `HomeDesktop`:
 
 ## Snapshot theo năm
 
-- Tag `snapshot-YYYY` → build vào `/YYYY/`, giữ cố định ở các lần deploy sau (lưu dạng artifact hoặc branch `snapshots`).
+- Cuối năm, đẩy tag `snapshot-YYYY` lên `main`. Workflow `Snapshot` build site ở tag đó với dữ liệu thật, đặt dưới `/YYYY/`, lưu vào nhánh `snapshots` rồi chạy lại Deploy ([ADR 0009](adr/0009-yearly-snapshots.md)).
+- Bản lưu có banner "Bản lưu năm YYYY" dẫn về site đang chạy, có `noindex`, tìm kiếm riêng của năm đó, và không đổi theo code hay dữ liệu về sau.
 - giscus (tùy chọn) cho `/blog/*`, `/work/*`.

@@ -91,5 +91,5 @@ eleventyComputed:
   <h2 id="license-title">{{ c.license }}</h2>
   <p>{{ c.licenseBody }}</p>
   <h2 id="security-title">{{ c.security }}</h2>
-  <p>{{ c.securityBody }} <a href="/.well-known/security.txt">/.well-known/security.txt</a></p>
+  <p>{{ c.securityBody }} {#- Protocol-relative: yearly snapshots keep pointing at the live file. -#}<a href="//{{ site.url | replace('https://', '') }}/.well-known/security.txt">/.well-known/security.txt</a></p>
 </section>

@@ -16,6 +16,9 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' {{ themeScript | cspHash | safe }} 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>{{ pageTitle }}</title>
   <meta name="description" content="{{ description }}">
+  {%- if site.snapshot %}
+  <meta name="robots" content="noindex">
+  {%- endif %}
   <link rel="canonical" href="{{ site.url }}{{ page.url }}">
   <meta property="og:type" content="{{ 'article' if (postSlug or workSlug) else 'website' }}">
   <meta property="og:site_name" content="{{ site.title }}">
@@ -62,6 +65,10 @@
 </head>
 <body>
   <a class="skip" href="#main">{{ t.skip }}</a>
+  {%- if site.snapshot %}
+  {#- Protocol-relative on purpose: the snapshot rewrite leaves it alone, so it always leads to the live site. -#}
+  <p class="snapshot-banner">{{ t.snapshotBanner | fmt({ year: site.snapshot }) }} <a href="//{{ site.url | replace('https://', '') }}{{ L.prefix }}/">{{ t.snapshotLive }}</a></p>
+  {%- endif %}
   <header class="titlebar">
     <a class="titlebar-label" href="{{ home }}">~/atkd-coding{{ page.url | shellPath(L.prefix) }} — zsh<span class="visually-hidden"> · {{ t.items.home }}</span></a>
     <div class="titlebar-right">

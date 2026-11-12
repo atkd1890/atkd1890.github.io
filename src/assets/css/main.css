@@ -1408,3 +1408,13 @@ leak-guard-demo {
     align-self: start;
   }
 }
+
+/* yearly snapshot banner (/YYYY/) */
+.snapshot-banner {
+  margin: 0;
+  padding: var(--sp-4) var(--gutter);
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+  font: 400 var(--fs-13) var(--font-display);
+  color: var(--muted);
+}

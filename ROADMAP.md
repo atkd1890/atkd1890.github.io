@@ -64,17 +64,15 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 
 - [ ] Nguồn dữ liệu ngoài GitHub cho repo khách hàng (Bitbucket và các tài khoản khác): token chỉ đọc mỗi nguồn trong secret, mapping ghi nguồn, số liệu theo codename, tên repo vào leak guard (ADR 0007). Làm sau, khi chủ dự án liệt kê đủ các tài khoản
 
-- [ ] `[qa]` Kiểm chứng quyền Metadata đủ cho mọi field sau mỗi lần đổi query (lỗi thiếu quyền chỉ lộ trên CI)
-
 ## Phase 3 — Home + craft
 
 - [ ] Mục Lab trên trang chủ hiện thí nghiệm hoặc kết quả benchmark mới nhất khi có (hiện là trạng thái trống + link `/lab`)
-- [ ] `[design]` So triển khai với mockup, ghi chênh lệch
+- [ ] `[design]` Chốt các chênh lệch còn lại với canvas ([docs/design.md → 11](docs/design.md#11-chênh-lệch-với-canvas)): màu badge tầng bằng chứng, heatmap 26 hay 52 tuần trên mobile
+- [ ] Footer liệt kê các năm đã lưu (`/2026/`…) khi có snapshot đầu tiên
 
 ## Phase 4 — Case study
 
-- [ ] Template `/work/<codename>` theo khung case study/postmortem, mở đầu bằng đồ thật (ảnh chụp `npm run screenshot` hoặc sơ đồ Mermaid lấy từ field `media` trong `showcase.yml`) trước phần chữ; codename chưa có media thì để trống, không dùng ảnh thay thế
-- [ ] 1 bài nháp mẫu từ dữ liệu chủ dự án đưa, không bịa số
+- [ ] Case study đầu tiên từ dữ liệu chủ dự án đưa, không bịa số (khung nháp: `src/work/atkd-ui.md`)
 - [ ] `[design]` Case study `atkd-ui`: vấn đề → token → component → áp dụng cho nhiều repo
 - [ ] `[mkt]` Mỗi case study có 1 câu tóm tắt dùng được cho mạng xã hội + OG riêng
 
@@ -88,11 +86,10 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 
 - [ ] Repo tool mẫu đầu tiên (public, topic `atkd-tool`) để `/tools` có dữ liệu thật; cần chủ dự án chọn tool
 - [ ] `/lab`: bảng xếp hạng benchmark, đọc từ các bài series `benchmark` khi có kết quả đầu tiên
-- [ ] `[ops]` Proof of craft trên `/colophon` thêm điểm Lighthouse và thời gian build lấy từ lần chạy CI gần nhất (hiện có số test, dung lượng JS/CSS, số workflow, số ADR, đọc từ repo)
 
 ## Phase 8 — Snapshot theo năm
 
-- [ ] Workflow `snapshot-YYYY` → `/YYYY/`. Test bằng tag thử rồi xoá
+- [ ] Thử workflow `Snapshot` một lần bằng tag thật trên GitHub (vd `snapshot-2026` rồi xoá tag và thư mục trên nhánh `snapshots` nếu chưa muốn giữ); cần chủ dự án đồng ý vì đẩy tag và chạy lại Deploy
 
 ## Phase 9 — Kiểm tra
 

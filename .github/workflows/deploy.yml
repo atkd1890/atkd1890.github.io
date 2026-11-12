@@ -48,6 +48,14 @@ jobs:
       - run: node scripts/check-data.js # fails if a query needs more than Metadata: read-only (ADR 0004)
       - run: npx playwright install --with-deps chromium
       - run: npm run og # OG images, rendered from the built pages
+      - name: Yearly snapshots (/YYYY/ from the snapshots branch, ADR 0009)
+        run: |
+          if git fetch -q --depth 1 origin snapshots 2>/dev/null; then
+            git archive FETCH_HEAD | tar -x -C _site
+            echo "snapshots: $(git ls-tree --name-only FETCH_HEAD | tr '\n' ' ')"
+          else
+            echo "no snapshots yet"
+          fi
       - run: sudo apt-get install -y --no-install-recommends fonts-noto-cjk # like real /ja/ readers (ADR 0008)
       - name: Lighthouse for the next /colophon (does not block; PRs gate on it)
         env:

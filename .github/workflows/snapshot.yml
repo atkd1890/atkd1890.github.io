@@ -1,0 +1,78 @@
+name: Snapshot
+
+# Freezes the site of a year under /YYYY/ (ADR 0009). Push a tag `snapshot-YYYY` (or run by hand with an
+# existing tag): the site is built at that tag with live data, checked by the leak guard, rewritten under
+# /YYYY/ and committed to the `snapshots` branch. Deploy merges that branch into every later build.
+on:
+  push:
+    tags: ['snapshot-*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing tag, snapshot-YYYY
+        required: true
+
+permissions:
+  contents: write # push to the snapshots branch
+  actions: write # start Deploy afterwards
+
+concurrency:
+  group: snapshot
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ inputs.tag || github.ref_name }}
+    steps:
+      - name: Year from tag
+        id: y
+        run: |
+          year=$(printf '%s' "$TAG" | sed -nE 's/^snapshot-([0-9]{4})$/\1/p')
+          [ -n "$year" ] || { echo "::error::tag must look like snapshot-YYYY"; exit 1; }
+          echo "year=$year" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.TAG }}
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+        env:
+          SNAPSHOT_YEAR: ${{ steps.y.outputs.year }}
+          GITHUB_TOKEN: ${{ github.token }}
+          SHOWCASE_TOKEN: ${{ secrets.SHOWCASE_TOKEN }}
+          SHOWCASE_REPOS: ${{ secrets.SHOWCASE_REPOS }}
+          STARS_EXCLUDE_OWNERS: ${{ secrets.STARS_EXCLUDE_OWNERS }}
+      - run: npx playwright install --with-deps chromium
+      - run: npm run og
+      - name: Leak guard
+        run: node scripts/leak-guard.js _site --require-denylist --fetch-private
+        env:
+          LEAK_DENYLIST: ${{ secrets.LEAK_DENYLIST }}
+          SHOWCASE_REPOS: ${{ secrets.SHOWCASE_REPOS }}
+          SHOWCASE_TOKEN: ${{ secrets.SHOWCASE_TOKEN }}
+      - run: node scripts/snapshot.js "${{ steps.y.outputs.year }}" snapshot-out
+      - name: Commit to the snapshots branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          YEAR: ${{ steps.y.outputs.year }}
+        run: |
+          mkdir snap && cd snap
+          git init -q -b snapshots
+          git config user.name atkd1890
+          git config user.email 2776097+atkd1890@users.noreply.github.com
+          git remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          if git fetch -q --depth 1 origin snapshots; then git checkout -q -B snapshots FETCH_HEAD; fi
+          rm -rf "$YEAR" && cp -R "../snapshot-out/$YEAR" "$YEAR"
+          git add -A
+          if git diff --cached --quiet; then echo "snapshot $YEAR unchanged"; exit 0; fi
+          git commit -qm "chore: snapshot $YEAR from $TAG"
+          git push -q origin snapshots
+      - name: Deploy with the new snapshot
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run Deploy --ref main -R "$GITHUB_REPOSITORY"

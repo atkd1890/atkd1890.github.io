@@ -129,6 +129,8 @@ export default {
         alsoIn: 'Case study này còn có bản:',
         read: 'Đọc case study',
       },
+      snapshotBanner: 'Bản lưu năm {year}, không còn cập nhật.',
+      snapshotLive: 'Xem site hiện tại',
       colophonLink: 'colophon',
       usesLink: 'uses',
       colophon: {
@@ -319,6 +321,8 @@ export default {
         alsoIn: 'This case study is also in:',
         read: 'Read the case study',
       },
+      snapshotBanner: 'Archived {year} snapshot, no longer updated.',
+      snapshotLive: 'See the current site',
       colophonLink: 'colophon',
       usesLink: 'uses',
       colophon: {
@@ -511,6 +515,8 @@ export default {
         alsoIn: 'このケーススタディの他の言語:',
         read: 'ケーススタディを読む',
       },
+      snapshotBanner: '{year} 年のアーカイブです。更新されません。',
+      snapshotLive: '現在のサイトを見る',
       colophonLink: 'colophon',
       usesLink: 'uses',
       colophon: {
