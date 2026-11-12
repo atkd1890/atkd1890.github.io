@@ -73,9 +73,10 @@
 
   /* type */
   --font-display:
-    'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', monospace;
+    'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP',
+    'Noto Sans CJK JP', monospace;
   --font-body: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-ja: 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', sans-serif;
+  --font-ja: 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', 'Noto Sans CJK JP', sans-serif;
 
   /* shape & size */
   --radius: 0;

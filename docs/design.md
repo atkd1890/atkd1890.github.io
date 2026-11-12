@@ -63,7 +63,7 @@ Theo theme contract của hub, mỗi persona bắt buộc có đủ `--bg --fg -
 
 - **Display / UI / code:** JetBrains Mono 400 và 700, tự host (subset latin + vietnamese, gói `@fontsource/jetbrains-mono`, OFL-1.1). Đây là webfont duy nhất.
 - **Body dài** (blog, case study): font hệ thống sans. Đây là điểm **mở rộng** so với hub: bài dài đọc bằng monospace rất mệt.
-- **`:lang(ja)`:** luôn dùng font hệ thống.
+- **`:lang(ja)`:** luôn dùng font hệ thống: Hiragino Sans (Apple), Yu Gothic (Windows), Noto Sans JP / Noto Sans CJK JP (Android, Linux).
 - **Thang chữ** `--fs-N` = N px: 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24. Tiêu đề co giãn: `--fs-h1` (hero), `--fs-h2` (section), `--fs-stat` (số trong tile).
 - H1 hero: 700, line-height 1.05, letter-spacing −0.03em, một dòng.
 

@@ -73,7 +73,7 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 
 ## Phase 4 — Case study
 
-- [ ] Template `/work/<codename>` theo khung case study/postmortem
+- [ ] Template `/work/<codename>` theo khung case study/postmortem, mở đầu bằng đồ thật (ảnh chụp `npm run screenshot` hoặc sơ đồ Mermaid lấy từ field `media` trong `showcase.yml`) trước phần chữ; codename chưa có media thì để trống, không dùng ảnh thay thế
 - [ ] 1 bài nháp mẫu từ dữ liệu chủ dự án đưa, không bịa số
 - [ ] `[design]` Case study `atkd-ui`: vấn đề → token → component → áp dụng cho nhiều repo
 - [ ] `[mkt]` Mỗi case study có 1 câu tóm tắt dùng được cho mạng xã hội + OG riêng
