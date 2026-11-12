@@ -27,7 +27,8 @@ Mức riêng tư là **kín đáo, không phải ẩn danh tuyệt đối** ([AD
 
 ## Code
 
-- Eleventy v3 (ESM), Nunjucks. CSS thuần chỉ dùng token, không hardcode màu, font, bo góc.
+- Eleventy v3 (ESM), Nunjucks. CSS thuần chỉ dùng token, không hardcode màu, font, bo góc (Stylelint chặn).
+- Không thêm script inline: CSP chỉ cho phép script inline chống nháy theme, bằng hash ([ADR 0008](docs/adr/0008-build-time-search-og-csp.md)).
 - JS cho người xem: vanilla hoặc Web Components, chỉ tải ở trang cần dùng. Component cho explainer nằm ở `src/_includes/interactive/`. Mermaid và Pagefind chạy lúc build.
 - File trong `src/_data/*.js` chỉ được có `export default`; logic để ở `lib/` và có test.
 - Ba ngôn ngữ VI (mặc định), EN, JA ([ADR 0006](docs/adr/0006-i18n.md)). Không hardcode chữ giao diện trong template: thêm key vào `src/_data/i18n.js` cho cả 3 ngôn ngữ. Nội dung cần dịch dùng map `{vi, en, ja}` và filter `tr`. Trang mới phân trang theo `i18n.langs` (alias `L`) và khai báo `basePath`.
@@ -47,7 +48,7 @@ Site phải chứng minh một người làm được mọi vai trò. Trước k
 - **design:** chỉ dùng token; đúng docs/design.md và artifact hoặc đã hỏi khi lệch; kiểm tra ở 375px và 1280px, light và dark; tương phản đạt WCAG AA; focus nhìn rõ.
 - **eng:** `npm run check` qua; trong ngân sách hiệu năng; không tải JS ở trang không cần.
 - **ops:** workflow `Deploy` và `PR check` xanh; action pin theo SHA; secret mới có ghi phạm vi trong README.
-- **qa:** logic mới có unit test; hành vi giao diện có e2e trong `tests/e2e/`; `npm run test:e2e` qua, gồm axe không có lỗi serious hay critical; `npm run budget` qua.
+- **qa:** logic mới có unit test; hành vi giao diện có e2e trong `tests/e2e/`; `npm run test:e2e` qua, gồm axe không có lỗi serious hay critical; `npm run budget`, `npm run validate:html`, `npm run links` và `npm run lighthouse` qua; đổi giao diện thì chạy `npm run test:visual` và cập nhật baseline nếu thay đổi là cố ý.
 - **sec:** leak guard sạch, kể cả `npm run leak-guard:local` với dữ liệu thật; không lộ tên riêng hay danh tính trong output, commit, PR.
 - **mkt:** mỗi trang public có title, summary, OG image; chữ theo giọng văn (số liệu trước tính từ).
 - **pm:** xoá task đã xong khỏi ROADMAP, thêm việc mới phát sinh; quyết định có ảnh hưởng lâu dài ghi ADR; thay đổi người xem thấy được ghi CHANGELOG.

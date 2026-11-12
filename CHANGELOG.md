@@ -2,6 +2,15 @@
 
 Thay đổi người xem thấy được trên atkd1890.github.io. Thay đổi nội bộ (test, CI, docs) xem ở git log.
 
+## 2026-11-12 — Tìm kiếm, chia sẻ và các trang mới
+
+- Bảng lệnh ⌘K tìm được trong nội dung mọi bài viết, theo ngôn ngữ của trang; phím `/` mở thẳng ô tìm.
+- Mỗi trang có ảnh chia sẻ riêng (OG image) theo phong cách terminal, cả 3 ngôn ngữ; có `sitemap.xml`, `robots.txt` và dữ liệu có cấu trúc cho bài viết.
+- Trang mới: `/colophon` (site dựng thế nào, số liệu craft đọc thẳng từ repo), `/uses`, `/tools`, `/lab`, mỗi trang đủ 3 ngôn ngữ; footer có link tới `/uses` và `/colophon`.
+- Release của các tool public hiện cùng bài viết ở `/blog/`, feed và trang chủ.
+- Feed theo loại (`/feed/<type>.xml`) đã có bài; trước đây luôn rỗng.
+- Content-Security-Policy chặn mọi script không phải của site; `/.well-known/security.txt` cho báo lỗ hổng.
+
 ## 2026-11-12 — Bản dịch và breadcrumb
 
 - Bài đầu tiên có bản tiếng Anh và tiếng Nhật, kèm sơ đồ và ảnh chụp theo đúng ngôn ngữ.

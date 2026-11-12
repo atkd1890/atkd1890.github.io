@@ -24,7 +24,6 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 - [Phase 4 — Case study](#phase-4--case-study)
 - [Phase 5 — Blog](#phase-5--blog)
 - [Phase 6 — Tools, lab, uses, colophon](#phase-6--tools-lab-uses-colophon)
-- [Phase 7 — SEO, share, search](#phase-7--seo-share-search)
 - [Phase 8 — Snapshot theo năm](#phase-8--snapshot-theo-năm)
 - [Phase 9 — Kiểm tra](#phase-9--kiểm-tra)
 - [Phase 10 — Launch và tăng trưởng](#phase-10--launch-và-tăng-trưởng)
@@ -49,7 +48,9 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 - [ ] Import repo cá nhân từ Bitbucket sang GitHub (private): github.com/new/import, từng repo (chủ dự án làm sau)
 - [ ] Thêm các email cũ từng dùng để commit vào github.com/settings/emails (để private), để commit cũ được tính vào contribution calendar
 - [ ] Sau khi import: thêm codename vào `showcase.yml` + mapping, thay dữ liệu mẫu của era mobile và indie game
-- [ ] `[mkt]` Đọc lại bản dịch tiếng Nhật trong `src/_data/i18n.js`, `showcase.yml`, `site.js`.
+- [ ] `[mkt]` Đọc lại bản dịch tiếng Nhật trong `src/_data/i18n.js`, `showcase.yml`, `site.js`, `uses.js`.
+- [ ] `[mkt]` Điền phần editor, terminal, phần cứng của `/uses` trong `src/_data/uses.js`.
+- [ ] `[qa]` Thử site trên máy thật (iPhone Safari, Android Chrome); CI chỉ giả lập.
 - [ ] `[mkt]` Điền `src/_data/eras.js`: khoảng năm và 1 câu "đã làm gì" cho từng era; `role` và `summary` trong `showcase.yml`.
 - [ ] `[sec]` Gửi GitHub Support yêu cầu xoá các commit cũ còn truy cập được qua mã hash (3 squash commit trước khi viết lại history có tên và email cá nhân; history Jekyll cũ).
 - [ ] `[sec]` Bổ sung denylist: SĐT, địa chỉ, nơi làm hiện tại, khách hàng khác ([hướng dẫn](README.md#cập-nhật-denylist)).
@@ -57,20 +58,17 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 
 ## Phase 1 — Hạ tầng còn thiếu
 
-- [ ] `[eng]` Lint: Stylelint cho CSS, ESLint cho JS; chạy trong `npm run check` (Prettier đã có)
 - [ ] `[pm]` GitHub Project board: mỗi phase là một milestone, mỗi task là một issue có label vai trò
 
 ## Phase 2 — Data pipeline còn thiếu
 
 - [ ] Nguồn dữ liệu ngoài GitHub cho repo khách hàng (Bitbucket và các tài khoản khác): token chỉ đọc mỗi nguồn trong secret, mapping ghi nguồn, số liệu theo codename, tên repo vào leak guard (ADR 0007). Làm sau, khi chủ dự án liệt kê đủ các tài khoản
 
-- [ ] `[sec]` Leak guard bắt thêm theo mẫu như PII scan của hub: email ngoài domain cho phép, SĐT VN/JP; vẫn không in giá trị bị khớp
 - [ ] `[qa]` Kiểm chứng quyền Metadata đủ cho mọi field sau mỗi lần đổi query (lỗi thiếu quyền chỉ lộ trên CI)
 
 ## Phase 3 — Home + craft
 
-- [ ] Stream, Tools, Lab hiện trạng thái trống; nối dữ liệu khi Phase 5 và 6 xong
-- [ ] `[qa]` Visual regression: 375/1280 × light/dark, so với baseline (chạy ở local như hub, vì ảnh khác giữa macOS và Linux)
+- [ ] Mục Lab trên trang chủ hiện thí nghiệm hoặc kết quả benchmark mới nhất khi có (hiện là trạng thái trống + link `/lab`)
 - [ ] `[design]` So triển khai với mockup, ghi chênh lệch
 
 ## Phase 4 — Case study
@@ -85,23 +83,12 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 - [ ] 1 bài `til` + 1 bài `link` thật, để thử luồng issue → PR → merge → publish
 - [ ] `[mkt]` Lịch nội dung: nhịp xuất bản mục tiêu cho từng type (vd til 3/tuần, log 1/tuần, deep-dive 1/quý)
 - [ ] `[mkt]` Cross-post có `canonical` trỏ về site (dev.to, Zenn/Qiita nếu có bài JA)
-- [ ] Bài `release` hiện trong danh sách blog và feed (trang release đã sinh từ GitHub Releases, chưa gộp vào index)
 
 ## Phase 6 — Tools, lab, uses, colophon
 
-- [ ] `/tools` từ topic `atkd-tool`, kèm 1 repo tool mẫu để test
-- [ ] `/lab`: kiến trúc ATKD OS (Mermaid, mức trừu tượng), danh sách thí nghiệm, `lab/benchmark/SPEC.md` (nháp, chờ duyệt), bảng xếp hạng benchmark
-- [ ] `/uses`: khung + `TODO`
-- [ ] `/colophon`: pipeline thật, sinh một phần từ cấu hình (version 11ty, workflows)
-- [ ] `[ops]` "Proof of craft" trên `/colophon`, tự cập nhật từ CI: điểm Lighthouse, số test, thời gian build, dung lượng JS/CSS, số ADR, lần deploy gần nhất
-- [ ] `[pm]` `/colophon` liệt kê ADR và CHANGELOG
-
-## Phase 7 — SEO, share, search
-
-- [ ] OG image sinh lúc build (home, case study, blog, tool)
-- [ ] Pagefind, sitemap, robots, canonical; nối Pagefind vào palette ⌘K
-- [ ] `[mkt]` JSON-LD (Person là persona, không tên thật; BlogPosting; SoftwareApplication cho tool)
-- [ ] `[sec]` CSP qua `<meta>` (script inline chống nháy theme cần hash), SRI cho mọi script ngoài, `/.well-known/security.txt` (hi@atkd1890.me)
+- [ ] Repo tool mẫu đầu tiên (public, topic `atkd-tool`) để `/tools` có dữ liệu thật; cần chủ dự án chọn tool
+- [ ] `/lab`: bảng xếp hạng benchmark, đọc từ các bài series `benchmark` khi có kết quả đầu tiên
+- [ ] `[ops]` Proof of craft trên `/colophon` thêm điểm Lighthouse và thời gian build lấy từ lần chạy CI gần nhất (hiện có số test, dung lượng JS/CSS, số workflow, số ADR, đọc từ repo)
 
 ## Phase 8 — Snapshot theo năm
 
@@ -109,13 +96,8 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 
 ## Phase 9 — Kiểm tra
 
-- [ ] Lighthouse ≥ 95, check link ngoài, leak guard pass, đọc tay lại toàn bộ output
-- [ ] Test bàn phím (palette, phím tắt), reduced-motion, âm thanh mặc định tắt
-- [ ] `[qa]` Lighthouse CI trên mỗi PR với budget
-- [ ] `[qa]` Link checker theo cron hằng tuần, tự mở issue khi có link chết
-- [ ] `[qa]` HTML validation; test trên Safari iOS, Chrome Android, Firefox
-- [ ] `[ops]` Uptime check theo cron, mở issue khi site không trả 200
-- [ ] `[ops]` Diễn tập rollback (re-run `Deploy` của commit trước) một lần, ghi thời gian khôi phục vào README
+- [ ] Đọc tay lại toàn bộ output trước launch (Lighthouse, link, HTML, leak guard đã tự động)
+- [ ] `[ops]` Diễn tập rollback (re-run `Deploy` của commit trước) một lần, ghi thời gian khôi phục vào README; cần chủ dự án đồng ý vì chạm production
 
 ## Phase 10 — Launch và tăng trưởng
 

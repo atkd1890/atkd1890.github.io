@@ -29,6 +29,10 @@
   <meta property="og:locale" content="{{ L.locale }}">
   <meta name="twitter:card" content="summary_large_image">
   {%- if postSlug %}
+  <meta property="article:published_time" content="{{ date | isoDay }}">
+  <meta property="article:section" content="{{ t.blog.types[type] }}">
+  {%- endif %}
+  {%- if postSlug %}
   <script type="application/ld+json">{{ { kind: 'post', url: page.url, title: title, description: description, lang: L.code, date: date, image: site.url + (page.url | ogPath) } | jsonLd(site) | safe }}</script>
   {%- elif page.url == home %}
   <script type="application/ld+json">{{ { kind: 'home', url: page.url, description: description, lang: L.code } | jsonLd(site) | safe }}</script>

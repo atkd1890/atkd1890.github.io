@@ -99,7 +99,7 @@ Trên mobile: nhãn shell + ⌘K + âm thanh + theme, một hàng. Từ 1024px c
 
 - **Favicon:** `src/assets/icons/favicon.svg`, chữ "CO" trong khung, tự đổi màu theo light/dark. Ở ≤ 32px chỉ dùng "CO" vì `<CO/>` không đọc được.
 - **Touch icon và manifest:** PNG 180/192/512 có đủ `<CO/>`, render bằng `node scripts/gen-icons.js` với chính JetBrains Mono của site; file kết quả được commit.
-- **OG image 1200×630** (artboard Nhận diện, sinh lúc build ở Phase 7): nền tối cố định, thanh shell, dòng lệnh theo loại trang, badge theo type, tiêu đề tự co (tối đa 3 dòng), mark + "ATKD Coding" + domain, dải 4 màu era ở đáy. Chỉ dùng chữ có sẵn trong frontmatter.
+- **OG image 1200×630** (artboard Nhận diện), mọi trang đều có, chụp lúc build bằng `scripts/og.js` với CSS của site: nền tối cố định, thanh shell kèm mã ngôn ngữ, dòng lệnh theo loại trang (`cat` cho bài viết, `cd` cho trang khác), badge theo type của bài, tiêu đề tự co từ 60px xuống 40px để vừa tối đa 3 dòng, mô tả tối đa 2 dòng, mark + "ATKD Coding" + domain, dải 4 màu era ở đáy. Chữ lấy từ `og:title`, `og:description` và `article:section` của trang đã build.
 
 ## 9. Liên kết với hub
 
