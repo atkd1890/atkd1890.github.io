@@ -8,15 +8,15 @@
 # Public repos go in `public_repo`.
 
 - codename: atkd-os
-  repo: "@secret"
+  repo: '@secret'
   public_repo: null
   era: ai
   domain: Personal AI lab across a Mac and a GPU box
   role: TODO
   stack: [TODO]
-  years: "2026–"
+  years: '2026–'
   status: wip
-  summary: "TODO"
+  summary: 'TODO'
   metrics: []
   evidence: [card, case-study]
   media: []
@@ -26,15 +26,15 @@
   order: 1
 
 - codename: signal-desk
-  repo: "@secret"
+  repo: '@secret'
   public_repo: null
   era: ai
   domain: Signal bot for personal finance
   role: TODO
   stack: [Python]
-  years: "2026–"
+  years: '2026–'
   status: live
-  summary: "TODO"
+  summary: 'TODO'
   metrics: []
   evidence: [card, case-study]
   media: []
@@ -44,15 +44,15 @@
   order: 2
 
 - codename: atkd-ui
-  repo: "@secret"
+  repo: '@secret'
   public_repo: null
   era: system
   domain: Design system shared by every repo on the account
   role: TODO
   stack: [CSS]
-  years: "2026–"
+  years: '2026–'
   status: live
-  summary: "TODO"
+  summary: 'TODO'
   metrics: []
   evidence: [card, case-study]
   media: []
@@ -62,15 +62,15 @@
   order: 3
 
 - codename: deal-hunters
-  repo: "@secret"
+  repo: '@secret'
   public_repo: null
   era: system
   domain: A fleet of personal-finance automation bots
   role: TODO
   stack: [Python]
-  years: "2026–"
+  years: '2026–'
   status: live
-  summary: "TODO"
+  summary: 'TODO'
   metrics: []
   evidence: [card]
   media: []
@@ -80,15 +80,15 @@
   order: 4
 
 - codename: shift-board
-  repo: "@secret"
+  repo: '@secret'
   public_repo: null
   era: system
   domain: Freelance attendance and shift product for a business client
   role: TODO
   stack: [JavaScript]
-  years: "2026"
+  years: '2026'
   status: shipped
-  summary: "TODO"
+  summary: 'TODO'
   metrics: []
   evidence: [card]
   media: []
@@ -98,15 +98,15 @@
   order: 5
 
 - codename: mmo-ui-kit
-  repo: "@secret"
+  repo: '@secret'
   public_repo: null
   era: indie-game
   domain: UI and scripting kit for an MMO game client
   role: TODO
   stack: [Lua]
-  years: "2016–2020"
+  years: '2016–2020'
   status: archived
-  summary: "TODO"
+  summary: 'TODO'
   metrics: []
   evidence: [card]
   media: []
@@ -115,17 +115,17 @@
   placeholder: false
   order: 6
 
-# Demo data until real mobile / indie-game projects are added (ROADMAP Q10).
+# Demo data until real mobile / indie-game projects are added (docs/content.md → Home).
 - codename: demo-mobile-1
   repo: null
   public_repo: null
   era: mobile
-  domain: "Lorem ipsum mobile app"
+  domain: 'Lorem ipsum mobile app'
   role: TODO
   stack: [Swift, Kotlin]
-  years: "TODO"
+  years: 'TODO'
   status: shipped
-  summary: "Lorem ipsum dolor sit amet."
+  summary: 'Lorem ipsum dolor sit amet.'
   metrics: []
   evidence: [card]
   media: []
@@ -138,12 +138,12 @@
   repo: null
   public_repo: null
   era: indie-game
-  domain: "Lorem ipsum indie game"
+  domain: 'Lorem ipsum indie game'
   role: TODO
   stack: [Unity]
-  years: "TODO"
+  years: 'TODO'
   status: shipped
-  summary: "Lorem ipsum dolor sit amet."
+  summary: 'Lorem ipsum dolor sit amet.'
   metrics: []
   evidence: [card]
   media: []

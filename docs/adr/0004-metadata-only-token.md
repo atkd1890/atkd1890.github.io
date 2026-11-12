@@ -13,11 +13,11 @@ Chủ dự án muốn không phải bảo trì.
 
 ## Các phương án
 
-| Phương án                       | Bảo trì                    | Đọc được code         | Leak guard biết mọi tên private | Số commit theo codename |
-| ------------------------------- | -------------------------- | --------------------- | ------------------------------- | ----------------------- |
-| Chọn repo, Contents + Metadata  | Sửa token mỗi repo mới     | Có, repo đã chọn      | Không                           | Có                      |
-| Mọi repo, Contents + Metadata   | Không                      | **Có, mọi repo**      | Có                              | Có                      |
-| **Mọi repo, chỉ Metadata**      | Không                      | **Không**             | Có                              | Không                   |
+| Phương án                      | Bảo trì                | Đọc được code    | Leak guard biết mọi tên private | Số commit theo codename |
+| ------------------------------ | ---------------------- | ---------------- | ------------------------------- | ----------------------- |
+| Chọn repo, Contents + Metadata | Sửa token mỗi repo mới | Có, repo đã chọn | Không                           | Có                      |
+| Mọi repo, Contents + Metadata  | Không                  | **Có, mọi repo** | Có                              | Có                      |
+| **Mọi repo, chỉ Metadata**     | Không                  | **Không**        | Có                              | Không                   |
 
 ## Quyết định
 

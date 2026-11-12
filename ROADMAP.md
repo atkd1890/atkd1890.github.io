@@ -4,15 +4,15 @@ Chỉ ghi việc còn mở. Xong thì xoá khỏi đây; quyết định ghi ở
 
 Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task không có tag là phần lõi của phase.
 
-| Tag        | Vai trò  | Bằng chứng để lại                                                          |
-| ---------- | -------- | -------------------------------------------------------------------------- |
-| `[design]` | Designer | Brand, token, artboard trong artifact, case study `atkd-ui`                 |
-| `[eng]`    | Engineer | Code qua type-check, ngân sách hiệu năng, Web Components                    |
+| Tag        | Vai trò  | Bằng chứng để lại                                                               |
+| ---------- | -------- | ------------------------------------------------------------------------------- |
+| `[design]` | Designer | Brand, token, artboard trong artifact, case study `atkd-ui`                     |
+| `[eng]`    | Engineer | Code qua type-check, ngân sách hiệu năng, Web Components                        |
 | `[ops]`    | DevOps   | Workflow, branch protection, Dependabot, runbook trong README, "Proof of craft" |
-| `[qa]`     | Tester   | Unit, e2e, visual, axe, Lighthouse CI, link checker, canary của leak guard  |
-| `[sec]`    | Security | Leak guard, secret scanning, CSP, `security.txt`                           |
-| `[mkt]`    | Marketer | Định vị, giọng văn, lịch nội dung, SEO, launch, đo lường không analytics    |
-| `[pm]`     | PM       | Project board, ADR, changelog, retro                                       |
+| `[qa]`     | Tester   | Unit, e2e, visual, axe, Lighthouse CI, link checker, canary của leak guard      |
+| `[sec]`    | Security | Leak guard, secret scanning, CSP, `security.txt`                                |
+| `[mkt]`    | Marketer | Định vị, giọng văn, lịch nội dung, SEO, launch, đo lường không analytics        |
+| `[pm]`     | PM       | Project board, ADR, changelog, retro                                            |
 
 ## Mục lục
 
@@ -54,9 +54,8 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 ## Phase 1 — Hạ tầng còn thiếu
 
 - [ ] `[ops]` Branch protection cho `main`: bắt buộc qua PR, `PR check` phải pass, cấm force-push
-- [ ] `[ops]` Pin mọi action theo commit SHA, `permissions` tối thiểu cho từng job; Dependabot cho npm + GitHub Actions
-- [ ] `[sec]` Bật secret scanning + push protection cho repo
-- [ ] `[eng]` Format và lint: Prettier (cùng cấu hình với hub), Stylelint, ESLint; chạy trong `pr.yml`
+- [ ] `[sec]` Bật secret scanning + push protection của GitHub cho repo (gitleaks trong CI đã có)
+- [ ] `[eng]` Lint: Stylelint cho CSS, ESLint cho JS; chạy trong `npm run check` (Prettier đã có)
 - [ ] `[pm]` GitHub Project board: mỗi phase là một milestone, mỗi task là một issue có label vai trò
 
 ## Phase 2 — Data pipeline còn thiếu
