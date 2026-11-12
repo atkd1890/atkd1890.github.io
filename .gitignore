@@ -5,3 +5,5 @@ _site/
 .env
 *.bundle
 .claude/
+test-results/
+playwright-report/

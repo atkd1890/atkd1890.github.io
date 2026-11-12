@@ -101,7 +101,7 @@ Hiện đang chạy: trang placeholder `/` và `/404`. Các trang khác làm the
 - Font duy nhất là JetBrains Mono, tự host (latin + vietnamese). Body dài dùng font hệ thống.
 - Mermaid render ra SVG lúc build. Pagefind cho tìm kiếm, index lúc build.
 - Dữ liệu GitHub qua GraphQL, cache 1 giờ bằng `@11ty/eleventy-fetch`. Không có token thì dùng snapshot.
-- Kiểm thử: `node:test` cho unit test, `tsc --checkJs` cho type-check, Prettier (cùng cấu hình với hub) cho format, gitleaks quét secret trong commit.
+- Kiểm thử: `node:test` cho unit test, Playwright + axe-core cho e2e và accessibility, ngân sách hiệu năng theo từng trang, `tsc --checkJs` cho type-check, Prettier (cùng cấu hình với hub) cho format, gitleaks quét secret trong commit.
 - Không có file CNAME. Không dùng analytics, tối đa là beacon Cloudflare Web Analytics.
 
 ### Hợp đồng nội dung
@@ -211,23 +211,27 @@ mise install
 npm ci
 ```
 
+`npm ci` cũng cài git hook trong `scripts/hooks/` (`core.hooksPath`): hook `pre-commit` chặn commit nếu email tác giả không phải email noreply của GitHub.
+
 Muốn chạy với dữ liệu thật thì cần thêm `gh` đã đăng nhập (`gh auth login`) và thư mục `../.config/atkd1890.github.io/`. Xem [Tái hiện production ở local](#tái-hiện-production-ở-local).
 
 ### Các lệnh
 
-| Lệnh                       | Dùng khi                                                                         |
-| -------------------------- | -------------------------------------------------------------------------------- |
-| `npm start`                | Sửa code và xem ngay tại http://localhost:8080, dữ liệu từ snapshot              |
-| `npm run start:live`       | Như trên nhưng với dữ liệu GitHub thật                                           |
-| `npm run build`            | Build ra `_site/` bằng snapshot                                                  |
-| `npm run build:live`       | Build với dữ liệu thật, giống production                                         |
-| `npm run check`            | Format check, type-check, unit test và leak guard self-test, như bước đầu của CI |
-| `npm run format`           | Format code và docs bằng Prettier                                                |
-| `npm run leak-guard:local` | Quét `_site/` bằng denylist và mapping thật, như bước cuối của CI                |
-| `npm test`                 | Chỉ chạy unit test                                                               |
-| `npm run typecheck`        | Chỉ chạy `tsc --checkJs`                                                         |
-| `npm run secrets:push`     | Đẩy file trong `../.config/atkd1890.github.io/` lên GitHub secret (ghi đè)       |
-| `npm run clean`            | Xoá `_site/` và `.cache/`                                                        |
+| Lệnh                       | Dùng khi                                                                                                            |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `npm start`                | Sửa code và xem ngay tại http://localhost:8080, dữ liệu từ snapshot                                                 |
+| `npm run start:live`       | Như trên nhưng với dữ liệu GitHub thật                                                                              |
+| `npm run build`            | Build ra `_site/` bằng snapshot                                                                                     |
+| `npm run build:live`       | Build với dữ liệu thật, giống production                                                                            |
+| `npm run check`            | Format check, type-check, unit test và leak guard self-test, như bước đầu của CI                                    |
+| `npm run format`           | Format code và docs bằng Prettier                                                                                   |
+| `npm run leak-guard:local` | Quét `_site/` bằng denylist và mapping thật, như bước cuối của CI                                                   |
+| `npm run test:e2e`         | Build rồi chạy e2e và axe (Playwright) ở 375px và 1280px, light và dark. Lần đầu: `npx playwright install chromium` |
+| `npm run budget`           | Kiểm tra ngân sách: mỗi trang JS ≤ 30 KB, CSS ≤ 20 KB, HTML ≤ 40 KB (gzip), font không chặn render                  |
+| `npm test`                 | Chỉ chạy unit test                                                                                                  |
+| `npm run typecheck`        | Chỉ chạy `tsc --checkJs`                                                                                            |
+| `npm run secrets:push`     | Đẩy file trong `../.config/atkd1890.github.io/` lên GitHub secret (ghi đè)                                          |
+| `npm run clean`            | Xoá `_site/` và `.cache/`                                                                                           |
 
 ### Tái hiện production ở local
 
@@ -283,10 +287,11 @@ Quy tắc giữ nguyên khi sửa: chỉ dùng token, góc vuông, vùng bấm t
 
 ```sh
 npm run check
+npm run test:e2e && npm run budget
 npm run build:live && npm run leak-guard:local
 ```
 
-Kiểm tra bằng mắt ở 375px và 1280px, cả light và dark.
+E2E và axe đã kiểm palette, phím tắt, theme, âm thanh, trang 404, tương phản và nhãn ở 375px và 1280px. Vẫn xem bằng mắt khi đổi giao diện.
 
 ### Debug ở local
 

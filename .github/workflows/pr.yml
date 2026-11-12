@@ -25,6 +25,9 @@ jobs:
       - run: npm run build
         env:
           GITHUB_TOKEN: ${{ github.token }}
+      - run: npm run budget
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test # e2e + axe on the built _site, 375px and 1280px
       - name: Leak guard (site, changed Markdown, commit authors)
         run: |
           changed=$(git diff --name-only --diff-filter=AM "origin/${{ github.base_ref }}...HEAD" -- '*.md' || true)

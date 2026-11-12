@@ -45,7 +45,7 @@ Site phải chứng minh một người làm được mọi vai trò. Trước k
 - **design:** chỉ dùng token; đúng docs/design.md và artifact hoặc đã hỏi khi lệch; kiểm tra ở 375px và 1280px, light và dark; tương phản đạt WCAG AA; focus nhìn rõ.
 - **eng:** `npm run check` qua; trong ngân sách hiệu năng; không tải JS ở trang không cần.
 - **ops:** workflow `Deploy` và `PR check` xanh; action pin theo SHA; secret mới có ghi phạm vi trong README.
-- **qa:** logic mới có unit test; hành vi giao diện có e2e (khi đã có bộ e2e); không có lỗi axe mức serious hay critical.
+- **qa:** logic mới có unit test; hành vi giao diện có e2e trong `tests/e2e/`; `npm run test:e2e` qua, gồm axe không có lỗi serious hay critical; `npm run budget` qua.
 - **sec:** leak guard sạch, kể cả `npm run leak-guard:local` với dữ liệu thật; không lộ tên riêng hay danh tính trong output, commit, PR.
 - **mkt:** mỗi trang public có title, summary, OG image; chữ theo giọng văn (số liệu trước tính từ).
 - **pm:** xoá task đã xong khỏi ROADMAP, thêm việc mới phát sinh; quyết định có ảnh hưởng lâu dài ghi ADR; thay đổi người xem thấy được ghi CHANGELOG.

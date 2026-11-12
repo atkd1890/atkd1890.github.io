@@ -17,6 +17,8 @@
     "scripts/**/*.js",
     "src/_data/**/*.js",
     "src/assets/js/**/*.js",
+    "tests/e2e/**/*.js",
+    "playwright.config.js",
     "eleventy.config.js"
   ]
 }

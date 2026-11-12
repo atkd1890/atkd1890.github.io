@@ -33,6 +33,7 @@ jobs:
           SHOWCASE_TOKEN: ${{ secrets.SHOWCASE_TOKEN }}
           SHOWCASE_REPOS: ${{ secrets.SHOWCASE_REPOS }}
           STARS_EXCLUDE_OWNERS: ${{ secrets.STARS_EXCLUDE_OWNERS }}
+      - run: npm run budget
       - name: Leak guard
         run: node scripts/leak-guard.js _site --require-denylist --fetch-private --commits=HEAD
         env:

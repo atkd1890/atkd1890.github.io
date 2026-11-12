@@ -1,0 +1,15 @@
+#!/bin/sh
+# Rejects commits whose author/committer email is not a GitHub noreply address (ADR 0005).
+# Installed by `npm install` via the "prepare" script (core.hooksPath=scripts/hooks).
+email=$(git var GIT_AUTHOR_IDENT | sed -E 's/.*<([^>]*)>.*/\1/')
+committer=$(git var GIT_COMMITTER_IDENT | sed -E 's/.*<([^>]*)>.*/\1/')
+for e in "$email" "$committer"; do
+  case "$e" in
+    *@users.noreply.github.com) ;;
+    *)
+      echo "pre-commit: commit email must be a GitHub noreply address, got a different one." >&2
+      echo "  fix: git config user.email 2776097+atkd1890@users.noreply.github.com" >&2
+      exit 1
+      ;;
+  esac
+done
