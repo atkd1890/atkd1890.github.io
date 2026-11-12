@@ -22,6 +22,8 @@ import {
   describe,
   CANARY,
   checkCommitMeta,
+  scanPii,
+  isProse,
 } from '../lib/leak-guard.js';
 import { gql } from '../lib/github-api.js';
 
@@ -88,8 +90,11 @@ function scan(files, rules) {
   /** @type {string[]} */
   const hits = [];
   for (const f of files) {
-    if (isText(f)) for (const x of scanText(f, readFileSync(f, 'utf8'), rules)) hits.push(describe(x));
-    else if (isImage(f) && hasExif(readFileSync(f), f)) hits.push(`${f}  image metadata (EXIF), strip it`);
+    if (isText(f)) {
+      const text = readFileSync(f, 'utf8');
+      for (const x of scanText(f, text, rules)) hits.push(describe(x));
+      if (isProse(f)) for (const x of scanPii(f, text)) hits.push(describe(x));
+    } else if (isImage(f) && hasExif(readFileSync(f), f)) hits.push(`${f}  image metadata (EXIF), strip it`);
   }
   return hits;
 }
@@ -97,7 +102,10 @@ function scan(files, rules) {
 function selfTest() {
   const dir = mkdtempSync(join(tmpdir(), 'leak-guard-'));
   try {
-    writeFileSync(join(dir, 'dirty.html'), `<p>ok</p>\n<p>${CANARY}</p>\n<p>see acme-secret-repo here</p>`);
+    writeFileSync(
+      join(dir, 'dirty.html'),
+      `<p>ok</p>\n<p>${CANARY}</p>\n<p>see acme-secret-repo here</p>\n<p>call 090-4821-7730 or mail jane@corp.test</p>`,
+    );
     writeFileSync(join(dir, 'clean.html'), '<p>nothing to see</p>');
     // Minimal JPEG: SOI + APP1 Exif segment + SOS.
     writeFileSync(
@@ -110,10 +118,12 @@ function selfTest() {
       hits.some((h) => h.includes('canary')) &&
       hits.some((h) => h.includes('private repo name')) &&
       hits.some((h) => h.includes('EXIF')) &&
+      hits.some((h) => h.includes('phone number')) &&
+      hits.some((h) => h.includes('email outside')) &&
       !hits.some((h) => h.includes('clean.html'));
     console.log(
       ok
-        ? 'leak-guard self-test: OK (canary, repo name and EXIF detected)'
+        ? 'leak-guard self-test: OK (canary, repo name, EXIF, phone and email detected)'
         : `leak-guard self-test: FAILED\n${hits.join('\n')}`,
     );
     return ok;

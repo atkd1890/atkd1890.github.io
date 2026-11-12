@@ -82,3 +82,44 @@ test('commit metadata: only noreply emails pass, denylisted names fail, values n
   assert.match(out[1], /^commit ccccccc: author\/committer matches denylist entry #0$/);
   for (const m of out) assert.equal(/gmail|Real Person/i.test(m), false);
 });
+
+test('PII: phone numbers in VN and JP formats, never dates, versions or examples', async () => {
+  const { findPhones, scanPii, describe } = await import('../lib/leak-guard.js');
+  for (const p of [
+    '0912345670',
+    '+84912345670',
+    '090-4821-7730',
+    '09048217730',
+    '03-4821-7730',
+    '045-482-7730',
+    '+81 90 4821 7730',
+    '+81-3-4821-7730',
+  ])
+    assert.equal(findPhones(`call ${p} now`).length, 1, p);
+  for (const p of [
+    '2026-11-12',
+    '03-11-2026',
+    'v1.0912345670',
+    '#0912345670',
+    'id-0912345670',
+    '090-1234-5678',
+    '090-0000-0000',
+    '0123456789',
+  ])
+    assert.equal(findPhones(`x ${p} y`).length, 0, p);
+  const findings = scanPii(
+    'a.html',
+    'ok hi@atkd1890.me\nme@gmail.com\n2776097+atkd1890@users.noreply.github.com\ncall 090-4821-7730',
+  );
+  assert.deepEqual(
+    findings.map((f) => describe(f)),
+    ['a.html:2  email outside allowed domains', 'a.html:4  phone number'],
+  );
+  assert.ok(
+    !findings
+      .map((f) => describe(f))
+      .join()
+      .includes('gmail'),
+    'never prints the value',
+  );
+});
