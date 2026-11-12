@@ -45,6 +45,10 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 
 ## Chủ dự án tự làm
 
+- [ ] Liệt kê các nơi đang có repo khách hàng (Bitbucket và các tài khoản khác) và phân loại từng repo: của riêng (import) hay của khách hàng (giữ nguyên, đọc qua API) ([ADR 0007](docs/adr/0007-bitbucket-repos.md))
+- [ ] Import repo cá nhân từ Bitbucket sang GitHub (private): github.com/new/import, từng repo (chủ dự án làm sau)
+- [ ] Thêm các email cũ từng dùng để commit vào github.com/settings/emails (để private), để commit cũ được tính vào contribution calendar
+- [ ] Sau khi import: thêm codename vào `showcase.yml` + mapping, thay dữ liệu mẫu của era mobile và indie game
 - [ ] `[mkt]` Đọc lại bản dịch tiếng Nhật trong `src/_data/i18n.js`, `showcase.yml`, `site.js`.
 - [ ] `[mkt]` Điền `src/_data/eras.js`: khoảng năm và 1 câu "đã làm gì" cho từng era; `role` và `summary` trong `showcase.yml`.
 - [ ] `[sec]` Gửi GitHub Support yêu cầu xoá các commit cũ còn truy cập được qua mã hash (3 squash commit trước khi viết lại history có tên và email cá nhân; history Jekyll cũ).
@@ -57,6 +61,8 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 - [ ] `[pm]` GitHub Project board: mỗi phase là một milestone, mỗi task là một issue có label vai trò
 
 ## Phase 2 — Data pipeline còn thiếu
+
+- [ ] Nguồn dữ liệu ngoài GitHub cho repo khách hàng (Bitbucket và các tài khoản khác): token chỉ đọc mỗi nguồn trong secret, mapping ghi nguồn, số liệu theo codename, tên repo vào leak guard (ADR 0007). Làm sau, khi chủ dự án liệt kê đủ các tài khoản
 
 - [ ] `[sec]` Leak guard bắt thêm theo mẫu như PII scan của hub: email ngoài domain cho phép, SĐT VN/JP; vẫn không in giá trị bị khớp
 - [ ] `[qa]` Kiểm chứng quyền Metadata đủ cho mọi field sau mỗi lần đổi query (lỗi thiếu quyền chỉ lộ trên CI)
