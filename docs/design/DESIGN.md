@@ -2,6 +2,8 @@
 
 Tài liệu nguồn chuẩn cho giao diện của site. Lấy từ bản thiết kế hub atkd1890.me (persona **5 · Coding — Terminal** + phần nền chung), rồi mở rộng cho một site nhiều trang.
 
+**Canvas thiết kế:** [ATKD Coding Design](https://claude.ai/artifact/RXYDQoYg6Z91vRdaQEk6rR) (private). Có 5 artboard: Foundations, Home mobile 390, Home desktop 1440 (có palette ⌘K mở được), Blog (index ⇄ post, lọc theo type), Case study. Tất cả có nút đổi light/dark. Canvas là bản nhìn, file này là bản chữ; khi lệch nhau thì sửa cả hai.
+
 **Nguyên tắc đồng bộ:** đồng bộ ở mức **core** (token màu, font, hình dạng, motif, kích thước chạm, theme contract). Không tái hiện 100%: bio page bên hub là one-page cho mobile, còn site này có home, blog, case study, lab, tools…
 
 ## 1. Bản sắc: "Terminal"
