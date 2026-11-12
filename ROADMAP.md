@@ -20,7 +20,6 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 - [Chủ dự án tự làm](#chủ-dự-án-tự-làm)
 - [Phase 1 — Hạ tầng còn thiếu](#phase-1--hạ-tầng-còn-thiếu)
 - [Phase 2 — Data pipeline còn thiếu](#phase-2--data-pipeline-còn-thiếu)
-- [Phase 2.5 — Design direction](#phase-25--design-direction)
 - [Phase 3 — Home + craft](#phase-3--home--craft)
 - [Phase 4 — Case study](#phase-4--case-study)
 - [Phase 5 — Blog](#phase-5--blog)
@@ -34,7 +33,8 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 ## Cần chủ dự án quyết định
 
 - [ ] `[mkt]` Ngôn ngữ site và blog: chỉ EN, hay EN + VI/JA?
-- [ ] `[mkt]` Câu định vị ở hero.
+- [ ] `[mkt]` Câu định vị ở hero: chọn từ [docs/positioning.md](docs/positioning.md) (4 phương án), duyệt 3 thông điệp và người đọc.
+- [ ] `[mkt]` Duyệt [docs/style-guide.md](docs/style-guide.md) (giọng văn, từ không dùng).
 - [ ] `[design]` `atkd-ui` có chuyển sang public để site này và hub cùng import token không? Đây là tầng bằng chứng mạnh nhất; repo còn private thì site không được copy CSS từ đó.
 - [ ] `[design]` Duyệt canvas [ATKD Coding Design](https://claude.ai/artifact/RXYDQoYg6Z91vRdaQEk6rR) (comment trực tiếp trên artboard), gồm màu 4 era đang đề xuất.
 - [ ] Thư viện nào tách ra open source trước.
@@ -60,16 +60,6 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 
 - [ ] `[sec]` Leak guard bắt thêm theo mẫu như PII scan của hub: email ngoài domain cho phép, SĐT VN/JP; vẫn không in giá trị bị khớp
 - [ ] `[qa]` Kiểm chứng quyền Metadata đủ cho mọi field sau mỗi lần đổi query (lỗi thiếu quyền chỉ lộ trên CI)
-
-## Phase 2.5 — Design direction
-
-- [ ] `[design]` Brand: favicon/app icon từ mark `<CO/>`, chốt màu 4 era
-- [ ] `[design]` Type scale, grid, spacing, elevation dưới dạng token; tương phản đạt WCAG AA cả light lẫn dark
-- [ ] `[design]` Motion principles: thời lượng, easing, chỗ được dùng; bản reduced-motion
-- [ ] `[design]` Sound design: bộ âm click/hover nhỏ, âm lượng, chỗ được phát (mặc định tắt)
-- [ ] `[design]` Template OG image theo khuôn OG của hub (nền tối, tên lớn, dải màu persona slate `#5B6472`)
-- [ ] `[mkt]` Positioning: câu định vị, 3 thông điệp chính, đối tượng đọc (engineer, tech lead, founder)
-- [ ] `[mkt]` Style guide giọng văn: số liệu trước tính từ, độ dài câu, cách viết tiêu đề, từ cấm
 
 ## Phase 3 — Home + craft
 

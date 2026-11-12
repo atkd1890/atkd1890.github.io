@@ -186,7 +186,7 @@ scripts/            leak-guard.js (CLI), push-secrets.sh
 tests/              Unit test (node:test)
 types/              Khai báo type cho package không có type
 config/examples/    Template dữ liệu giả cho các file riêng tư
-docs/               content.md, design.md, adr/
+docs/               content.md, design.md, positioning.md, style-guide.md, adr/
 .github/workflows/  deploy.yml, pr.yml
 eleventy.config.js  mise.toml  .nvmrc  tsconfig.json
 ```
@@ -217,21 +217,22 @@ Muốn chạy với dữ liệu thật thì cần thêm `gh` đã đăng nhập 
 
 ### Các lệnh
 
-| Lệnh                       | Dùng khi                                                                                                            |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `npm start`                | Sửa code và xem ngay tại http://localhost:8080, dữ liệu từ snapshot                                                 |
-| `npm run start:live`       | Như trên nhưng với dữ liệu GitHub thật                                                                              |
-| `npm run build`            | Build ra `_site/` bằng snapshot                                                                                     |
-| `npm run build:live`       | Build với dữ liệu thật, giống production                                                                            |
-| `npm run check`            | Format check, type-check, unit test và leak guard self-test, như bước đầu của CI                                    |
-| `npm run format`           | Format code và docs bằng Prettier                                                                                   |
-| `npm run leak-guard:local` | Quét `_site/` bằng denylist và mapping thật, như bước cuối của CI                                                   |
-| `npm run test:e2e`         | Build rồi chạy e2e và axe (Playwright) ở 375px và 1280px, light và dark. Lần đầu: `npx playwright install chromium` |
-| `npm run budget`           | Kiểm tra ngân sách: mỗi trang JS ≤ 30 KB, CSS ≤ 20 KB, HTML ≤ 40 KB (gzip), font không chặn render                  |
-| `npm test`                 | Chỉ chạy unit test                                                                                                  |
-| `npm run typecheck`        | Chỉ chạy `tsc --checkJs`                                                                                            |
-| `npm run secrets:push`     | Đẩy file trong `../.config/atkd1890.github.io/` lên GitHub secret (ghi đè)                                          |
-| `npm run clean`            | Xoá `_site/` và `.cache/`                                                                                           |
+| Lệnh                        | Dùng khi                                                                                                            |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `npm start`                 | Sửa code và xem ngay tại http://localhost:8080, dữ liệu từ snapshot                                                 |
+| `npm run start:live`        | Như trên nhưng với dữ liệu GitHub thật                                                                              |
+| `npm run build`             | Build ra `_site/` bằng snapshot                                                                                     |
+| `npm run build:live`        | Build với dữ liệu thật, giống production                                                                            |
+| `npm run check`             | Format check, type-check, unit test và leak guard self-test, như bước đầu của CI                                    |
+| `npm run format`            | Format code và docs bằng Prettier                                                                                   |
+| `npm run leak-guard:local`  | Quét `_site/` bằng denylist và mapping thật, như bước cuối của CI                                                   |
+| `npm run test:e2e`          | Build rồi chạy e2e và axe (Playwright) ở 375px và 1280px, light và dark. Lần đầu: `npx playwright install chromium` |
+| `npm run budget`            | Kiểm tra ngân sách: mỗi trang JS ≤ 30 KB, CSS ≤ 20 KB, HTML ≤ 40 KB (gzip), font không chặn render                  |
+| `npm test`                  | Chỉ chạy unit test                                                                                                  |
+| `npm run typecheck`         | Chỉ chạy `tsc --checkJs`                                                                                            |
+| `npm run secrets:push`      | Đẩy file trong `../.config/atkd1890.github.io/` lên GitHub secret (ghi đè)                                          |
+| `node scripts/gen-icons.js` | Render lại PNG icon (touch icon, manifest) từ mark `<CO/>` sau khi đổi màu hoặc font                                |
+| `npm run clean`             | Xoá `_site/` và `.cache/`                                                                                           |
 
 ### Tái hiện production ở local
 
@@ -301,7 +302,8 @@ E2E và axe đã kiểm palette, phím tắt, theme, âm thanh, trang 404, tươ
 | Build fail, báo `showcase.yml is invalid`       | Sai schema, codename trùng, `repo` là tên thật            | Sửa theo dòng báo lỗi                                                   |
 | Footer ghi `Data snapshot (demo)`               | Không có token, hoặc gọi API lỗi                          | Xem dòng `[github] …` trong output; kiểm tra `gh auth status`           |
 | Log `[github] no mapping for codename …`        | Codename có `repo: "@secret"` nhưng chưa có trong mapping | Thêm vào `showcase-repos.json`                                          |
-| Dữ liệu không đổi sau khi sửa                   | Cache 1 giờ trong `.cache/`                               | `npm run clean`                                                         |
+| Dữ liệu không đổi sau khi sửa                   | Cache 1 giờ trong `.cache/`                               | `node scripts/gen-icons.js`                                             | Render lại PNG icon (touch icon, manifest) từ mark `<CO/>` sau khi đổi màu hoặc font |
+| `npm run clean`                                 |
 | Template không thấy dữ liệu từ `src/_data/*.js` | File data có named export, Eleventy lấy cả module         | Chỉ để `export default`; test `data-files` sẽ báo                       |
 | `leak-guard: no denylist configured`            | Thiếu file denylist                                       | Tạo từ template, xem bước 1 ở trên                                      |
 | Leak guard báo `denylist entry #N`              | Nội dung chứa chuỗi cấm                                   | Sửa nội dung. N đếm từ 0, chỉ tính dòng có hiệu lực trong file denylist |
