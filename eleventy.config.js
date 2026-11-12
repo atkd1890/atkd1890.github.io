@@ -1,5 +1,6 @@
 // Eleventy v3 config (ESM). See CLAUDE.md for conventions.
 import { heatmap, topLanguages, eraSummary, selectedWork } from './lib/home.js';
+import { paletteItems } from './lib/palette.js';
 /** @param {any} eleventyConfig Eleventy UserConfig (no published types) */
 export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ 'src/assets': 'assets' });
@@ -19,6 +20,7 @@ export default function (eleventyConfig) {
   eleventyConfig.addFilter('topLanguages', topLanguages);
   eleventyConfig.addFilter('eraSummary', eraSummary);
   eleventyConfig.addFilter('selectedWork', selectedWork);
+  eleventyConfig.addFilter('paletteItems', paletteItems);
   eleventyConfig.addFilter('year', (/** @type {string|number|Date} */ d) => new Date(d).getUTCFullYear());
 
   return {

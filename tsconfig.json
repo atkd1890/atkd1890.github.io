@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2023",
+    "lib": ["es2023", "dom", "dom.iterable"],
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "allowJs": true,
@@ -10,5 +11,12 @@
     "skipLibCheck": true,
     "types": ["node"]
   },
-  "include": ["types/**/*.d.ts", "lib/**/*.js", "scripts/**/*.js", "src/_data/**/*.js", "eleventy.config.js"]
+  "include": [
+    "types/**/*.d.ts",
+    "lib/**/*.js",
+    "scripts/**/*.js",
+    "src/_data/**/*.js",
+    "src/assets/js/**/*.js",
+    "eleventy.config.js"
+  ]
 }

@@ -75,8 +75,6 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 ## Phase 3 — Home + craft
 
 - [ ] Stream, Tools, Lab hiện trạng thái trống; nối dữ liệu khi Phase 5 và 6 xong
-- [ ] Command palette ⌘K, phím tắt (`g h`, `g b`, `/`, `?`)
-- [ ] Nút âm thanh (mặc định tắt), theme toggle
 - [ ] `[eng]` Ngân sách hiệu năng: JS mỗi trang ≤ 30 KB gzip, CSS ≤ 20 KB, không font chặn render; CI fail nếu vượt
 - [ ] `[qa]` Playwright e2e: palette, phím tắt, theme toggle, âm thanh mặc định tắt
 - [ ] `[qa]` Visual regression: 375/1280 × light/dark, so với baseline
@@ -101,6 +99,7 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 - [ ] Nút "New post" mở trình soạn của GitHub với frontmatter điền sẵn
 - [ ] 1 bài `til` + 1 bài `link` mẫu viết tay, để test luồng PR → merge → publish
 - [ ] Hạ tầng explainer tương tác + 1 component demo
+- [ ] Phím tắt `g b` và mục "Stream" trong palette trỏ sang `/blog/` thay cho `#stream`
 - [ ] `[qa]` Validate feed (Atom hợp lệ), test bộ lọc type/tag/series
 - [ ] `[mkt]` Lịch nội dung: nhịp xuất bản mục tiêu cho từng type (vd til 3/tuần, log 1/tuần, deep-dive 1/quý)
 - [ ] `[mkt]` Cross-post có `canonical` trỏ về site (dev.to, Zenn/Qiita nếu có bài JA)
@@ -117,9 +116,9 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 ## Phase 7 — SEO, share, search
 
 - [ ] OG image sinh lúc build (home, case study, blog, tool)
-- [ ] Pagefind, sitemap, robots, canonical
+- [ ] Pagefind, sitemap, robots, canonical; nối Pagefind vào palette ⌘K
 - [ ] `[mkt]` JSON-LD (Person là persona, không tên thật; BlogPosting; SoftwareApplication cho tool)
-- [ ] `[sec]` CSP qua `<meta>`, SRI cho mọi script ngoài, `/.well-known/security.txt` (hi@atkd1890.me)
+- [ ] `[sec]` CSP qua `<meta>` (script inline chống nháy theme cần hash), SRI cho mọi script ngoài, `/.well-known/security.txt` (hi@atkd1890.me)
 
 ## Phase 8 — Snapshot theo năm
 
