@@ -74,10 +74,7 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 ## Phase 3 — Home + craft
 
 - [ ] Stream, Tools, Lab hiện trạng thái trống; nối dữ liệu khi Phase 5 và 6 xong
-- [ ] `[eng]` Ngân sách hiệu năng: JS mỗi trang ≤ 30 KB gzip, CSS ≤ 20 KB, không font chặn render; CI fail nếu vượt
-- [ ] `[qa]` Playwright e2e: palette, phím tắt, theme toggle, âm thanh mặc định tắt
-- [ ] `[qa]` Visual regression: 375/1280 × light/dark, so với baseline
-- [ ] `[qa]` axe-core trong CI: 0 lỗi mức serious/critical
+- [ ] `[qa]` Visual regression: 375/1280 × light/dark, so với baseline (chạy ở local như hub, vì ảnh khác giữa macOS và Linux)
 - [ ] `[design]` So triển khai với mockup, ghi chênh lệch
 
 ## Phase 4 — Case study

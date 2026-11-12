@@ -3,3 +3,5 @@ _site/
 node_modules/
 package-lock.json
 LICENSE-CONTENT
+test-results/
+playwright-report/

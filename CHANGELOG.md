@@ -2,6 +2,10 @@
 
 Thay đổi người xem thấy được trên atkd1890.github.io. Thay đổi nội bộ (test, CI, docs) xem ở git log.
 
+## 2026-11-12 — Accessibility
+
+- Nút mở palette và nút đóng palette có tên đọc được khớp với chữ hiển thị, cho trình đọc màn hình và điều khiển bằng giọng nói.
+
 ## 2026-11-12 — Craft
 
 - Command palette ⌘K / Ctrl+K (cả `/`): đi tới section, dự án, link, đổi theme, bật âm thanh.
