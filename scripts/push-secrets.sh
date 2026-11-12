@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 # Push private config files to this repo's Actions secrets. Each run OVERWRITES the secret.
-# Files live outside the repo, in $ATKD_CONFIG_DIR (default ~/.config/atkd-coding).
+# Files live outside the repo, next to it: ../.config/atkd-coding (override with $ATKD_CONFIG_DIR).
 # Templates: config/examples/. Usage: npm run secrets:push
 set -euo pipefail
-C="${ATKD_CONFIG_DIR:-$HOME/.config/atkd-coding}"
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+C="${ATKD_CONFIG_DIR:-$ROOT/../.config/atkd-coding}"
 
 set_from() {
   local name=$1 file=$C/$2

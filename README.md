@@ -162,7 +162,7 @@ Settings → Pages → Build and deployment → Source: **GitHub Actions**. Work
 
 Không có token thì build dùng `src/_data/snapshot/github.json` và không bao giờ crash.
 
-**Chạy local với dữ liệu thật** (đọc file ở `~/.config/atkd-coding/` và dùng token của `gh`):
+**Chạy local với dữ liệu thật** (đọc file ở `../.config/atkd-coding/` cạnh repo và dùng token của `gh`):
 
 ```bash
 npm run build:live
@@ -180,15 +180,15 @@ npm run check    # typecheck (tsc --checkJs) + unit test (node --test) + leak gu
 
 ## Tùy chỉnh và bảo trì (checklist cho chủ site)
 
-Mọi thứ chủ site phải tự điền hoặc cập nhật đều có trong bảng này. Dữ liệu riêng tư **không bao giờ nằm trong repo**: file thật để ở `~/.config/atkd-coding/` (quyền 600), còn template dữ liệu giả để ở [`config/examples/`](config/examples/).
+Mọi thứ chủ site phải tự điền hoặc cập nhật đều có trong bảng này. Dữ liệu riêng tư **không bao giờ nằm trong repo**: file thật để ở `../.config/atkd-coding/`, tức `~/git/atkd1890/.config/atkd-coding/` ngay cạnh thư mục repo (quyền 600). Template dữ liệu giả để ở [`config/examples/`](config/examples/).
 
 | Mục | Nằm ở đâu | Khi nào cần sửa | Cách làm |
 |---|---|---|---|
-| Denylist chống lộ thông tin | Secret `LEAK_DENYLIST` ← `~/.config/atkd-coding/leak-denylist.txt` | Đổi việc, có khách hàng mới, đổi SĐT hay địa chỉ, gặp chuỗi mới cần giấu | [Cập nhật denylist](#cập-nhật-denylist) |
-| Mapping codename → repo | Secret `SHOWCASE_REPOS` ← `~/.config/atkd-coding/showcase-repos.json` | Thêm hoặc bớt dự án trong showcase | Sửa file rồi `npm run secrets:push` |
+| Denylist chống lộ thông tin | Secret `LEAK_DENYLIST` ← `../.config/atkd-coding/leak-denylist.txt` | Đổi việc, có khách hàng mới, đổi SĐT hay địa chỉ, gặp chuỗi mới cần giấu | [Cập nhật denylist](#cập-nhật-denylist) |
+| Mapping codename → repo | Secret `SHOWCASE_REPOS` ← `../.config/atkd-coding/showcase-repos.json` | Thêm hoặc bớt dự án trong showcase | Sửa file rồi `npm run secrets:push` |
 | Danh sách dự án | [`src/_data/showcase.yml`](src/_data/showcase.yml) | Thêm dự án, đổi trạng thái, thêm số liệu hay bằng chứng | Sửa file, mở PR. `repo` chỉ được là `"@secret"` hoặc `null` |
 | Token đọc metadata | Secret `SHOWCASE_TOKEN` (không có file) | **Trước khi hết hạn** (xem ngày trên trang token) | Tạo token mới như mục Secrets, rồi `gh secret set SHOWCASE_TOKEN` |
-| Loại owner khỏi feed stars | Secret `STARS_EXCLUDE_OWNERS` ← `~/.config/atkd-coding/stars-exclude-owners.txt` | Khi vào org của công ty hoặc khách hàng | Sửa file rồi `npm run secrets:push` |
+| Loại owner khỏi feed stars | Secret `STARS_EXCLUDE_OWNERS` ← `../.config/atkd-coding/stars-exclude-owners.txt` | Khi vào org của công ty hoặc khách hàng | Sửa file rồi `npm run secrets:push` |
 | Câu định vị, email, link | [`src/_data/site.js`](src/_data/site.js) | Chốt tagline, có kênh YouTube | Sửa file, mở PR |
 | Design (màu, font, component) | [`docs/design/DESIGN.md`](docs/design/DESIGN.md) + `src/assets/css/main.css` + canvas thiết kế | Khi đổi design hub hoặc persona | Sửa cả ba cho khớp nhau |
 | Profile GitHub | github.com/settings/profile | Trước khi giới thiệu site | Đổi name, ẩn email, tắt hireable (ROADMAP Phase 0) |
@@ -199,12 +199,12 @@ Các mục sẽ thêm vào bảng ở các phase sau: bài blog (Phase 5), `/use
 
 1. Lần đầu trên máy mới, tạo file từ template:
    ```bash
-   mkdir -p ~/.config/atkd-coding && chmod 700 ~/.config/atkd-coding
+   mkdir -p ../.config/atkd-coding && chmod 700 ../.config ../.config/atkd-coding
    ```
    ```bash
-   cp -n config/examples/leak-denylist.example.txt ~/.config/atkd-coding/leak-denylist.txt
+   cp -n config/examples/leak-denylist.example.txt ../.config/atkd-coding/leak-denylist.txt
    ```
-2. Sửa `~/.config/atkd-coding/leak-denylist.txt`:
+2. Sửa `../.config/atkd-coding/leak-denylist.txt`:
    - Mỗi dòng một chuỗi. Dòng bắt đầu bằng `#` là ghi chú.
    - Khớp theo chuỗi con, không phân biệt hoa thường hay dấu.
    - **Không** bỏ qua khoảng trắng hay gạch nối, nên mỗi định dạng SĐT phải ghi một dòng riêng.

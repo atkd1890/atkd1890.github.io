@@ -16,8 +16,8 @@
     "leak-guard": "node scripts/leak-guard.js _site",
     "check": "npm run typecheck && npm test && node scripts/leak-guard.js --self-test",
     "secrets:push": "bash scripts/push-secrets.sh",
-    "build:live": "GITHUB_TOKEN=$(gh auth token) SHOWCASE_TOKEN=$(gh auth token) SHOWCASE_REPOS_FILE=$HOME/.config/atkd-coding/showcase-repos.json eleventy",
-    "leak-guard:local": "LEAK_DENYLIST_FILE=$HOME/.config/atkd-coding/leak-denylist.txt SHOWCASE_REPOS_FILE=$HOME/.config/atkd-coding/showcase-repos.json SHOWCASE_TOKEN=$(gh auth token) node scripts/leak-guard.js _site --require-denylist --fetch-private"
+    "build:live": "GITHUB_TOKEN=$(gh auth token) SHOWCASE_TOKEN=$(gh auth token) SHOWCASE_REPOS_FILE=../.config/atkd-coding/showcase-repos.json eleventy",
+    "leak-guard:local": "LEAK_DENYLIST_FILE=../.config/atkd-coding/leak-denylist.txt SHOWCASE_REPOS_FILE=../.config/atkd-coding/showcase-repos.json SHOWCASE_TOKEN=$(gh auth token) node scripts/leak-guard.js _site --require-denylist --fetch-private"
   },
   "devDependencies": {
     "@11ty/eleventy": "3.1.8",
