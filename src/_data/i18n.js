@@ -120,7 +120,8 @@ export default {
       usesLink: 'uses',
       colophon: {
         title: 'Colophon',
-        summary: 'Site này được dựng thế nào: stack, pipeline, số liệu craft tự cập nhật từ repo, quyết định kiến trúc và license.',
+        summary:
+          'Site này được dựng thế nào: stack, pipeline, số liệu craft tự cập nhật từ repo, quyết định kiến trúc và license.',
         intro: 'Mọi con số ở đây được đọc từ chính repo lúc build, không gõ tay.',
         stack: 'Stack',
         node: 'Node',
@@ -135,7 +136,8 @@ export default {
           js: 'JS trang chủ, gzip',
           css: 'CSS, gzip',
         },
-        proofNote: 'Số test là số khai báo trong mã nguồn; một khai báo trong vòng lặp chạy nhiều lần. Dung lượng là file thật người xem tải về.',
+        proofNote:
+          'Số test là số khai báo trong mã nguồn; một khai báo trong vòng lặp chạy nhiều lần. Dung lượng là file thật người xem tải về.',
         workflows: 'Workflow',
         cols: { name: 'Tên', triggers: 'Chạy khi', jobs: 'Job' },
         decisions: 'Quyết định kiến trúc',
@@ -166,11 +168,13 @@ export default {
         summary: 'Thí nghiệm với AI: kiến trúc ATKD OS, benchmark model, và những thứ đang thử.',
         intro: 'Nơi ghi lại các thí nghiệm, kể cả những thứ còn ở dạng kế hoạch.',
         os: 'ATKD OS',
-        osIntro: 'Các agent sẽ chạy trong một repo private riêng. Mọi đầu ra của chúng là pull request, đi qua đúng các cổng kiểm tra như thay đổi của người.',
+        osIntro:
+          'Các agent sẽ chạy trong một repo private riêng. Mọi đầu ra của chúng là pull request, đi qua đúng các cổng kiểm tra như thay đổi của người.',
         osStatus: 'kế hoạch, chưa dựng',
         osAlt: 'Kế hoạch ATKD OS: agent trong repo private mở pull request, CI kiểm tra, chủ site merge thì deploy',
         benchmark: 'Benchmark',
-        benchmarkBody: 'Mỗi model mới dựng cùng một prototype game nhỏ theo một đề bài cố định, chấm theo cùng một rubric.',
+        benchmarkBody:
+          'Mỗi model mới dựng cùng một prototype game nhỏ theo một đề bài cố định, chấm theo cùng một rubric.',
         benchmarkStatus: 'đề bài nháp, chờ duyệt',
         spec: 'Đọc đề bài nháp',
         experiments: 'Thí nghiệm',
@@ -289,12 +293,14 @@ export default {
       usesLink: 'uses',
       colophon: {
         title: 'Colophon',
-        summary: 'How this site is built: stack, pipeline, craft numbers read from the repo, architecture decisions and licenses.',
+        summary:
+          'How this site is built: stack, pipeline, craft numbers read from the repo, architecture decisions and licenses.',
         intro: 'Every number here is read from the repo at build time, not typed by hand.',
         stack: 'Stack',
         node: 'Node',
         pipeline: 'Pipeline',
-        pipelineIntro: 'The repo is the CMS, the GitHub API is the data source, Actions checks and builds, Pages serves the site.',
+        pipelineIntro:
+          'The repo is the CMS, the GitHub API is the data source, Actions checks and builds, Pages serves the site.',
         proof: 'Proof of craft',
         tiles: {
           unit: 'unit test declarations',
@@ -304,7 +310,8 @@ export default {
           js: 'home page JS, gzipped',
           css: 'CSS, gzipped',
         },
-        proofNote: 'Test numbers count declarations in the source; one declared in a loop runs several times. Sizes are the files visitors actually download.',
+        proofNote:
+          'Test numbers count declarations in the source; one declared in a loop runs several times. Sizes are the files visitors actually download.',
         workflows: 'Workflows',
         cols: { name: 'Name', triggers: 'Runs on', jobs: 'Jobs' },
         decisions: 'Architecture decisions',
@@ -313,7 +320,8 @@ export default {
         license: 'License',
         licenseBody: 'Content under CC BY 4.0, code under MIT. JetBrains Mono under SIL OFL 1.1, self-hosted.',
         security: 'Security',
-        securityBody: 'The Content-Security-Policy allows only the site’s own scripts; report issues as described in security.txt.',
+        securityBody:
+          'The Content-Security-Policy allows only the site’s own scripts; report issues as described in security.txt.',
       },
       uses: {
         title: 'Uses',
@@ -335,11 +343,13 @@ export default {
         summary: 'AI experiments: the ATKD OS architecture, model benchmarks and work in progress.',
         intro: 'A record of experiments, including ones that are still plans.',
         os: 'ATKD OS',
-        osIntro: 'The agents will run in a separate private repo. Everything they produce is a pull request that passes the same gates as a human change.',
+        osIntro:
+          'The agents will run in a separate private repo. Everything they produce is a pull request that passes the same gates as a human change.',
         osStatus: 'planned, not built yet',
         osAlt: 'ATKD OS plan: agents in a private repo open pull requests, CI checks them, the owner merges to deploy',
         benchmark: 'Benchmark',
-        benchmarkBody: 'Every new model builds the same small game prototype from one fixed spec, scored against the same rubric.',
+        benchmarkBody:
+          'Every new model builds the same small game prototype from one fixed spec, scored against the same rubric.',
         benchmarkStatus: 'draft spec, awaiting review',
         spec: 'Read the draft spec',
         experiments: 'Experiments',
@@ -473,7 +483,8 @@ export default {
           js: 'ホームの JS(gzip)',
           css: 'CSS(gzip)',
         },
-        proofNote: 'テスト数はソース内の宣言数です。ループ内の宣言は複数回実行されます。サイズは訪問者が実際にダウンロードするファイルです。',
+        proofNote:
+          'テスト数はソース内の宣言数です。ループ内の宣言は複数回実行されます。サイズは訪問者が実際にダウンロードするファイルです。',
         workflows: 'ワークフロー',
         cols: { name: '名前', triggers: '実行タイミング', jobs: 'ジョブ' },
         decisions: 'アーキテクチャ判断',
@@ -482,13 +493,19 @@ export default {
         license: 'ライセンス',
         licenseBody: 'コンテンツは CC BY 4.0、コードは MIT。JetBrains Mono は SIL OFL 1.1 でセルフホスト。',
         security: 'セキュリティ',
-        securityBody: 'Content-Security-Policy はサイト自身のスクリプトのみを許可します。脆弱性の報告は security.txt を参照してください。',
+        securityBody:
+          'Content-Security-Policy はサイト自身のスクリプトのみを許可します。脆弱性の報告は security.txt を参照してください。',
       },
       uses: {
         title: 'Uses',
         summary: '使っている道具:このサイトのスタック、作業の流れ、エディタ、ハードウェア。',
         intro: 'スタックと作業の流れはこのリポジトリから。それ以外はサイトの持ち主が記入します。',
-        groups: { site: 'このサイト', workflow: '作業の流れ', editor: 'エディタとターミナル', hardware: 'ハードウェア' },
+        groups: {
+          site: 'このサイト',
+          workflow: '作業の流れ',
+          editor: 'エディタとターミナル',
+          hardware: 'ハードウェア',
+        },
       },
       toolsPage: {
         title: 'ツール',
@@ -504,9 +521,11 @@ export default {
         summary: 'AI の実験:ATKD OS の構成、モデルのベンチマーク、進行中の試み。',
         intro: '計画段階のものも含めた、実験の記録です。',
         os: 'ATKD OS',
-        osIntro: 'エージェントは別の非公開リポジトリで動く予定です。出力はすべてプルリクエストで、人の変更と同じ検査を通ります。',
+        osIntro:
+          'エージェントは別の非公開リポジトリで動く予定です。出力はすべてプルリクエストで、人の変更と同じ検査を通ります。',
         osStatus: '計画中、未構築',
-        osAlt: 'ATKD OS の計画:非公開リポジトリのエージェントがプルリクエストを開き、CI が検査し、持ち主がマージするとデプロイ',
+        osAlt:
+          'ATKD OS の計画:非公開リポジトリのエージェントがプルリクエストを開き、CI が検査し、持ち主がマージするとデプロイ',
         benchmark: 'ベンチマーク',
         benchmarkBody: '新しいモデルごとに、固定の仕様から同じ小さなゲームのプロトタイプを作り、同じ基準で採点します。',
         benchmarkStatus: '仕様は草案、レビュー待ち',
