@@ -8,7 +8,8 @@ permalink: "{% if feed == 'all' %}/feed.xml{% else %}/feed/{{ feed }}.xml{% endi
 eleventyExcludeFromCollections: true
 ---
 {#- Atom feeds: /feed.xml for every post (all languages), /feed/<type>.xml per type. -#}
-{%- set items = collections.posts if feed == 'all' else collections.posts | where('type', feed) -%}
+{%- set all = collections.stream -%}
+{%- set items = all if feed == 'all' else all | where('data.type', feed) -%}
 {%- set selfUrl = site.url + ('/feed.xml' if feed == 'all' else '/feed/' + feed + '.xml') -%}
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="vi">
@@ -29,7 +30,7 @@ eleventyExcludeFromCollections: true
     <category term="{{ post.data.type }}"/>
     {%- for tag in post.data.tags %}<category term="{{ tag }}"/>{% endfor %}
     <summary>{{ post.data.summary }}</summary>
-    <content type="html">{{ post.content | htmlToAbsoluteUrls(abs) }}</content>
+    <content type="html">{{ (post.content or post.data.summary) | htmlToAbsoluteUrls(abs) }}</content>
   </entry>
   {%- endfor %}
 </feed>

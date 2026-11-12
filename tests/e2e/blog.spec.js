@@ -121,3 +121,9 @@ test('the first post exists in all three languages and links them', async ({ pag
     await expect(page.locator('.post-toc li')).toHaveCount(10);
   }
 });
+
+test('per-type feeds list the posts of that type', async ({ request }) => {
+  const xml = await (await request.get('/feed/deep-dive.xml')).text();
+  expect(xml).toContain('<entry');
+  expect(xml).not.toContain('<category term="til"/>');
+});

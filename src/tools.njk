@@ -25,7 +25,7 @@ eleventyComputed:
     <li class="card" id="tool-{{ tool.name }}">
       <div class="card-head"><h2>{{ tool.name }}</h2><span class="meta-line"><time datetime="{{ tool.createdAt | isoDay }}">{{ tool.createdAt | isoDay }}</time></span></div>
       <p>{{ tool.description or '' }}</p>
-      {% if rels.length %}<p class="meta-line">{{ p.releases }}: {% for r in rels | limit(3) %}<a href="/blog/release/{{ r.repo | replace('/', '-') | slugify }}-{{ r.tag | slugify }}/">{{ r.tag }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</p>{% endif %}
+      {% if rels.length %}<p class="meta-line">{{ p.releases }}: {% for r in rels | limit(3) %}<a href="{{ r | releaseUrl }}">{{ r.tag }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</p>{% endif %}
       <p class="badges">
         {% if tool.homepage %}<a class="badge badge-accent" href="{{ tool.homepage }}">{{ p.open }}</a>{% endif %}
         <a class="badge badge-muted" href="{{ tool.url }}">{{ p.source }}</a>

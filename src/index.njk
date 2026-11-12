@@ -124,7 +124,7 @@ permalink: '{{ L.prefix }}/index.html'
   <section class="section" id="stream" aria-labelledby="stream-title">
     <p class="prompt">git log --all --oneline</p>
     <h2 id="stream-title">{{ t.stream }}</h2>
-    {%- set latest = collections.posts | pickVersions(L.code) | limit(6) -%}
+    {%- set latest = collections.stream | pickVersions(L.code) | limit(6) -%}
     {% if latest.length %}
     <ol class="stream">
       {% for p in latest %}
