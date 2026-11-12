@@ -165,16 +165,17 @@ Demo data phải có cờ `placeholder: true` và hiện nhãn "demo data" trên
 
 ### Phase 2.5 — Design direction (mới)
 
-Làm trước Phase 3. Không code trang, chỉ chốt hướng.
+Làm trước Phase 3. Không code trang, chỉ chốt hướng. Nguồn chuẩn: [docs/design/DESIGN.md](docs/design/DESIGN.md), đồng bộ core với bản thiết kế hub atkd1890.me (persona **Coding — Terminal**).
 
-- [ ] `[design]` Chốt câu hỏi 13: dùng token từ `atkd-ui` (public) hay dựng token riêng cho site
-- [ ] `[design]` Brand: wordmark "ATKD Coding", favicon/app icon, màu nhận diện cho 4 era
+- [x] `[design]` Đồng bộ core với design hub: token màu light/dark, JetBrains Mono tự host, góc vuông, motif terminal, kích thước chạm, theme contract → `docs/design/DESIGN.md` + `main.css`
+- [ ] `[design]` Câu hỏi 13: `atkd-ui` (public) có nên chứa luôn token persona Coding, để site và hub cùng import một nguồn không?
+- [ ] `[design]` Brand: wordmark "ATKD Coding" + mark `<CO/>` (đã có từ hub), favicon/app icon, **màu cho 4 era** (mở rộng, chưa có ở hub)
 - [ ] `[design]` Type scale, grid, spacing, radius, elevation dưới dạng token; contrast đạt WCAG AA cả light lẫn dark
 - [ ] `[design]` Motion principles: thời lượng, easing, chỗ được dùng; bản reduced-motion
 - [ ] `[design]` Sound design: bộ âm click/hover nhỏ, âm lượng, chỗ được phát (mặc định tắt)
 - [ ] `[design]` Component inventory: repo card, evidence badge, era timeline, stat tile, heatmap, stream item, palette
 - [ ] `[design]` Mockup home ở 375px và 1280px, light và dark → chủ site duyệt
-- [ ] `[design]` Template OG image (dùng lại ở Phase 7)
+- [ ] `[design]` Template OG image theo khuôn OG của hub (nền tối, tên lớn, dải màu persona slate `#5B6472`), dùng lại ở Phase 7
 - [ ] `[mkt]` Positioning: 1 câu định vị (câu hỏi 2), 3 thông điệp chính, đối tượng đọc (engineer, tech lead, founder)
 - [ ] `[mkt]` Style guide giọng văn: số liệu trước tính từ, độ dài câu, cách viết tiêu đề, từ cấm
 

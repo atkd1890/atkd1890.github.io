@@ -32,7 +32,7 @@ ATKD Coding is an anonymous persona. These rules override convenience, every tim
 
 - Eleventy v3, ESM (`eleventy.config.js`), Nunjucks templates.
 - Layout: `src/_data`, `src/_includes`, `src/work`, `src/blog`, `src/lab`, `src/tools`, `src/assets`.
-- Plain CSS. Design tokens on `:root`, dark mode via `prefers-color-scheme` plus a manual toggle (`data-theme`).
+- Plain CSS. Design tokens on `:root`, dark mode via `prefers-color-scheme` plus a manual toggle (`data-theme`). **[docs/design/DESIGN.md](docs/design/DESIGN.md) is the design source of truth.** It stays in sync at core level with the atkd1890.me hub design (persona "Coding — Terminal"). Use tokens only; no ad-hoc colors, fonts or radii.
 - Client JS: vanilla or Web Components, loaded only on pages that need it. Interactive explainer components live in `src/_includes/interactive/`.
 - Mermaid renders to SVG at build time. No client-side Mermaid.
 - Pagefind indexes at build time.

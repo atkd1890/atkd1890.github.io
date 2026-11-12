@@ -13,6 +13,7 @@
     "clean": "rm -rf _site .cache"
   },
   "devDependencies": {
-    "@11ty/eleventy": "3.1.8"
+    "@11ty/eleventy": "3.1.8",
+    "@fontsource/jetbrains-mono": "5.3.0"
   }
 }

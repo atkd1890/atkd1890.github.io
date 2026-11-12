@@ -3,12 +3,16 @@ layout: layouts/base.njk
 title: ATKD Coding
 ---
 <header class="hero">
-  <h1>{{ site.title }}</h1>
-  <p class="tagline">{{ site.tagline }}</p>
+  <p class="prompt">whoami</p>
+  <div class="hero-id">
+    <div class="mark" aria-hidden="true">&lt;CO/&gt;</div>
+    <h1>ATKD<br>Coding</h1>
+  </div>
+  <p class="comment">{{ site.tagline }}</p>
 </header>
 
-<section class="status" aria-labelledby="status-h">
-  <h2 id="status-h">Rebuilding</h2>
-  <p>This site is being rebuilt in the open, GitHub-native: the repo is the CMS, the API is the data source, Actions is the CI, Pages is the host.</p>
-  <p><a href="https://github.com/{{ site.repo }}">Follow along on GitHub →</a></p>
+<section class="block" aria-labelledby="status-h">
+  <p class="prompt" id="status-h">git status</p>
+  <p>Rebuilding in the open, GitHub-native: the repo is the CMS, the API is the data source, Actions is the CI, Pages is the host.</p>
+  <a class="cta" href="https://github.com/{{ site.repo }}"><span>{{ site.repo }}</span><span class="cursor" aria-hidden="true"></span></a>
 </section>
