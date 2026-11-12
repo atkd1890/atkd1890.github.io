@@ -49,7 +49,11 @@ test('theme toggle persists across reloads without a flash', async ({ page }) =>
   // Applied by the inline head script, before the module runs.
   const atLoad = await page.evaluate(() => document.documentElement.dataset.theme);
   expect(atLoad).toBe(after);
-  await expect(page.locator('[data-theme-toggle]')).toHaveAttribute('aria-label', `Switch to ${before} theme`);
+  const btn = page.locator('[data-theme-toggle]');
+  await expect(btn).toHaveAttribute(
+    'aria-label',
+    /** @type {string} */ (await btn.getAttribute(`data-label-${before}`)),
+  );
 });
 
 test('sound is off by default and its state is announced', async ({ page }) => {

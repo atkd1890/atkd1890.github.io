@@ -1,6 +1,6 @@
 # Nội dung
 
-Spec về nội dung của site: chiến lược, từng section của home, các loại bài, series, `/tools`. Phần kỹ thuật (hợp đồng frontmatter, schema, leak guard) ở [README](../README.md#specs).
+Spec về nội dung của site: chiến lược, từng section của home, các loại bài, series, `/tools`. Mọi trang có 3 ngôn ngữ, tiếng Việt mặc định ([ADR 0006](adr/0006-i18n.md)). Phần kỹ thuật (hợp đồng frontmatter, schema, leak guard) ở [README](../README.md#specs).
 
 ## Mục lục
 

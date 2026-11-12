@@ -32,7 +32,6 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 
 ## Cần chủ dự án quyết định
 
-- [ ] `[mkt]` Ngôn ngữ site và blog: chỉ EN, hay EN + VI/JA?
 - [ ] `[mkt]` Câu định vị ở hero: chọn từ [docs/positioning.md](docs/positioning.md) (4 phương án), duyệt 3 thông điệp và người đọc.
 - [ ] `[mkt]` Duyệt [docs/style-guide.md](docs/style-guide.md) (giọng văn, từ không dùng).
 - [ ] `[design]` `atkd-ui` có chuyển sang public để site này và hub cùng import token không? Đây là tầng bằng chứng mạnh nhất; repo còn private thì site không được copy CSS từ đó.
@@ -46,6 +45,7 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 
 ## Chủ dự án tự làm
 
+- [ ] `[mkt]` Đọc lại bản dịch tiếng Nhật trong `src/_data/i18n.js`, `showcase.yml`, `site.js`.
 - [ ] `[mkt]` Điền `src/_data/eras.js`: khoảng năm và 1 câu "đã làm gì" cho từng era; `role` và `summary` trong `showcase.yml`.
 - [ ] `[sec]` Gửi GitHub Support yêu cầu xoá các commit cũ còn truy cập được qua mã hash (3 squash commit trước khi viết lại history có tên và email cá nhân; history Jekyll cũ).
 - [ ] `[sec]` Bổ sung denylist: SĐT, địa chỉ, nơi làm hiện tại, khách hàng khác ([hướng dẫn](README.md#cập-nhật-denylist)).

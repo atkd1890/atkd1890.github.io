@@ -90,9 +90,11 @@ Từ yếu đến mạnh:
 /<YYYY>/            Snapshot theo năm, đóng băng từ tag snapshot-YYYY
 /feed.xml           Atom feed mọi bài; /feed/<type>.xml cho từng loại
 /404
+/en/...             Bản tiếng Anh của các trang trên
+/ja/...             Bản tiếng Nhật của các trang trên
 ```
 
-Hiện đang chạy: trang placeholder `/` và `/404`. Các trang khác làm theo phase trong ROADMAP.
+Tiếng Việt là mặc định, không có tiền tố URL ([ADR 0006](docs/adr/0006-i18n.md)). Hiện đang chạy: home `/` (và `/en/`, `/ja/`), `/404`. Các trang khác làm theo phase trong ROADMAP.
 
 ### Stack
 
@@ -261,13 +263,14 @@ Khác biệt còn lại so với production: token của `gh` có nhiều quyề
 
 ### Sửa nội dung
 
-| Muốn đổi                                | Sửa ở                                                       |
-| --------------------------------------- | ----------------------------------------------------------- |
-| Dự án trong showcase                    | `src/_data/showcase.yml` (và mapping nếu `repo: "@secret"`) |
-| Câu định vị, email, link                | `src/_data/site.js`                                         |
-| Timeline 4 era (năm, 1 câu "đã làm gì") | [`src/_data/eras.js`](src/_data/eras.js)                    | Khi chốt số năm và nội dung từng era | Thay các giá trị `TODO`, mở PR |
-| Nội dung trang placeholder              | `src/index.njk`                                             |
-| Snapshot dùng khi không có token        | `src/_data/snapshot/github.json`, chỉ chứa số liệu tổng hợp |
+| Muốn đổi                                | Sửa ở                                                                                                                       |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Dự án trong showcase                    | `src/_data/showcase.yml` (và mapping nếu `repo: "@secret"`)                                                                 |
+| Câu định vị, email, link                | `src/_data/site.js`                                                                                                         |
+| Bản dịch EN/JA                          | [`src/_data/i18n.js`](src/_data/i18n.js) (chữ giao diện), các map `{vi, en, ja}` trong `site.js`, `eras.js`, `showcase.yml` | Khi thêm chữ mới hoặc sửa bản dịch tiếng Nhật | Sửa file, mở PR; test báo nếu một ngôn ngữ thiếu key |
+| Timeline 4 era (năm, 1 câu "đã làm gì") | [`src/_data/eras.js`](src/_data/eras.js)                                                                                    | Khi chốt số năm và nội dung từng era          | Thay các giá trị `TODO`, mở PR                       |
+| Nội dung trang placeholder              | `src/index.njk`                                                                                                             |
+| Snapshot dùng khi không có token        | `src/_data/snapshot/github.json`, chỉ chứa số liệu tổng hợp                                                                 |
 
 Chưa có dữ liệu thì để `TODO`, không điền đoán. Có thể sửa thẳng trên github.com hoặc github.dev (bấm `.` trong repo) rồi mở PR.
 

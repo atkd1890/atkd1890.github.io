@@ -2,18 +2,19 @@
 layout: layouts/base.njk
 title: ATKD Coding
 wide: true
-nav:
-  - { label: trajectory, href: '#trajectory' }
-  - { label: work, href: '#work' }
-  - { label: signals, href: '#signals' }
-  - { label: stream, href: '#stream' }
-  - { label: lab, href: '#lab' }
+basePath: /
+nav: [trajectory, work, signals, stream, lab]
+pagination:
+  data: i18n.langs
+  size: 1
+  alias: L
+permalink: '{{ L.prefix }}/index.html'
 ---
+{%- set t = i18n.t[L.code] -%}
 {%- set eraList = eras | eraSummary(showcase) -%}
 {%- set work = showcase | selectedWork(6) -%}
 {%- set heat = github.signals.heatmap | heatmap(52) -%}
 {%- set langs = github.signals.languages | topLanguages(5) -%}
-{%- set eraName = { 'mobile': 'mobile', 'indie-game': 'indie games', 'system': 'systems', 'ai': 'AI' } -%}
 
 <section class="hero" aria-labelledby="hero-title">
   <div class="hero-text">
@@ -22,11 +23,11 @@ nav:
       <div class="mark" aria-hidden="true">&lt;CO/&gt;</div>
       <h1 id="hero-title">ATKD Coding</h1>
     </div>
-    <p class="comment">{{ site.tagline }}</p>
+    <p class="comment">{{ site.tagline | tr(L.code) }}</p>
     {% if github.signals.latest %}
     <p class="now">
       <span class="now-dot" aria-hidden="true"></span>
-      <span class="label">now shipping:</span>
+      <span class="label">{{ t.nowShipping }}</span>
       <a href="#work-{{ github.signals.latest.codename }}">{{ github.signals.latest.codename }}</a>
     </p>
     {% endif %}
@@ -37,22 +38,23 @@ nav:
 
 <section class="section" id="trajectory" aria-labelledby="trajectory-title">
   <p class="prompt">cat trajectory.md</p>
-  <h2 id="trajectory-title">Trajectory</h2>
+  <h2 id="trajectory-title">{{ t.trajectory }}</h2>
   <ol class="eras">
     {% for era in eraList %}
+    {%- set did = era.did | tr(L.code) -%}
     <li class="era era-{{ era.id }}">
       <div class="era-head">
-        <span class="name">{{ era.label }}</span>
+        <span class="name">{{ t.era[era.id] }}</span>
         <span class="years{% if era.years == 'TODO' %} todo{% endif %}">{{ era.years }}</span>
       </div>
       <div class="stack">{{ era.stack | join(' · ') }}</div>
-      <p{% if era.did.startsWith('TODO') %} class="todo"{% endif %}>{{ era.did }}</p>
+      <p{% if did.startsWith('TODO') %} class="todo"{% endif %}>{{ did }}</p>
       <div class="era-foot">
-        <span class="count">{{ era.projects }} project{% if era.projects != 1 %}s{% endif %} shown</span>
+        <span class="count">{{ t.projectsShown | fmt({ n: era.projects }) }}</span>
         {% if era.flagship %}
         <span>-&gt; {% if era.flagship.placeholder %}{{ era.flagship.codename }}{% else %}<a href="#work-{{ era.flagship.codename }}">{{ era.flagship.codename }}</a>{% endif %}</span>
         {% endif %}
-        {% if era.demoOnly %}<span class="badge badge-hash">demo data</span>{% endif %}
+        {% if era.demoOnly %}<span class="badge badge-hash">{{ t.demoData }}</span>{% endif %}
       </div>
     </li>
     {% endfor %}
@@ -61,22 +63,22 @@ nav:
 
 <section class="section" id="work" aria-labelledby="work-title">
   <p class="prompt">ls work/ --featured</p>
-  <h2 id="work-title">Selected work</h2>
+  <h2 id="work-title">{{ t.work }}</h2>
   <div class="cards">
     {% for w in work %}
     <article class="card era-{{ w.era }}" id="work-{{ w.codename }}" aria-labelledby="work-{{ w.codename }}-title">
       <div class="card-head">
         <h3 id="work-{{ w.codename }}-title">{{ w.codename }}</h3>
-        <span class="era-label">{{ eraName[w.era] }}</span>
+        <span class="era-label">{{ t.era[w.era] }}</span>
       </div>
-      <p>{{ w.domain }}</p>
+      <p>{{ w.domain | tr(L.code) }}</p>
       <div class="meta-line">
         {%- set bits = [] -%}
         {%- for s in w.stack %}{% if s != 'TODO' %}{% set bits = (bits.push(s), bits) %}{% endif %}{% endfor -%}
-        {{ bits | join(' · ') }}{% if bits.length %} · {% endif %}{{ w.years }} · {{ w.status }}
+        {{ bits | join(' · ') }}{% if bits.length %} · {% endif %}{{ w.years }} · {{ t.status[w.status] }}
       </div>
       <div class="badges">
-        {% for ev in w.evidence %}<span class="badge {% if ev == 'card' %}badge-muted{% elif ev == 'case-study' %}badge-prompt{% else %}badge-accent{% endif %}">{{ ev | replace('-', ' ') }}</span>{% endfor %}
+        {% for ev in w.evidence %}<span class="badge {% if ev == 'card' %}badge-muted{% elif ev == 'case-study' %}badge-prompt{% else %}badge-accent{% endif %}">{{ t.evidence[ev] }}</span>{% endfor %}
       </div>
     </article>
     {% endfor %}
@@ -86,19 +88,21 @@ nav:
 <section class="section" id="signals" aria-labelledby="signals-title">
   <p class="prompt">gh stats --aggregate</p>
   <div class="section-head">
-    <h2 id="signals-title">Signals</h2>
-    {% if github.demo %}<span class="badge badge-hash">demo data</span>{% else %}<span class="comment">updated daily by Actions</span>{% endif %}
+    <h2 id="signals-title">{{ t.signals }}</h2>
+    {% if github.demo %}<span class="badge badge-hash">{{ t.demoData }}</span>{% else %}<span class="comment">{{ t.updatedDaily }}</span>{% endif %}
   </div>
   <div class="signals-body">
     <div class="tiles">
-      <div class="tile"><span class="value">{{ heat.total }}</span><span class="label">contributions, last 12 months</span></div>
-      <div class="tile"><span class="value">{{ heat.activeDays }}</span><span class="label">active days, last 12 months</span></div>
-      <div class="tile"><span class="value">{{ github.signals.totalContributions }}</span><span class="label">contributions, all time</span></div>
-      <div class="tile"><span class="value">{{ github.signals.activeCodenames }}</span><span class="label">projects with live stats</span></div>
+      <div class="tile"><span class="value">{{ heat.total }}</span><span class="label">{{ t.tiles.year }}</span></div>
+      <div class="tile"><span class="value">{{ heat.activeDays }}</span><span class="label">{{ t.tiles.days }}</span></div>
+      <div class="tile"><span class="value">{{ github.signals.totalContributions }}</span><span class="label">{{ t.tiles.all }}</span></div>
+      <div class="tile"><span class="value">{{ github.signals.activeCodenames }}</span><span class="label">{{ t.tiles.projects }}</span></div>
     </div>
     <div class="langs">
       {% if langs.length %}
-      <div class="lang-bar" role="img" aria-label="Languages across showcased projects: {% for l in langs %}{{ l.name }} {{ l.pct }}%{% if not loop.last %}, {% endif %}{% endfor %}">
+      {%- set langList = [] -%}
+      {%- for l in langs %}{% set langList = (langList.push(l.name + ' ' + l.pct + '%'), langList) %}{% endfor -%}
+      <div class="lang-bar" role="img" aria-label="{{ t.langsAria | fmt({ list: langList | join(', ') }) }}">
         {% for l in langs %}<span style="width: {{ l.pct }}%"></span>{% endfor %}
       </div>
       <ul class="lang-legend" aria-hidden="true">
@@ -106,10 +110,10 @@ nav:
       </ul>
       {% endif %}
       <figure class="heatmap">
-        <div class="heatmap-grid" role="img" aria-label="{{ heat.total }} contributions on {{ heat.activeDays }} days over the last {{ heat.weeks.length }} weeks">
+        <div class="heatmap-grid" role="img" aria-label="{{ t.heatAria | fmt({ total: heat.total, days: heat.activeDays, weeks: heat.weeks.length }) }}">
           {%- for col in heat.weeks %}{% for d in col %}<span class="l{{ d.level }}"></span>{% endfor %}{% endfor -%}
         </div>
-        <figcaption>last {{ heat.weeks.length }} weeks · public + private contributions, counts only</figcaption>
+        <figcaption>{{ t.heatCaption | fmt({ weeks: heat.weeks.length }) }}</figcaption>
       </figure>
     </div>
   </div>
@@ -118,27 +122,27 @@ nav:
 <div class="duo">
   <section class="section" id="stream" aria-labelledby="stream-title">
     <p class="prompt">git log --all --oneline</p>
-    <h2 id="stream-title">Stream</h2>
-    <p class="comment empty">Nothing published yet. TILs, links, build logs and deep-dives land here.</p>
+    <h2 id="stream-title">{{ t.stream }}</h2>
+    <p class="comment empty">{{ t.emptyStream }}</p>
   </section>
 
   <div>
     <section class="section" id="tools" aria-labelledby="tools-title">
       <p class="prompt">ls tools/ playground/</p>
-      <h2 id="tools-title">Tools &amp; playground</h2>
+      <h2 id="tools-title">{{ t.tools }}</h2>
       {% if github.tools.length %}
       <ul class="cards">
-        {% for t in github.tools | batch(3) | first %}<li class="card"><h3><a href="{{ t.homepage or t.url }}">{{ t.name }}</a></h3><p>{{ t.description }}</p></li>{% endfor %}
+        {% for tool in github.tools %}{% if loop.index <= 3 %}<li class="card"><h3><a href="{{ tool.homepage or tool.url }}">{{ tool.name }}</a></h3><p>{{ tool.description }}</p></li>{% endif %}{% endfor %}
       </ul>
       {% else %}
-      <p class="comment empty">No tools yet. Single-file HTML tools built with AI will be listed here.</p>
+      <p class="comment empty">{{ t.emptyTools }}</p>
       {% endif %}
     </section>
 
     <section class="section" id="lab" aria-labelledby="lab-title">
       <p class="prompt">lab bench --latest</p>
-      <h2 id="lab-title">Lab</h2>
-      <p class="comment empty">Benchmark in preparation: every new model builds the same small game prototype from one fixed spec.</p>
+      <h2 id="lab-title">{{ t.lab }}</h2>
+      <p class="comment empty">{{ t.emptyLab }}</p>
     </section>
   </div>
 </div>

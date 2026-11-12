@@ -22,9 +22,11 @@ const currentTheme = () => /** @type {'light'|'dark'} */ (root.dataset.theme || 
 
 function syncThemeButton() {
   const next = nextTheme(currentTheme());
-  document
-    .querySelectorAll('[data-theme-toggle]')
-    .forEach((b) => b.setAttribute('aria-label', `Switch to ${next} theme`));
+  document.querySelectorAll('[data-theme-toggle]').forEach((b) => {
+    // Labels come from the markup, in the page's language.
+    const label = b.getAttribute(`data-label-${next}`);
+    if (label) b.setAttribute('aria-label', label);
+  });
 }
 
 function toggleTheme() {
@@ -109,7 +111,7 @@ function render() {
   if (!shown.length) {
     const li = document.createElement('li');
     li.className = 'pal-empty';
-    li.textContent = 'No match.';
+    li.textContent = list.getAttribute('data-no-match') || '';
     list.append(li);
   }
   highlight();
@@ -195,14 +197,15 @@ document.addEventListener('keydown', (e) => {
   const action = sequencer(e.key, e.timeStamp);
   if (!action) return;
   e.preventDefault();
-  const onHome = location.pathname === '/';
+  const home = root.dataset.home || '/';
+  const onHome = location.pathname === home;
   /** @type {Record<string, () => void>} */
   const actions = {
-    home: () => (location.href = '/'),
-    work: () => (location.href = onHome ? '#work' : '/#work'),
-    signals: () => (location.href = onHome ? '#signals' : '/#signals'),
+    home: () => (location.href = home),
+    work: () => (location.href = onHome ? '#work' : `${home}#work`),
+    signals: () => (location.href = onHome ? '#signals' : `${home}#signals`),
     // Blog lands in Phase 5; until then the Stream section stands in.
-    blog: () => (location.href = onHome ? '#stream' : '/#stream'),
+    blog: () => (location.href = onHome ? '#stream' : `${home}#stream`),
     search: openPalette,
     help: () => help?.showModal(),
   };

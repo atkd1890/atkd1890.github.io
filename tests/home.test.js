@@ -87,7 +87,23 @@ test('selectedWork skips demo data and caps the list', () => {
 
 import { paletteItems } from '../lib/palette.js';
 
-test('paletteItems lists featured real work only, with unique ids', () => {
+test('paletteItems lists featured real work only, translated, with language-prefixed links', () => {
+  const t = {
+    groups: { go: 'Đi tới', work: 'Dự án', action: 'Thao tác', link: 'Liên kết' },
+    items: {
+      home: 'Trang chủ',
+      trajectory: 'a',
+      work: 'b',
+      signals: 'c',
+      stream: 'd',
+      tools: 'e',
+      lab: 'f',
+      theme: 'g',
+      sound: 'h',
+      help: 'i',
+      source: 'j',
+    },
+  };
   const items = paletteItems(
     [
       { codename: 'b', featured: true, placeholder: false, order: 2 },
@@ -95,9 +111,17 @@ test('paletteItems lists featured real work only, with unique ids', () => {
       { codename: 'demo', featured: true, placeholder: true, order: 3 },
     ],
     { hub: 'https://hub', github: 'https://gh', repo: 'o/r', email: 'x@y' },
+    t,
+    '/en',
   );
-  const work = items.filter((i) => i.group === 'Work').map((i) => i.label);
-  assert.deepEqual(work, ['a', 'b']);
+  const work = items.filter((i) => i.group === 'Dự án');
+  assert.deepEqual(
+    work.map((i) => i.label),
+    ['a', 'b'],
+  );
+  assert.equal(work[0].href, '/en/#work-a');
+  assert.equal(items[0].label, 'Trang chủ');
+  assert.equal(items[0].href, '/en/');
   assert.equal(new Set(items.map((i) => i.id)).size, items.length);
   assert.ok(items.every((i) => i.href || i.action));
 });
