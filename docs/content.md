@@ -11,6 +11,7 @@ Spec về nội dung của site: chiến lược, từng section của home, cá
   - [Series](#series)
   - [Explainer tương tác](#explainer-tương-tác)
 - [Viết một bài](#viết-một-bài)
+- [Viết một case study](#viết-một-case-study)
 - [Tools](#tools)
 - [Snapshot theo năm](#snapshot-theo-năm)
 
@@ -74,6 +75,16 @@ Theo thứ tự, mockup ở artboard `HomeMobile` và `HomeDesktop`:
 - **Component tương tác**: Web Component ở `src/_includes/interactive/<tên>.js`, chỉ tải ở bài liệt kê nó trong `interactive`. Hiện có `leak-guard-demo` (gõ một câu, xem leak guard có chặn không, với denylist giả).
 - **Bài do agent soạn**: `source: agent` và `agent_run`; site hiện nhãn "AI hỗ trợ viết".
 - **Quy trình**: issue `blog-idea` → nhánh `post/<slug>` → PR có label `blog-draft` → CI (schema, leak guard trên cả nháp, e2e, preview artifact) → merge là xuất bản. Trang `/blog/` có nút "Viết bài mới trên GitHub" mở sẵn frontmatter.
+
+## Viết một case study
+
+- **File**: `src/work/<codename>.md` cho bản tiếng Việt, thêm `.en.md` hoặc `.ja.md` cho bản dịch. URL: `/work/<codename>/`, `/en/work/<codename>/`, `/ja/work/<codename>/`. Codename phải có trong `showcase.yml`, không phải demo data, và `evidence` có `case-study`; sai thì build fail.
+- **Frontmatter**: `codename`, `lang`, `summary` (một câu, dùng cho mô tả và ảnh chia sẻ), `date`, `source`, `agent_run`, `draft`. Không có field nào khác.
+- **Số liệu một nguồn**: vai trò, domain, stack, năm, `metrics` và `media` khai báo trong `showcase.yml`; trang case study đọc từ đó. File Markdown chỉ chứa câu chuyện.
+- **Khung**: mỗi mục là một `##`, đánh số tự động, liệt kê ở cột "Khung" bên trái: Bối cảnh → Vấn đề → Ràng buộc → Kiến trúc → Quyết định và đánh đổi → Kết quả → Bài học. Bảng quyết định có 3 cột: quyết định, thay cho, cái giá.
+- **Đồ thật trước chữ**: mỗi mục trong `media` là đường dẫn dưới `src/`, không có đuôi. Có `<path>.svg` (Mermaid, `npm run diagrams`) thì hiện sơ đồ; có `<path>-light.png` và `<path>-dark.png` (`npm run screenshot`) thì hiện ảnh chụp. Không có file thì không hiện gì, không dùng ảnh thay thế.
+- **Không bịa**: chưa có thì để `TODO` và giữ `draft: true`. Khung mẫu: [`src/work/atkd-ui.md`](../src/work/atkd-ui.md).
+- Có case study thì thẻ dự án trên trang chủ và mục dự án trong ⌘K tự trỏ tới nó.
 
 ## Tools
 

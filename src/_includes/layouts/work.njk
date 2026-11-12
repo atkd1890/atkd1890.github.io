@@ -1,0 +1,71 @@
+---
+layout: layouts/base.njk
+---
+{#- Case study /work/<codename>/ (artboard CaseStudy). Facts come from showcase.yml, the story from the Markdown file. -#}
+{%- set t = i18n.t[L.code] -%}
+{%- set cs = t.caseStudy -%}
+{%- set w = showcase | where('codename', codename) | first -%}
+{%- set headings = content | toc -%}
+{%- set order = [] -%}
+{%- for e in showcase %}{% set order = (order.push(e.codename), order) %}{% endfor -%}
+{%- set nav = collections.caseStudies | workNav(codename, L.code, order) -%}
+{%- set versions = collections.caseStudies | versionsOf(codename) -%}
+{%- set stack = [] -%}
+{%- for s in w.stack %}{% if s != 'TODO' %}{% set stack = (stack.push(s), stack) %}{% endif %}{% endfor -%}
+<article class="post case era-{{ w.era }}" aria-labelledby="case-title">
+  <header class="post-head case-head">
+    <p class="prompt">cat work/{{ codename }}/README.md</p>
+    <div class="badges">
+      <span class="badge badge-accent">{{ cs.label }}</span>
+      <span class="badge badge-era">{{ cs.era }}: {{ t.era[w.era] }}</span>
+      <span class="badge badge-muted">{{ cs.status }}: {{ t.status[w.status] }}</span>
+      {% if source == 'agent' %}<span class="badge badge-hash" title="agent_run: {{ agent_run }}">{{ t.blog.aiAssisted }}</span>{% endif %}
+    </div>
+    <h1 id="case-title">{{ codename }}</h1>
+    <p class="post-lead">{{ summary }}</p>
+    <dl class="facts">
+      {%- set role = w.role | tr(L.code) %}
+      {% if role and role != 'TODO' %}<div><dt>{{ cs.facts.role }}</dt><dd>{{ role }}</dd></div>{% endif %}
+      <div><dt>{{ cs.facts.domain }}</dt><dd>{{ w.domain | tr(L.code) }}</dd></div>
+      {% if stack.length %}<div><dt>{{ cs.facts.stack }}</dt><dd>{{ stack | join(' · ') }}</dd></div>{% endif %}
+      <div><dt>{{ cs.facts.years }}</dt><dd>{{ w.years }}</dd></div>
+    </dl>
+    {% if w.metrics.length %}
+    <div class="tiles tiles-3" role="list" aria-label="{{ cs.metrics }}">
+      {% for m in w.metrics %}<div class="tile" role="listitem"><span class="value">{{ m.value }}</span><span class="label">{{ m.label | tr(L.code) }}</span></div>{% endfor %}
+    </div>
+    {% endif %}
+    {#- Real media first: diagrams (npm run diagrams) or screenshots (npm run screenshot). Missing files render nothing. -#}
+    {% for path in w.media %}
+    {%- set kind = path | mediaKind %}
+    {% if kind == 'diagram' %}{% diagram path, codename %}{% elif kind == 'shot' %}{% shot '/' + path, codename, 1280, 800 %}{% endif %}
+    {% endfor %}
+  </header>
+
+  <div class="case-body">
+    {% if headings.length > 2 %}
+    <nav class="post-toc case-nav" aria-labelledby="case-toc-title" data-pagefind-ignore>
+      <p id="case-toc-title" class="comment">{{ cs.framework }}</p>
+      <ol>{% for h in headings %}<li><a href="#{{ h.id }}"><span class="case-num" aria-hidden="true">{{ '0' if loop.index < 10 }}{{ loop.index }}</span> {{ h.text }}</a></li>{% endfor %}</ol>
+    </nav>
+    {% endif %}
+    <div class="prose case-prose">
+      {{ content | safe }}
+    </div>
+  </div>
+
+  <footer class="post-foot" data-pagefind-ignore>
+    {% if nav.prev or nav.next %}
+    <nav class="series-nav" aria-label="{{ cs.label }}">
+      {% if nav.prev %}<a href="{{ nav.prev.url }}" rel="prev"><span class="comment">{{ cs.prev }}</span>{{ nav.prev.data.codename }}</a>{% endif %}
+      {% if nav.next %}<a href="{{ nav.next.url }}" rel="next"><span class="comment">{{ cs.next }}</span>{{ nav.next.data.codename }}</a>{% endif %}
+    </nav>
+    {% endif %}
+    {%- set others = [] -%}
+    {%- for l in i18n.langs %}{% if versions[l.code] and l.code != lang %}{% set others = (others.push(l), others) %}{% endif %}{% endfor -%}
+    {% if others.length %}
+    <p class="comment">{{ cs.alsoIn }} {% for l in others %}<a href="{{ versions[l.code] }}" hreflang="{{ l.code }}" lang="{{ l.code }}">{{ l.name }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</p>
+    {% endif %}
+    <p><a href="{{ L.prefix }}/#work">&lt;- {{ cs.back }}</a></p>
+  </footer>
+</article>

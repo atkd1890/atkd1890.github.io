@@ -69,7 +69,8 @@ permalink: '{{ L.prefix }}/index.html'
     {% for w in work %}
     <article class="card era-{{ w.era }}" id="work-{{ w.codename }}" aria-labelledby="work-{{ w.codename }}-title">
       <div class="card-head">
-        <h3 id="work-{{ w.codename }}-title">{{ w.codename }}</h3>
+        {%- set caseUrl = collections.caseStudies | workUrl(w.codename, L.code) %}
+        <h3 id="work-{{ w.codename }}-title">{% if caseUrl %}<a href="{{ caseUrl }}">{{ w.codename }}</a>{% else %}{{ w.codename }}{% endif %}</h3>
         <span class="era-label">{{ t.era[w.era] }}</span>
       </div>
       <p>{{ w.domain | tr(L.code) }}</p>
