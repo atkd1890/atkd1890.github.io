@@ -11,7 +11,7 @@ The site is built from private sources and drafted partly by agents. A single sl
 
 `scripts/leak-guard.js` runs on the built `_site/` and on the Markdown files a PR changes. It fails on:
 
-- **private repo names**, matched as whole tokens, from `SHOWCASE_REPOS` plus the private repos the token can list;
+- **private repo names**, matched as whole tokens, from `SHOWCASE_REPOS` plus every private repo the all-repositories token can list (ADR 0004);
 - **denylist entries**, matched case- and diacritic-insensitively, from the `LEAK_DENYLIST` secret (names, employers, clients, emails, phones, addresses, local paths);
 - **EXIF** in JPEG, PNG and WebP images;
 - **a built-in canary**. A self-test plants it on every CI run to prove the guard still fires.

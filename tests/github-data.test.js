@@ -2,8 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { buildSignals, toShares, toStars, toTools, toReleases, whitelist } from "../lib/github-data.js";
 
-const raw = (pushedAt, years, langs) => ({
-  createdAt: "2026-01-01T00:00:00Z", pushedAt, commitsByYear: years,
+const raw = (pushedAt, langs) => ({
+  createdAt: "2026-01-01T00:00:00Z", pushedAt,
   languages: { edges: Object.entries(langs).map(([name, size]) => ({ size, node: { name } })) },
 });
 
@@ -14,12 +14,14 @@ test("toShares turns bytes into rounded percentages, largest first", () => {
 
 test("buildSignals aggregates by codename and never sees repo names", () => {
   const { signals, codenames } = buildSignals(
-    { "atkd-os": raw("2026-10-01T00:00:00Z", { 2026: 30 }, { TS: 900 }), "signal-desk": raw("2026-11-01T00:00:00Z", { 2026: 10, 2025: 2 }, { Python: 100 }) },
+    { "atkd-os": raw("2026-10-01T00:00:00Z", { TS: 900 }), "signal-desk": raw("2026-11-01T00:00:00Z", { Python: 100 }) },
     [{ codename: "atkd-os", era: "ai", placeholder: false }, { codename: "demo", era: "mobile", placeholder: true }],
-    [{ date: "2026-11-01", count: 3 }],
+    { heatmap: [{ date: "2026-11-01", count: 3 }], contributionsByYear: { 2026: 40, 2025: 2 } },
   );
-  assert.deepEqual(signals.commitsByYear, { 2026: 40, 2025: 2 });
-  assert.equal(signals.totalCommits, 42);
+  assert.deepEqual(signals.contributionsByYear, { 2026: 40, 2025: 2 });
+  assert.equal(signals.totalContributions, 42);
+  assert.deepEqual(signals.languages, [{ name: "TS", pct: 90 }, { name: "Python", pct: 10 }]);
+  assert.deepEqual(signals.heatmap, [{ date: "2026-11-01", count: 3 }]);
   assert.deepEqual(signals.latest, { codename: "signal-desk", pushedAt: "2026-11-01T00:00:00Z" });
   assert.deepEqual(signals.reposByEra, { ai: 1 }, "placeholders are not counted");
   assert.deepEqual(Object.keys(codenames), ["atkd-os", "signal-desk"]);
@@ -51,7 +53,7 @@ test("toReleases skips private sources and sorts newest first", () => {
 
 test("whitelist strips unknown keys at every level", () => {
   const p = /** @type {any} */ ({ generatedAt: "t", source: "live", demo: false, signals: {}, tools: [], releases: [], stars: [],
-    codenames: { a: { commitsByYear: {}, languages: [], pushedAt: null, repo: "someone/private" } }, token: "x", repoMap: { a: "someone/private" } });
+    codenames: { a: { languages: [], createdAt: null, pushedAt: null, repo: "someone/private" } }, token: "x", repoMap: { a: "someone/private" } });
   const out = whitelist(p);
   assert.equal("token" in out, false);
   assert.equal("repoMap" in out, false);
@@ -60,11 +62,10 @@ test("whitelist strips unknown keys at every level", () => {
 
 import { mergeRaw, repoList } from "../lib/github-data.js";
 
-test("mergeRaw sums commits and bytes, keeps earliest createdAt and latest pushedAt", () => {
-  const a = { createdAt: "2026-02-01", pushedAt: "2026-05-01", commitsByYear: { 2026: 3 }, languages: { edges: [{ size: 10, node: { name: "Py" } }] } };
-  const b = { createdAt: "2026-01-01", pushedAt: "2026-04-01", commitsByYear: { 2026: 2, 2025: 1 }, languages: { edges: [{ size: 5, node: { name: "Py" } }] } };
+test("mergeRaw sums language bytes, keeps earliest createdAt and latest pushedAt", () => {
+  const a = { createdAt: "2026-02-01", pushedAt: "2026-05-01", languages: { edges: [{ size: 10, node: { name: "Py" } }] } };
+  const b = { createdAt: "2026-01-01", pushedAt: "2026-04-01", languages: { edges: [{ size: 5, node: { name: "Py" } }] } };
   const m = mergeRaw([a, b]);
-  assert.deepEqual(m.commitsByYear, { 2026: 5, 2025: 1 });
   assert.equal(m.createdAt, "2026-01-01");
   assert.equal(m.pushedAt, "2026-05-01");
   assert.deepEqual(m.languages.edges, [{ size: 15, node: { name: "Py" } }]);
