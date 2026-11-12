@@ -13,9 +13,10 @@ Phần core (token, font, góc vuông, motif terminal) đồng bộ với design
 
 ## Persona và quyền riêng tư
 
-ATKD Coding là persona ẩn danh. Các luật này luôn được ưu tiên hơn sự tiện lợi.
+Mức riêng tư là **kín đáo, không phải ẩn danh tuyệt đối** ([ADR 0005](docs/adr/0005-privacy-level.md)): người xem nối được ATKD Coding với tài khoản GitHub hay với hub cũng không sao. Cái phải giữ là dữ liệu công việc và thông tin liên lạc cá nhân. Các luật này luôn được ưu tiên hơn sự tiện lợi.
 
-- Không ghi tên thật, nơi làm việc cũ hay hiện tại, tên khách hàng, email cá nhân, SĐT, địa chỉ, path máy local vào bất kỳ file nào được commit hoặc render. Liên hệ chỉ dùng `hi@atkd1890.me`.
+- Không ghi tên thật, nơi làm việc cũ hay hiện tại, tên khách hàng, email cá nhân, SĐT, địa chỉ, path máy local vào nội dung site hay file được commit. Liên hệ chỉ dùng `hi@atkd1890.me`.
+- Tác giả và committer của mọi commit dùng email noreply của GitHub. Leak guard kiểm tra cả metadata commit trong PR và trên `main`.
 - Tên repo private không bao giờ xuất hiện trong HTML, feed, JSON, OG image, commit message, PR, docs hay `showcase.yml`. Dùng codename dạng kebab-case, không trùng hay gần giống tên repo. Mapping codename → repo chỉ nằm trong secret `SHOWCASE_REPOS` ([ADR 0002](docs/adr/0002-private-repo-mapping-in-secrets.md)).
 - Chỉ hiện những gì `showcase.yml` khai báo. Repo private chỉ đóng góp số liệu, không commit code, dữ liệu hay chữ copy từ repo private.
 - Dự án công ty/khách hàng chỉ mô tả trừu tượng: domain, quy mô, vai trò.
@@ -59,9 +60,9 @@ Site phải chứng minh một người làm được mọi vai trò. Trước k
 
 ## Git
 
-- Identity của repo là `ATKD Coding <2776097+atkd1890@users.noreply.github.com>`. Kiểm tra `git config user.email` trước khi commit, không bao giờ commit bằng email cá nhân.
+- Identity của repo là `atkd1890 <2776097+atkd1890@users.noreply.github.com>`. Kiểm tra `git config user.email` trước khi commit, không bao giờ commit bằng email cá nhân. Merge trên GitHub dùng tên và email theo profile, nên profile phải để email private.
 - Nhánh mặc định là `main`. History cũ chỉ nằm trong bundle ở `../_archive/`, không push lại.
 - Commit nhỏ theo task, message dạng `type: mô tả` (`feat`, `fix`, `docs`, `test`, `ci`, `chore`), không chứa tên repo private.
-- `main` được bảo vệ: làm trên nhánh riêng, mở PR, chờ `check` và `gitleaks` xanh rồi squash merge. Không push thẳng lên `main`, kể cả khi admin bypass được.
+- `main` được bảo vệ: làm trên nhánh riêng, mở PR, chờ `check` và `gitleaks` xanh rồi squash merge. Không push thẳng lên `main`, kể cả khi admin bypass được. Nhánh trên GitHub tự xoá sau khi merge; ở local `fetch.prune` đã bật, nhánh local tự xoá sau merge.
 - Không push hay merge nếu chủ dự án chưa bảo.
 - Docs viết lại cho đúng hiện trạng, không nối thêm ghi chú hay ngày vào dòng cũ.

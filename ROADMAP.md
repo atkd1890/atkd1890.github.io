@@ -47,10 +47,9 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 ## Chủ dự án tự làm
 
 - [ ] `[mkt]` Điền `src/_data/eras.js`: khoảng năm và 1 câu "đã làm gì" cho từng era; `role` và `summary` trong `showcase.yml`.
-- [ ] `[sec]` Sửa profile GitHub: name, ẩn email, location, bio, twitter, tắt hireable. Phải xong trước khi giới thiệu site.
+- [ ] `[sec]` Gửi GitHub Support yêu cầu xoá các commit cũ còn truy cập được qua mã hash (3 squash commit trước khi viết lại history có tên và email cá nhân; history Jekyll cũ).
 - [ ] `[sec]` Bổ sung denylist: SĐT, địa chỉ, nơi làm hiện tại, khách hàng khác ([hướng dẫn](README.md#cập-nhật-denylist)).
 - [ ] `[sec]` Xem lại các mục denylist ngắn dễ chặn nhầm (mục #6 trùng một từ tiếng Nhật thông dụng, mục #7 ngắn); cân nhắc đổi sang dạng domain.
-- [ ] `[sec]` History cũ có thể còn trong cache, fork hoặc Wayback: gửi yêu cầu gỡ nếu cần, hoặc nhờ GitHub Support xoá commit cũ còn truy cập được qua hash.
 
 ## Phase 1 — Hạ tầng còn thiếu
 
@@ -145,7 +144,7 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 
 ## Định kỳ
 
-- Trước ngày hết hạn của `SHOWCASE_TOKEN` `[sec]`: tạo token mới, `gh secret set SHOWCASE_TOKEN`. Hết hạn thì site tự quay về snapshot.
+- Khi có issue "SHOWCASE_TOKEN expires…" `[sec]`: tạo token mới theo hướng dẫn trong issue, rồi đóng issue. Issue tự mở 14 ngày trước hạn.
 - Khi đổi việc, có khách hàng mới hoặc đổi thông tin liên lạc `[sec]`: cập nhật denylist, `npm run secrets:push`.
 - Khi thêm dự án vào showcase `[pm]`: thêm vào `showcase.yml` và mapping, `npm run secrets:push`.
 - Khi repo không có commit 60 ngày `[ops]`: GitHub tắt cron, bật lại workflow `Deploy` ở tab Actions.

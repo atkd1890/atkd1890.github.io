@@ -15,6 +15,10 @@ updates:
         patterns:
           - '@types/*'
           - typescript
+    ignore:
+      # @types/node follows the Node major pinned in mise.toml / .nvmrc; bump it together with Node.
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
   - package-ecosystem: github-actions
     directory: /
     schedule:

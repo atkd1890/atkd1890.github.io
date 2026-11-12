@@ -34,7 +34,7 @@ jobs:
           SHOWCASE_REPOS: ${{ secrets.SHOWCASE_REPOS }}
           STARS_EXCLUDE_OWNERS: ${{ secrets.STARS_EXCLUDE_OWNERS }}
       - name: Leak guard
-        run: node scripts/leak-guard.js _site --require-denylist --fetch-private
+        run: node scripts/leak-guard.js _site --require-denylist --fetch-private --commits=HEAD
         env:
           LEAK_DENYLIST: ${{ secrets.LEAK_DENYLIST }}
           SHOWCASE_REPOS: ${{ secrets.SHOWCASE_REPOS }}
@@ -53,3 +53,47 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+
+  token-expiry:
+    # Reminds the owner to rotate SHOWCASE_TOKEN: opens one issue 14 days before expiry,
+    # or when the token has expired or is invalid. Runs with every deploy, including the daily cron.
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+      - id: check
+        run: node scripts/check-token-expiry.js
+        env:
+          SHOWCASE_TOKEN: ${{ secrets.SHOWCASE_TOKEN }}
+      - name: Open reminder issue
+        if: contains(fromJSON('["warn","expired","invalid"]'), steps.check.outputs.state)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          STATE: ${{ steps.check.outputs.state }}
+          DAYS: ${{ steps.check.outputs.days }}
+          EXPIRES: ${{ steps.check.outputs.expires }}
+        run: |
+          if [ -n "$(gh issue list --state open --search 'SHOWCASE_TOKEN in:title' --json number --jq '.[].number')" ]; then
+            echo "Reminder issue already open"; exit 0
+          fi
+          case "$STATE" in
+            warn) title="SHOWCASE_TOKEN expires in $DAYS days ($EXPIRES)";;
+            expired) title="SHOWCASE_TOKEN expired on $EXPIRES";;
+            invalid) title="SHOWCASE_TOKEN is invalid (401)";;
+          esac
+          gh issue create --title "$title" --body "$(cat <<'BODY'
+          The site falls back to the snapshot when this token stops working, so stats stop updating.
+
+          Rotate it (about 2 minutes):
+          1. github.com → Settings → Developer settings → Fine-grained tokens → generate a new token: all repositories, **Metadata: Read-only** only, with an expiry date.
+          2. `gh secret set SHOWCASE_TOKEN` in this repo and paste the new token.
+          3. `gh workflow run Deploy`, then close this issue.
+
+          Details: README → "Cấu hình GitHub" and docs/adr/0004.
+          BODY
+          )"

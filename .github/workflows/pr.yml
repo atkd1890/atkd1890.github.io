@@ -25,10 +25,10 @@ jobs:
       - run: npm run build
         env:
           GITHUB_TOKEN: ${{ github.token }}
-      - name: Leak guard (site + changed Markdown)
+      - name: Leak guard (site, changed Markdown, commit authors)
         run: |
           changed=$(git diff --name-only --diff-filter=AM "origin/${{ github.base_ref }}...HEAD" -- '*.md' || true)
-          node scripts/leak-guard.js _site $changed
+          node scripts/leak-guard.js _site $changed --commits=${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }}
         env:
           # Present for same-repo PRs, absent for forks (guard still checks canary + EXIF).
           LEAK_DENYLIST: ${{ secrets.LEAK_DENYLIST }}

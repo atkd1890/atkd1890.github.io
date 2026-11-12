@@ -58,7 +58,8 @@ Phần lớn công việc nằm trong repo private và không được public. V
 3. **Repo private chỉ đóng góp số liệu.** Chỉ có số liệu tổng hợp, không có code.
 4. **Code chỉ ở hai dạng.** Hoặc là đoạn trích viết lại, hoặc nằm trong repo public (thư viện tách ra, tools, demo mới).
 5. **Dự án công ty/khách hàng chỉ mô tả trừu tượng.** Nêu domain, quy mô, vai trò; không nêu tên.
-6. **Không bịa số.** Chưa có thì để `TODO`, hoặc dùng demo data có nhãn.
+6. **Kín đáo, không ẩn danh tuyệt đối.** Nối persona với tài khoản GitHub hay hub cũng được; chỉ giữ kín dữ liệu công việc và liên lạc cá nhân ([ADR 0005](docs/adr/0005-privacy-level.md)).
+7. **Không bịa số.** Chưa có thì để `TODO`, hoặc dùng demo data có nhãn.
 
 ### Các tầng bằng chứng
 
@@ -167,7 +168,8 @@ Bắt buộc. Vi phạm thì build hoặc PR fail. Lý do ở [ADR 0003](docs/ad
   - tên repo private, khớp nguyên từ (lấy từ `SHOWCASE_REPOS` và từ API, không lưu trong repo);
   - các mục trong denylist, không phân biệt hoa thường và dấu (secret `LEAK_DENYLIST`);
   - EXIF trong ảnh JPEG, PNG, WebP;
-  - chuỗi canary cài sẵn (self-test chạy mỗi lần CI).
+  - chuỗi canary cài sẵn (self-test chạy mỗi lần CI);
+  - tên và email tác giả, committer của commit: chỉ chấp nhận email noreply của GitHub, không khớp denylist.
 - Log chỉ in `file:dòng` và số thứ tự luật, không in giá trị bị khớp, vì log CI là public.
 - `lib/github-data.js` chỉ xuất các field nằm trong whitelist, mọi số liệu gắn theo codename.
 - Feed `link` lấy từ stars loại bỏ repo private và các owner trong secret `STARS_EXCLUDE_OWNERS`.
@@ -303,13 +305,13 @@ Kiểm tra bằng mắt ở 375px và 1280px, cả light và dark.
 
 ### Luồng deploy
 
-| Sự kiện                             | Workflow      | Kết quả                                                                          |
-| ----------------------------------- | ------------- | -------------------------------------------------------------------------------- |
-| Push lên `main`                     | `Deploy`      | Check, build với dữ liệu thật, leak guard, deploy lên https://atkd1890.github.io |
-| Hằng ngày 06:17 JST                 | `Deploy`      | Như trên, để cập nhật số liệu                                                    |
-| Chạy tay (`gh workflow run Deploy`) | `Deploy`      | Như trên                                                                         |
-| PR vào `main`                       | `PR check`    | Check, build bằng dữ liệu public, leak guard, bản preview làm artifact 7 ngày    |
-| Push lên `main` hoặc PR             | `Secret scan` | gitleaks quét secret trong toàn bộ history                                       |
+| Sự kiện                             | Workflow      | Kết quả                                                                                     |
+| ----------------------------------- | ------------- | ------------------------------------------------------------------------------------------- |
+| Push lên `main`                     | `Deploy`      | Check, build với dữ liệu thật, leak guard, deploy lên https://atkd1890.github.io            |
+| Hằng ngày 06:17 JST                 | `Deploy`      | Như trên, để cập nhật số liệu; job `token-expiry` mở issue khi `SHOWCASE_TOKEN` sắp hết hạn |
+| Chạy tay (`gh workflow run Deploy`) | `Deploy`      | Như trên                                                                                    |
+| PR vào `main`                       | `PR check`    | Check, build bằng dữ liệu public, leak guard, bản preview làm artifact 7 ngày               |
+| Push lên `main` hoặc PR             | `Secret scan` | gitleaks quét secret trong toàn bộ history                                                  |
 
 Leak guard fail thì không deploy, site giữ bản cũ. Workflow PR không bao giờ nhận `SHOWCASE_TOKEN`. Action pin theo commit SHA, Dependabot cập nhật npm và action hằng tuần.
 
@@ -361,17 +363,17 @@ gh run rerun <run-id-của-bản-tốt>
 
 Mọi thứ chủ site phải tự điền hoặc cập nhật đều có trong bảng này. Dữ liệu riêng tư **không bao giờ nằm trong repo**: file thật để ở `../.config/atkd1890.github.io/`, tức `~/git/atkd1890/.config/atkd1890.github.io/` ngay cạnh repo (quyền 600). Template dữ liệu giả để ở [`config/examples/`](config/examples/).
 
-| Mục                         | Nằm ở đâu                                                         | Khi nào cần sửa                                         | Cách làm                                                                                   |
-| --------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| Denylist chống lộ thông tin | Secret `LEAK_DENYLIST` ← `leak-denylist.txt`                      | Đổi việc, có khách hàng mới, đổi SĐT hay địa chỉ        | [Cập nhật denylist](#cập-nhật-denylist)                                                    |
-| Mapping codename → repo     | Secret `SHOWCASE_REPOS` ← `showcase-repos.json`                   | Thêm hoặc bớt dự án trong showcase                      | Sửa file rồi `npm run secrets:push`                                                        |
-| Danh sách dự án             | [`src/_data/showcase.yml`](src/_data/showcase.yml)                | Thêm dự án, đổi trạng thái, thêm số liệu hay bằng chứng | Sửa file, mở PR                                                                            |
-| Token đọc metadata          | Secret `SHOWCASE_TOKEN` (không có file)                           | **Trước khi hết hạn** (xem ngày trên trang token)       | Tạo token mới theo [Cấu hình GitHub](#cấu-hình-github), rồi `gh secret set SHOWCASE_TOKEN` |
-| Loại owner khỏi feed stars  | Secret `STARS_EXCLUDE_OWNERS` ← `stars-exclude-owners.txt`        | Khi vào org của công ty hoặc khách hàng                 | Sửa file rồi `npm run secrets:push`                                                        |
-| Câu định vị, email, link    | [`src/_data/site.js`](src/_data/site.js)                          | Chốt tagline, có kênh YouTube                           | Sửa file, mở PR                                                                            |
-| Design                      | [`docs/design.md`](docs/design.md) + `main.css` + canvas thiết kế | Khi đổi design hub hoặc persona                         | Sửa cả ba cho khớp nhau                                                                    |
-| Phiên bản Node              | `mise.toml` + `.nvmrc`                                            | Khi nâng Node                                           | Sửa cả hai, `mise install`, `npm run check`                                                |
-| Profile GitHub              | github.com/settings/profile                                       | Trước khi giới thiệu site                               | Đổi name, ẩn email, tắt hireable                                                           |
+| Mục                         | Nằm ở đâu                                                         | Khi nào cần sửa                                                                                        | Cách làm                                                                                   |
+| --------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| Denylist chống lộ thông tin | Secret `LEAK_DENYLIST` ← `leak-denylist.txt`                      | Đổi việc, có khách hàng mới, đổi SĐT hay địa chỉ                                                       | [Cập nhật denylist](#cập-nhật-denylist)                                                    |
+| Mapping codename → repo     | Secret `SHOWCASE_REPOS` ← `showcase-repos.json`                   | Thêm hoặc bớt dự án trong showcase                                                                     | Sửa file rồi `npm run secrets:push`                                                        |
+| Danh sách dự án             | [`src/_data/showcase.yml`](src/_data/showcase.yml)                | Thêm dự án, đổi trạng thái, thêm số liệu hay bằng chứng                                                | Sửa file, mở PR                                                                            |
+| Token đọc metadata          | Secret `SHOWCASE_TOKEN` (không có file)                           | **Trước khi hết hạn**: workflow `Deploy` tự mở issue nhắc 14 ngày trước, và khi token hết hạn hoặc sai | Tạo token mới theo [Cấu hình GitHub](#cấu-hình-github), rồi `gh secret set SHOWCASE_TOKEN` |
+| Loại owner khỏi feed stars  | Secret `STARS_EXCLUDE_OWNERS` ← `stars-exclude-owners.txt`        | Khi vào org của công ty hoặc khách hàng                                                                | Sửa file rồi `npm run secrets:push`                                                        |
+| Câu định vị, email, link    | [`src/_data/site.js`](src/_data/site.js)                          | Chốt tagline, có kênh YouTube                                                                          | Sửa file, mở PR                                                                            |
+| Design                      | [`docs/design.md`](docs/design.md) + `main.css` + canvas thiết kế | Khi đổi design hub hoặc persona                                                                        | Sửa cả ba cho khớp nhau                                                                    |
+| Phiên bản Node              | `mise.toml` + `.nvmrc`                                            | Khi nâng Node                                                                                          | Sửa cả hai, `mise install`, `npm run check`                                                |
+| Profile GitHub              | github.com/settings/profile                                       | Trước khi giới thiệu site                                                                              | Đổi name, ẩn email, tắt hireable                                                           |
 
 Các mục sẽ thêm vào bảng ở các phase sau: bài blog (Phase 5), `/uses` và đề bài benchmark (Phase 6).
 
