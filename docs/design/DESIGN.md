@@ -32,17 +32,17 @@ Tài liệu nguồn chuẩn cho giao diện của site. Lấy từ bản thiết
 
 Theo theme contract của hub, mỗi persona bắt buộc có đủ `--bg --fg --muted --line --accent` cho cả light và dark. Coding có thêm `--prompt`, `--hash`, `--panel`, `--inv`.
 
-| Token | Light | Dark | Dùng cho |
-|---|---|---|---|
-| `--bg` | `#F4F5F8` | `#0D1117` | Nền trang |
-| `--fg` | `#1E2330` | `#E6EDF3` | Chữ chính |
-| `--muted` | `#5A6172` | `#8F9AAA` | Chữ phụ, gutter, nhãn |
-| `--line` | `#CBD0DB` | `#2A3340` | Viền, kẻ |
-| `--panel` | `#E7E9F0` | `#161B22` | Thanh tiêu đề, nền link/card |
-| `--accent` | `#4338CA` | `#7DD3FC` | CTA, logo, link, focus glow |
-| `--prompt` | `#0F6B62` | `#5EEAD4` | Dòng `$ lệnh` |
-| `--hash` | `#9A3412` | `#FDBA74` | Hash, số liệu nhỏ, highlight phụ |
-| `--inv` | `#FFFFFF` | `#0D1117` | Chữ trên nền accent |
+| Token      | Light     | Dark      | Dùng cho                         |
+| ---------- | --------- | --------- | -------------------------------- |
+| `--bg`     | `#F4F5F8` | `#0D1117` | Nền trang                        |
+| `--fg`     | `#1E2330` | `#E6EDF3` | Chữ chính                        |
+| `--muted`  | `#5A6172` | `#8F9AAA` | Chữ phụ, gutter, nhãn            |
+| `--line`   | `#CBD0DB` | `#2A3340` | Viền, kẻ                         |
+| `--panel`  | `#E7E9F0` | `#161B22` | Thanh tiêu đề, nền link/card     |
+| `--accent` | `#4338CA` | `#7DD3FC` | CTA, logo, link, focus glow      |
+| `--prompt` | `#0F6B62` | `#5EEAD4` | Dòng `$ lệnh`                    |
+| `--hash`   | `#9A3412` | `#FDBA74` | Hash, số liệu nhỏ, highlight phụ |
+| `--inv`    | `#FFFFFF` | `#0D1117` | Chữ trên nền accent              |
 
 - **Màu đại diện của Coding trên hub:** `#5B6472` (slate), dùng cho avatar `CO` và dải màu trên OG image.
 - **Mở rộng cho site (chưa có ở hub):** 4 màu era cho timeline Trajectory sẽ chốt ở Phase 2.5. Chúng phải khác nhau cả về độ sáng, không chỉ hue, và đạt 3:1 trên `--bg`.
