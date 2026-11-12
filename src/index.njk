@@ -1,18 +1,144 @@
 ---
 layout: layouts/base.njk
 title: ATKD Coding
+wide: true
+nav:
+  - { label: trajectory, href: '#trajectory' }
+  - { label: work, href: '#work' }
+  - { label: signals, href: '#signals' }
+  - { label: stream, href: '#stream' }
+  - { label: lab, href: '#lab' }
 ---
-<header class="hero">
-  <p class="prompt">whoami</p>
-  <div class="hero-id">
-    <div class="mark" aria-hidden="true">&lt;CO/&gt;</div>
-    <h1>ATKD<br>Coding</h1>
-  </div>
-  <p class="comment">{{ site.tagline }}</p>
-</header>
+{%- set eraList = eras | eraSummary(showcase) -%}
+{%- set work = showcase | selectedWork(6) -%}
+{%- set heat = github.signals.heatmap | heatmap(52) -%}
+{%- set langs = github.signals.languages | topLanguages(5) -%}
+{%- set eraName = { 'mobile': 'mobile', 'indie-game': 'indie games', 'system': 'systems', 'ai': 'AI' } -%}
 
-<section class="block" aria-labelledby="status-h">
-  <p class="prompt" id="status-h">git status</p>
-  <p>Rebuilding in the open, GitHub-native: the repo is the CMS, the API is the data source, Actions is the CI, Pages is the host.</p>
-  <a class="cta" href="https://github.com/{{ site.repo }}"><span>{{ site.repo }}</span><span class="cursor" aria-hidden="true"></span></a>
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-text">
+    <p class="prompt">whoami</p>
+    <div class="hero-id">
+      <div class="mark" aria-hidden="true">&lt;CO/&gt;</div>
+      <h1 id="hero-title">ATKD<br>Coding</h1>
+    </div>
+    <p class="comment">{{ site.tagline }}</p>
+    {% if github.signals.latest %}
+    <p class="now">
+      <span class="now-dot" aria-hidden="true"></span>
+      <span class="label">now shipping:</span>
+      <a href="#work-{{ github.signals.latest.codename }}">{{ github.signals.latest.codename }}</a>
+    </p>
+    {% endif %}
+    <a class="cta" href="#trajectory"><span>cat trajectory.md</span><span class="cursor" aria-hidden="true"></span></a>
+  </div>
+  {% include "partials/decor-server-room.njk" %}
 </section>
+
+<section class="section" id="trajectory" aria-labelledby="trajectory-title">
+  <p class="prompt">cat trajectory.md</p>
+  <h2 id="trajectory-title">Trajectory</h2>
+  <ol class="eras">
+    {% for era in eraList %}
+    <li class="era era-{{ era.id }}">
+      <div class="era-head">
+        <span class="name">{{ era.label }}</span>
+        <span class="years{% if era.years == 'TODO' %} todo{% endif %}">{{ era.years }}</span>
+      </div>
+      <div class="stack">{{ era.stack | join(' · ') }}</div>
+      <p{% if era.did.startsWith('TODO') %} class="todo"{% endif %}>{{ era.did }}</p>
+      <div class="era-foot">
+        <span class="count">{{ era.projects }} project{% if era.projects != 1 %}s{% endif %} shown</span>
+        {% if era.flagship %}
+        <span>-&gt; {% if era.flagship.placeholder %}{{ era.flagship.codename }}{% else %}<a href="#work-{{ era.flagship.codename }}">{{ era.flagship.codename }}</a>{% endif %}</span>
+        {% endif %}
+        {% if era.demoOnly %}<span class="badge badge-hash">demo data</span>{% endif %}
+      </div>
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+
+<section class="section" id="work" aria-labelledby="work-title">
+  <p class="prompt">ls work/ --featured</p>
+  <h2 id="work-title">Selected work</h2>
+  <div class="cards">
+    {% for w in work %}
+    <article class="card era-{{ w.era }}" id="work-{{ w.codename }}" aria-labelledby="work-{{ w.codename }}-title">
+      <div class="card-head">
+        <h3 id="work-{{ w.codename }}-title">{{ w.codename }}</h3>
+        <span class="era-label">{{ eraName[w.era] }}</span>
+      </div>
+      <p>{{ w.domain }}</p>
+      <div class="meta-line">
+        {%- set bits = [] -%}
+        {%- for s in w.stack %}{% if s != 'TODO' %}{% set bits = (bits.push(s), bits) %}{% endif %}{% endfor -%}
+        {{ bits | join(' · ') }}{% if bits.length %} · {% endif %}{{ w.years }} · {{ w.status }}
+      </div>
+      <div class="badges">
+        {% for ev in w.evidence %}<span class="badge {% if ev == 'card' %}badge-muted{% elif ev == 'case-study' %}badge-prompt{% else %}badge-accent{% endif %}">{{ ev | replace('-', ' ') }}</span>{% endfor %}
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section" id="signals" aria-labelledby="signals-title">
+  <p class="prompt">gh stats --aggregate</p>
+  <div class="section-head">
+    <h2 id="signals-title">Signals</h2>
+    {% if github.demo %}<span class="badge badge-hash">demo data</span>{% else %}<span class="comment">updated daily by Actions</span>{% endif %}
+  </div>
+  <div class="signals-body">
+    <div class="tiles">
+      <div class="tile"><span class="value">{{ heat.total }}</span><span class="label">contributions, last 12 months</span></div>
+      <div class="tile"><span class="value">{{ heat.activeDays }}</span><span class="label">active days, last 12 months</span></div>
+      <div class="tile"><span class="value">{{ github.signals.totalContributions }}</span><span class="label">contributions, all time</span></div>
+      <div class="tile"><span class="value">{{ github.signals.activeCodenames }}</span><span class="label">projects with live stats</span></div>
+    </div>
+    <div class="langs">
+      {% if langs.length %}
+      <div class="lang-bar" role="img" aria-label="Languages across showcased projects: {% for l in langs %}{{ l.name }} {{ l.pct }}%{% if not loop.last %}, {% endif %}{% endfor %}">
+        {% for l in langs %}<span style="width: {{ l.pct }}%"></span>{% endfor %}
+      </div>
+      <ul class="lang-legend" aria-hidden="true">
+        {% for l in langs %}<li>{{ l.name }} <span class="pct">{{ l.pct }}%</span></li>{% endfor %}
+      </ul>
+      {% endif %}
+      <figure class="heatmap">
+        <div class="heatmap-grid" role="img" aria-label="{{ heat.total }} contributions on {{ heat.activeDays }} days over the last {{ heat.weeks.length }} weeks">
+          {%- for col in heat.weeks %}{% for d in col %}<span class="l{{ d.level }}"></span>{% endfor %}{% endfor -%}
+        </div>
+        <figcaption>last {{ heat.weeks.length }} weeks · public + private contributions, counts only</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<div class="duo">
+  <section class="section" id="stream" aria-labelledby="stream-title">
+    <p class="prompt">git log --all --oneline</p>
+    <h2 id="stream-title">Stream</h2>
+    <p class="comment empty">Nothing published yet. TILs, links, build logs and deep-dives land here.</p>
+  </section>
+
+  <div>
+    <section class="section" id="tools" aria-labelledby="tools-title">
+      <p class="prompt">ls tools/ playground/</p>
+      <h2 id="tools-title">Tools &amp; playground</h2>
+      {% if github.tools.length %}
+      <ul class="cards">
+        {% for t in github.tools | batch(3) | first %}<li class="card"><h3><a href="{{ t.homepage or t.url }}">{{ t.name }}</a></h3><p>{{ t.description }}</p></li>{% endfor %}
+      </ul>
+      {% else %}
+      <p class="comment empty">No tools yet. Single-file HTML tools built with AI will be listed here.</p>
+      {% endif %}
+    </section>
+
+    <section class="section" id="lab" aria-labelledby="lab-title">
+      <p class="prompt">lab bench --latest</p>
+      <h2 id="lab-title">Lab</h2>
+      <p class="comment empty">Benchmark in preparation: every new model builds the same small game prototype from one fixed spec.</p>
+    </section>
+  </div>
+</div>

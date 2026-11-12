@@ -12,11 +12,18 @@
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
-  <div class="titlebar" aria-hidden="true">~/atkd-coding — zsh</div>
-  <main id="main" class="wrap">
+  <header class="titlebar">
+    <span class="titlebar-label" aria-hidden="true">~/atkd-coding — zsh</span>
+    {% if nav %}
+    <nav aria-label="Sections">
+      {% for item in nav %}<a href="{{ item.href }}">{{ item.label }}</a>{% endfor %}
+    </nav>
+    {% endif %}
+  </header>
+  <main id="main" class="wrap{% if wide %} wide{% endif %}">
     {{ content | safe }}
   </main>
-  <footer class="wrap site-footer">
+  <footer class="wrap{% if wide %} wide{% endif %} site-footer">
     <p class="prompt">cat links.txt</p>
     <nav aria-label="Elsewhere">
       <a href="{{ site.hub }}">atkd1890.me</a>

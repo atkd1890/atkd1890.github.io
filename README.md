@@ -254,12 +254,13 @@ Khác biệt còn lại so với production: token của `gh` có nhiều quyề
 
 ### Sửa nội dung
 
-| Muốn đổi                         | Sửa ở                                                       |
-| -------------------------------- | ----------------------------------------------------------- |
-| Dự án trong showcase             | `src/_data/showcase.yml` (và mapping nếu `repo: "@secret"`) |
-| Câu định vị, email, link         | `src/_data/site.js`                                         |
-| Nội dung trang placeholder       | `src/index.njk`                                             |
-| Snapshot dùng khi không có token | `src/_data/snapshot/github.json`, chỉ chứa số liệu tổng hợp |
+| Muốn đổi                                | Sửa ở                                                       |
+| --------------------------------------- | ----------------------------------------------------------- |
+| Dự án trong showcase                    | `src/_data/showcase.yml` (và mapping nếu `repo: "@secret"`) |
+| Câu định vị, email, link                | `src/_data/site.js`                                         |
+| Timeline 4 era (năm, 1 câu "đã làm gì") | [`src/_data/eras.js`](src/_data/eras.js)                    | Khi chốt số năm và nội dung từng era | Thay các giá trị `TODO`, mở PR |
+| Nội dung trang placeholder              | `src/index.njk`                                             |
+| Snapshot dùng khi không có token        | `src/_data/snapshot/github.json`, chỉ chứa số liệu tổng hợp |
 
 Chưa có dữ liệu thì để `TODO`, không điền đoán. Có thể sửa thẳng trên github.com hoặc github.dev (bấm `.` trong repo) rồi mở PR.
 
