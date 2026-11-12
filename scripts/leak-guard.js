@@ -36,7 +36,7 @@ async function loadLists() {
   ];
   const mapRaw = process.env.SHOWCASE_REPOS || (process.env.SHOWCASE_REPOS_FILE ? readFileSync(process.env.SHOWCASE_REPOS_FILE, "utf8") : "");
   const repoNames = [...lines(process.env.LEAK_REPO_NAMES)];
-  if (mapRaw) { try { repoNames.push(...Object.values(JSON.parse(mapRaw)).flat().map(String)); } catch { console.warn("leak-guard: SHOWCASE_REPOS is not valid JSON"); } }
+  if (mapRaw) { try { repoNames.push(...Object.entries(JSON.parse(mapRaw)).filter(([k]) => !k.startsWith("_")).map(([, v]) => v).flat().map(String)); } catch { console.warn("leak-guard: SHOWCASE_REPOS is not valid JSON"); } }
   if (flags.has("--fetch-private") && process.env.SHOWCASE_TOKEN) {
     try {
       const d = await gql(process.env.SHOWCASE_TOKEN, `{ viewer { repositories(first:100, privacy:PRIVATE, ownerAffiliations:[OWNER, COLLABORATOR, ORGANIZATION_MEMBER]){ nodes{ nameWithOwner } } } }`);

@@ -1,0 +1,40 @@
+# LEAK_DENYLIST template. FAKE DATA: copy outside the repo, replace with real values.
+#   cp config/examples/leak-denylist.example.txt ~/.config/atkd-coding/leak-denylist.txt
+#
+# Rules
+# - One string per line. Lines starting with # are ignored. Lines shorter than 3 chars are ignored.
+# - Substring match, case-insensitive, diacritic-insensitive ("Nguyễn" == "nguyen").
+# - Spaces and hyphens are NOT normalized: add each format of a phone number or name order.
+# - Too generic = false positives that block deploys. Prefer full names, domains, suffixes.
+# - Never list things the site is allowed to show (atkd1890, hi@atkd1890.me, codenames).
+
+# --- Real name, every spelling ---
+Nguyễn Văn A
+Van A Nguyen
+ngvana
+
+# --- Personal emails and handles ---
+vana.personal@gmail.com
+@vana_real
+
+# --- Phone, each format ---
+090-1234-5678
+09012345678
++81 90 1234 5678
+
+# --- Address, distinctive parts ---
+Sakura Heights 302
+1-2-3 Ebisu
+
+# --- Employers and clients: Latin, Japanese, domain ---
+Acme Holdings
+アクメ
+acme.co.jp
+
+# --- Local paths, hostnames, internal services ---
+/Users/
+vana-macbook
+jenkins.acme.internal
+
+# --- Old tracking IDs ---
+UA-00000000

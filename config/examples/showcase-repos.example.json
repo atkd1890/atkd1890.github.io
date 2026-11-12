@@ -1,0 +1,5 @@
+{
+  "_comment": "SHOWCASE_REPOS template. FAKE DATA. Keys are codenames from src/_data/showcase.yml (entries with repo: \"@secret\"). Values: one \"owner/repo\" or a list when one codename spans several repos. Remove this _comment key in the real file.",
+  "signal-desk": "atkd1890/example-private-repo",
+  "deal-hunters": ["atkd1890/example-bot-a", "atkd1890/example-bot-b"]
+}
