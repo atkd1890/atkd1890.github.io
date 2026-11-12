@@ -1,5 +1,5 @@
 # LEAK_DENYLIST template. FAKE DATA: copy outside the repo, replace with real values.
-#   cp config/examples/leak-denylist.example.txt ../.config/atkd-coding/leak-denylist.txt
+#   cp config/examples/leak-denylist.example.txt ../.config/atkd.github.io/leak-denylist.txt
 #
 # Rules
 # - One string per line. Lines starting with # are ignored. Lines shorter than 3 chars are ignored.
