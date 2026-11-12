@@ -123,7 +123,22 @@ permalink: '{{ L.prefix }}/index.html'
   <section class="section" id="stream" aria-labelledby="stream-title">
     <p class="prompt">git log --all --oneline</p>
     <h2 id="stream-title">{{ t.stream }}</h2>
+    {%- set latest = collections.posts | pickVersions(L.code) | limit(6) -%}
+    {% if latest.length %}
+    <ol class="stream">
+      {% for p in latest %}
+      <li class="stream-item{% if p.data.type | isLong %} stream-long{% endif %}"{% if p.data.lang != L.code %} lang="{{ p.data.lang }}"{% endif %}>
+        <span class="stream-type">{{ t.blog.types[p.data.type] }}</span>
+        <a class="stream-title" href="{{ p.url }}">{{ p.data.title }}</a>
+        {% if p.data.type | isLong %}<p class="stream-summary">{{ p.data.summary }}</p>{% endif %}
+        <span class="stream-meta"><time datetime="{{ p.data.date | isoDay }}">{{ p.data.date | postDate(L.code) }}</time>{% if p.data.source == 'agent' %} · {{ t.blog.aiAssisted }}{% endif %}</span>
+      </li>
+      {% endfor %}
+    </ol>
+    <p><a href="{{ L.prefix }}/blog/">-&gt; {{ t.blog.title }}</a></p>
+    {% else %}
     <p class="comment empty">{{ t.emptyStream }}</p>
+    {% endif %}
   </section>
 
   <div>

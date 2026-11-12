@@ -1,0 +1,23 @@
+---
+layout: layouts/base.njk
+pagination:
+  data: github.releases
+  size: 1
+  alias: rel
+  addAllPagesToCollections: false
+permalink: "/blog/release/{{ rel.repo | replace('/', '-') | slugify }}-{{ rel.tag | slugify }}/"
+eleventyComputed:
+  title: '{{ rel.repo }} {{ rel.tag }}'
+---
+{#- Release notes of public repos (tools, extracted libraries), generated in CI from GitHub Releases. -#}
+{%- set t = i18n.t.vi -%}
+<article class="post post-release" aria-labelledby="post-title">
+  <header class="post-head">
+    <p class="prompt">gh release view {{ rel.tag }} -R {{ rel.repo }}</p>
+    <div class="badges"><span class="badge badge-accent">{{ t.blog.types.release }}</span></div>
+    <h1 id="post-title">{{ rel.repo }} {{ rel.name }}</h1>
+    <p class="post-meta"><time datetime="{{ rel.publishedAt | isoDay }}">{{ rel.publishedAt | isoDay }}</time></p>
+    <a class="cta" href="{{ rel.url }}" rel="noopener"><span>{{ rel.url | replace('https://', '') }}</span><span aria-hidden="true">-&gt;</span></a>
+  </header>
+  <div class="prose"><pre>{{ rel.body }}</pre></div>
+</article>

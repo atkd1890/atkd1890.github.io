@@ -2,6 +2,12 @@
 
 Thay đổi người xem thấy được trên atkd1890.github.io. Thay đổi nội bộ (test, CI, docs) xem ở git log.
 
+## 2026-11-12 — Blog
+
+- `/blog/` với bộ lọc theo loại, thẻ, series và năm, ở cả 3 ngôn ngữ; feed Atom `/feed.xml` và `/feed/<type>.xml`.
+- Trang bài viết: mục lục, thời gian đọc, series, bản dịch, nhãn "AI hỗ trợ viết", sơ đồ và ảnh chụp tự đổi theo theme.
+- Mục "Bài viết" trên trang chủ hiện các bài mới nhất; phím `g b` mở blog.
+
 ## 2026-11-12 — Ba ngôn ngữ
 
 - Site có 3 ngôn ngữ: tiếng Việt (mặc định), English ở `/en/`, 日本語 ở `/ja/`. Nút VI/EN/JA trên thanh tiêu đề, dùng được cả khi tắt JavaScript.

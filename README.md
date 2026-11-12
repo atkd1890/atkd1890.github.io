@@ -79,22 +79,21 @@ Từ yếu đến mạnh:
 ```
 /                   Home (one-page): Hero → Trajectory → Selected work → Signals → Stream → Tools → Lab → Footer
 /work/<codename>    Case study / postmortem
-/blog               Mọi bài; lọc theo type / tag / series; lưu trữ theo năm
-/blog/<slug>        Bài viết
-/blog/series/<id>   Trang series (vd benchmark)
+/blog               Mọi bài; /blog/type/<type>/, /blog/tag/<tag>/, /blog/series/<id>/, /blog/<năm>/
+/blog/<slug>        Bài viết (bản dịch ở /en/blog/<slug>/, /ja/blog/<slug>/)
 /tools              Danh mục tool HTML một file (mỗi tool là một repo public → /<repo>)
 /lab                AI & ATKD OS: kiến trúc, thí nghiệm, bảng xếp hạng benchmark
 /uses               Phần cứng, tool, AI stack, agent
 /colophon           Site này được build thế nào
 /<repo>             Project page của repo public (GitHub tự serve)
 /<YYYY>/            Snapshot theo năm, đóng băng từ tag snapshot-YYYY
-/feed.xml           Atom feed mọi bài; /feed/<type>.xml cho từng loại
+/feed.xml           Atom feed mọi bài (mọi ngôn ngữ); /feed/<type>.xml cho từng loại
 /404
 /en/...             Bản tiếng Anh của các trang trên
 /ja/...             Bản tiếng Nhật của các trang trên
 ```
 
-Tiếng Việt là mặc định, không có tiền tố URL ([ADR 0006](docs/adr/0006-i18n.md)). Hiện đang chạy: home `/` (và `/en/`, `/ja/`), `/404`. Các trang khác làm theo phase trong ROADMAP.
+Tiếng Việt là mặc định, không có tiền tố URL ([ADR 0006](docs/adr/0006-i18n.md)). Hiện đang chạy: home, blog (index, bộ lọc, lưu trữ, series, feed), `/404`, mỗi trang đủ 3 ngôn ngữ. Cách viết bài: [docs/content.md → Viết một bài](docs/content.md#viết-một-bài). Các trang khác làm theo phase trong ROADMAP.
 
 ### Stack
 
@@ -219,22 +218,24 @@ Muốn chạy với dữ liệu thật thì cần thêm `gh` đã đăng nhập 
 
 ### Các lệnh
 
-| Lệnh                        | Dùng khi                                                                                                            |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| `npm start`                 | Sửa code và xem ngay tại http://localhost:8080, dữ liệu từ snapshot                                                 |
-| `npm run start:live`        | Như trên nhưng với dữ liệu GitHub thật                                                                              |
-| `npm run build`             | Build ra `_site/` bằng snapshot                                                                                     |
-| `npm run build:live`        | Build với dữ liệu thật, giống production                                                                            |
-| `npm run check`             | Format check, type-check, unit test và leak guard self-test, như bước đầu của CI                                    |
-| `npm run format`            | Format code và docs bằng Prettier                                                                                   |
-| `npm run leak-guard:local`  | Quét `_site/` bằng denylist và mapping thật, như bước cuối của CI                                                   |
-| `npm run test:e2e`          | Build rồi chạy e2e và axe (Playwright) ở 375px và 1280px, light và dark. Lần đầu: `npx playwright install chromium` |
-| `npm run budget`            | Kiểm tra ngân sách: mỗi trang JS ≤ 30 KB, CSS ≤ 20 KB, HTML ≤ 40 KB (gzip), font không chặn render                  |
-| `npm test`                  | Chỉ chạy unit test                                                                                                  |
-| `npm run typecheck`         | Chỉ chạy `tsc --checkJs`                                                                                            |
-| `npm run secrets:push`      | Đẩy file trong `../.config/atkd1890.github.io/` lên GitHub secret (ghi đè)                                          |
-| `node scripts/gen-icons.js` | Render lại PNG icon (touch icon, manifest) từ mark `<CO/>` sau khi đổi màu hoặc font                                |
-| `npm run clean`             | Xoá `_site/` và `.cache/`                                                                                           |
+| Lệnh                                | Dùng khi                                                                                                            |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `npm start`                         | Sửa code và xem ngay tại http://localhost:8080, dữ liệu từ snapshot                                                 |
+| `npm run start:live`                | Như trên nhưng với dữ liệu GitHub thật                                                                              |
+| `npm run build`                     | Build ra `_site/` bằng snapshot                                                                                     |
+| `npm run build:live`                | Build với dữ liệu thật, giống production                                                                            |
+| `npm run check`                     | Format check, type-check, unit test và leak guard self-test, như bước đầu của CI                                    |
+| `npm run format`                    | Format code và docs bằng Prettier                                                                                   |
+| `npm run leak-guard:local`          | Quét `_site/` bằng denylist và mapping thật, như bước cuối của CI                                                   |
+| `npm run test:e2e`                  | Build rồi chạy e2e và axe (Playwright) ở 375px và 1280px, light và dark. Lần đầu: `npx playwright install chromium` |
+| `npm run budget`                    | Kiểm tra ngân sách: mỗi trang JS ≤ 30 KB, CSS ≤ 20 KB, HTML ≤ 40 KB (gzip), font không chặn render                  |
+| `npm test`                          | Chỉ chạy unit test                                                                                                  |
+| `npm run typecheck`                 | Chỉ chạy `tsc --checkJs`                                                                                            |
+| `npm run secrets:push`              | Đẩy file trong `../.config/atkd1890.github.io/` lên GitHub secret (ghi đè)                                          |
+| `npm run screenshot -- <url> <out>` | Chụp màn hình thật (light + dark) cho bài viết                                                                      |
+| `npm run diagrams`                  | Render các file Mermaid `.mmd` trong `src/blog/` thành SVG theo theme                                               |
+| `node scripts/gen-icons.js`         | Render lại PNG icon (touch icon, manifest) từ mark `<CO/>` sau khi đổi màu hoặc font                                |
+| `npm run clean`                     | Xoá `_site/` và `.cache/`                                                                                           |
 
 ### Tái hiện production ở local
 
@@ -299,17 +300,19 @@ E2E và axe đã kiểm palette, phím tắt, theme, âm thanh, trang 404, tươ
 
 ### Debug ở local
 
-| Hiện tượng                                      | Nguyên nhân thường gặp                                    | Cách xử lý                                                              |
-| ----------------------------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------- |
-| `node` sai phiên bản                            | Shell chưa kích hoạt mise                                 | `mise install`, hoặc chạy `mise exec -- npm …`                          |
-| Build fail, báo `showcase.yml is invalid`       | Sai schema, codename trùng, `repo` là tên thật            | Sửa theo dòng báo lỗi                                                   |
-| Footer ghi `Data snapshot (demo)`               | Không có token, hoặc gọi API lỗi                          | Xem dòng `[github] …` trong output; kiểm tra `gh auth status`           |
-| Log `[github] no mapping for codename …`        | Codename có `repo: "@secret"` nhưng chưa có trong mapping | Thêm vào `showcase-repos.json`                                          |
-| Dữ liệu không đổi sau khi sửa                   | Cache 1 giờ trong `.cache/`                               | `node scripts/gen-icons.js`                                             | Render lại PNG icon (touch icon, manifest) từ mark `<CO/>` sau khi đổi màu hoặc font |
+| Hiện tượng                                      | Nguyên nhân thường gặp                                                               | Cách xử lý                                                              |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| `node` sai phiên bản                            | Shell chưa kích hoạt mise                                                            | `mise install`, hoặc chạy `mise exec -- npm …`                          |
+| Build fail, báo `showcase.yml is invalid`       | Sai schema, codename trùng, `repo` là tên thật                                       | Sửa theo dòng báo lỗi                                                   |
+| Footer ghi `Data snapshot (demo)`               | Không có token, hoặc gọi API lỗi                                                     | Xem dòng `[github] …` trong output; kiểm tra `gh auth status`           |
+| Log `[github] no mapping for codename …`        | Codename có `repo: "@secret"` nhưng chưa có trong mapping                            | Thêm vào `showcase-repos.json`                                          |
+| Dữ liệu không đổi sau khi sửa                   | Cache 1 giờ trong `.cache/`                                                          | `npm run screenshot -- <url> <out>`                                     | Chụp màn hình thật (light + dark) cho bài viết |
+| `npm run diagrams`                              | Render các file Mermaid `.mmd` trong `src/blog/` thành SVG theo theme                |
+| `node scripts/gen-icons.js`                     | Render lại PNG icon (touch icon, manifest) từ mark `<CO/>` sau khi đổi màu hoặc font |
 | `npm run clean`                                 |
-| Template không thấy dữ liệu từ `src/_data/*.js` | File data có named export, Eleventy lấy cả module         | Chỉ để `export default`; test `data-files` sẽ báo                       |
-| `leak-guard: no denylist configured`            | Thiếu file denylist                                       | Tạo từ template, xem bước 1 ở trên                                      |
-| Leak guard báo `denylist entry #N`              | Nội dung chứa chuỗi cấm                                   | Sửa nội dung. N đếm từ 0, chỉ tính dòng có hiệu lực trong file denylist |
+| Template không thấy dữ liệu từ `src/_data/*.js` | File data có named export, Eleventy lấy cả module                                    | Chỉ để `export default`; test `data-files` sẽ báo                       |
+| `leak-guard: no denylist configured`            | Thiếu file denylist                                                                  | Tạo từ template, xem bước 1 ở trên                                      |
+| Leak guard báo `denylist entry #N`              | Nội dung chứa chuỗi cấm                                                              | Sửa nội dung. N đếm từ 0, chỉ tính dòng có hiệu lực trong file denylist |
 
 ## Deploy production và xử lý sự cố
 

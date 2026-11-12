@@ -204,8 +204,7 @@ document.addEventListener('keydown', (e) => {
     home: () => (location.href = home),
     work: () => (location.href = onHome ? '#work' : `${home}#work`),
     signals: () => (location.href = onHome ? '#signals' : `${home}#signals`),
-    // Blog lands in Phase 5; until then the Stream section stands in.
-    blog: () => (location.href = onHome ? '#stream' : `${home}#stream`),
+    blog: () => (location.href = `${home}blog/`),
     search: openPalette,
     help: () => help?.showModal(),
   };

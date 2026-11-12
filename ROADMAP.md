@@ -76,19 +76,11 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 
 ## Phase 5 — Blog
 
-- [ ] `/blog`, `/blog/<slug>`, lọc type/tag/series, lưu trữ theo năm, `/blog/series/<id>`
-- [ ] Layout riêng theo type (til/link gọn, deep-dive đầy đủ)
-- [ ] `/feed.xml` + `/feed/<type>.xml`
-- [ ] Validate frontmatter, badge "AI-assisted"
-- [ ] Sinh `release` tự động từ GitHub Releases
-- [ ] Issue template `blog-idea`, labels `blog-idea` / `blog-draft`, PR template (checklist: leak guard, số liệu có nguồn, ảnh sạch EXIF)
-- [ ] Nút "New post" mở trình soạn của GitHub với frontmatter điền sẵn
-- [ ] 1 bài `til` + 1 bài `link` mẫu viết tay, để test luồng PR → merge → publish
-- [ ] Hạ tầng explainer tương tác + 1 component demo
-- [ ] Phím tắt `g b` và mục "Stream" trong palette trỏ sang `/blog/` thay cho `#stream`
-- [ ] `[qa]` Validate feed (Atom hợp lệ), test bộ lọc type/tag/series
+- [ ] Bài đầu tiên: "Dựng portfolio trên GitHub khi phần lớn công việc là private" (VI), rồi bản EN, JA
+- [ ] 1 bài `til` + 1 bài `link` thật, để thử luồng issue → PR → merge → publish
 - [ ] `[mkt]` Lịch nội dung: nhịp xuất bản mục tiêu cho từng type (vd til 3/tuần, log 1/tuần, deep-dive 1/quý)
 - [ ] `[mkt]` Cross-post có `canonical` trỏ về site (dev.to, Zenn/Qiita nếu có bài JA)
+- [ ] Bài `release` hiện trong danh sách blog và feed (trang release đã sinh từ GitHub Releases, chưa gộp vào index)
 
 ## Phase 6 — Tools, lab, uses, colophon
 

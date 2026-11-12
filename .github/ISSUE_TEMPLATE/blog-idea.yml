@@ -1,0 +1,30 @@
+name: Blog idea
+description: One line is enough. An agent or the owner turns it into a draft PR.
+title: 'idea: '
+labels: [blog-idea]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Idea
+      description: What the post is about, in a sentence or two.
+    validations:
+      required: true
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type
+      options: [til, link, log, note, deep-dive, case-study, cross]
+    validations:
+      required: true
+  - type: input
+    id: url
+    attributes:
+      label: Link (for type link)
+      placeholder: https://
+  - type: dropdown
+    id: lang
+    attributes:
+      label: Language
+      options: [vi, en, ja]
+      default: 0

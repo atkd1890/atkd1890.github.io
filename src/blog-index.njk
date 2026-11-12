@@ -1,0 +1,81 @@
+---
+layout: layouts/base.njk
+wide: true
+pagination:
+  data: collections.blogPages
+  size: 1
+  alias: bp
+  addAllPagesToCollections: false
+permalink: '{{ bp.url }}'
+eleventyComputed:
+  L: '{{ bp.lang }}'
+  basePath: '{{ bp.path }}'
+  title: 'Blog'
+---
+{#- One template renders every blog index: all posts, by type, tag, series and year, in each language. -#}
+{%- set L = i18n.langs | where('code', bp.lang) | first -%}
+{%- set t = i18n.t[L.code] -%}
+{%- set langPages = collections.blogPages | where('lang', L.code) -%}
+{%- set newPostBody = '---\ntitle: ""\nslug: ""\ndate: ' + (site.buildTime | isoDay) + '\ntype: til\ntags: []\nseries: null\nlang: ' + L.code + '\nsummary: ""\nurl: null\ncodenames: []\nsource: human\nagent_run: null\ndraft: false\n---\n\n' -%}
+<section class="section blog-head" aria-labelledby="blog-title">
+  <p class="prompt">ls blog/{% if bp.kind != 'all' %}{{ bp.kind }}/{{ bp.value }}/{% endif %}</p>
+  <div class="section-head">
+    <h1 id="blog-title">{{ t.blog.title }}{% if bp.kind != 'all' %} <span class="comment">{{ t.blog.showing }} {% if bp.kind == 'type' %}{{ t.blog.types[bp.value] }}{% elif bp.kind == 'tag' %}#{{ bp.value }}{% else %}{{ bp.value }}{% endif %}</span>{% endif %}</h1>
+  </div>
+  <p>{{ t.blog.intro }}</p>
+</section>
+
+<div class="blog-layout">
+  <aside class="blog-filters" aria-label="{{ t.blog.type }}">
+    <div>
+      <p class="comment">{{ t.blog.type }}</p>
+      <ul class="chips">
+        <li><a href="{{ L.prefix }}/blog/"{% if bp.kind == 'all' %} aria-current="page"{% endif %}>{{ t.blog.all }}</a></li>
+        {% for p in langPages %}{% if p.kind == 'type' %}<li><a href="{{ p.url }}"{% if p.url == bp.url %} aria-current="page"{% endif %}>{{ t.blog.types[p.value] }}</a></li>{% endif %}{% endfor %}
+      </ul>
+    </div>
+    {%- set hasSeries = langPages | where('kind', 'series') -%}
+    {% if hasSeries.length %}
+    <div>
+      <p class="comment">{{ t.blog.series }}</p>
+      <ul class="chips">{% for p in hasSeries %}<li><a href="{{ p.url }}"{% if p.url == bp.url %} aria-current="page"{% endif %}>{{ p.value }}</a></li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+    {%- set tagPages = langPages | where('kind', 'tag') -%}
+    {% if tagPages.length %}
+    <div>
+      <p class="comment">{{ t.blog.tags }}</p>
+      <ul class="chips">{% for p in tagPages %}<li><a href="{{ p.url }}"{% if p.url == bp.url %} aria-current="page"{% endif %}>#{{ p.value }}</a></li>{% endfor %}</ul>
+    </div>
+    {% endif %}
+    <div>
+      <p class="comment">{{ t.blog.archive }}</p>
+      <ul class="chips">{% for p in langPages %}{% if p.kind == 'year' %}<li><a href="{{ p.url }}"{% if p.url == bp.url %} aria-current="page"{% endif %}>{{ p.value }}</a></li>{% endif %}{% endfor %}</ul>
+    </div>
+    <div>
+      <p class="comment">{{ t.blog.feeds }}</p>
+      <ul class="links">
+        <li><a href="/feed.xml">/feed.xml</a></li>
+        {% for p in langPages %}{% if p.kind == 'type' %}<li><a href="/feed/{{ p.value }}.xml">/feed/{{ p.value }}.xml</a></li>{% endif %}{% endfor %}
+      </ul>
+    </div>
+    <p><a href="https://github.com/{{ site.repo }}/new/{{ site.branch }}/src/blog/{{ site.buildTime | year }}?filename={{ site.buildTime | isoDay }}-new-post{% if L.code != 'vi' %}.{{ L.code }}{% endif %}.md&value={{ newPostBody | urlencode }}">{{ t.blog.newPost }}</a></p>
+  </aside>
+
+  <div class="blog-list">
+    {% if bp.posts.length %}
+    <ol class="stream">
+      {% for p in bp.posts %}
+      <li class="stream-item{% if p.data.type | isLong %} stream-long{% endif %}"{% if p.data.lang != L.code %} lang="{{ p.data.lang }}"{% endif %}>
+        <span class="stream-type">{{ t.blog.types[p.data.type] }}</span>
+        <a class="stream-title" href="{{ p.url }}">{{ p.data.title }}</a>
+        {% if p.data.type | isLong %}<p class="stream-summary">{{ p.data.summary }}</p>{% endif %}
+        <span class="stream-meta"><time datetime="{{ p.data.date | isoDay }}">{{ p.data.date | postDate(L.code) }}</time>{% if p.data.source == 'agent' %} · {{ t.blog.aiAssisted }}{% endif %}{% if p.data.lang != L.code %} · {{ p.data.lang | upper }}{% endif %}</span>
+      </li>
+      {% endfor %}
+    </ol>
+    {% else %}
+    <p class="comment empty">{{ t.blog.empty }}</p>
+    {% endif %}
+  </div>
+</div>

@@ -1,0 +1,35 @@
+---
+pagination:
+  data: feeds
+  size: 1
+  alias: feed
+feeds: [all, til, link, log, release, note, deep-dive, case-study, cross]
+permalink: "{% if feed == 'all' %}/feed.xml{% else %}/feed/{{ feed }}.xml{% endif %}"
+eleventyExcludeFromCollections: true
+---
+{#- Atom feeds: /feed.xml for every post (all languages), /feed/<type>.xml per type. -#}
+{%- set items = collections.posts if feed == 'all' else collections.posts | where('type', feed) -%}
+{%- set selfUrl = site.url + ('/feed.xml' if feed == 'all' else '/feed/' + feed + '.xml') -%}
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="vi">
+  <title>ATKD Coding{% if feed != 'all' %} · {{ i18n.t.en.blog.types[feed] }}{% endif %}</title>
+  <subtitle>{{ site.tagline | tr('en') }}</subtitle>
+  <link href="{{ selfUrl }}" rel="self"/>
+  <link href="{{ site.url }}/blog/"/>
+  <updated>{{ (items | getNewestCollectionItemDate or site.buildTime) | dateToRfc3339 }}</updated>
+  <id>{{ selfUrl }}</id>
+  <author><name>ATKD Coding</name></author>
+  {%- for post in items %}
+  {%- set abs = post.url | absoluteUrl(site.url) %}
+  <entry xml:lang="{{ post.data.lang }}">
+    <title>{{ post.data.title }}</title>
+    <link href="{{ abs }}"/>
+    <updated>{{ post.date | dateToRfc3339 }}</updated>
+    <id>{{ abs }}</id>
+    <category term="{{ post.data.type }}"/>
+    {%- for tag in post.data.tags %}<category term="{{ tag }}"/>{% endfor %}
+    <summary>{{ post.data.summary }}</summary>
+    <content type="html">{{ post.content | htmlToAbsoluteUrls(abs) }}</content>
+  </entry>
+  {%- endfor %}
+</feed>

@@ -10,7 +10,7 @@ async function audit(page) {
   expect(serious.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
 }
 
-for (const path of ['/en/', '/ja/']) {
+for (const path of ['/en/', '/ja/', '/blog/', '/blog/blog-fixture/', '/en/blog/blog-fixture/']) {
   test(`axe: ${path} has no serious issues`, async ({ page }) => {
     await page.goto(path);
     await expect(page.locator('.controls')).toBeVisible();

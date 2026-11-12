@@ -1,5 +1,6 @@
 {#- Language context: pages paginate over i18n.langs with alias L, and set basePath (URL without
     the language prefix) so the switcher and hreflang can link to the same page in other languages. -#}
+{%- if L is string %}{% set L = i18n.langs | where('code', L) | first %}{% endif -%}
 {%- set L = L or i18n.langs[0] -%}
 {%- set t = i18n.t[L.code] -%}
 {%- set home = L.prefix + '/' -%}
@@ -12,12 +13,18 @@
   <title>{% if title and title != site.title %}{{ title | tr(L.code) }} · {% endif %}{{ site.title }}</title>
   <meta name="description" content="{{ description }}">
   <link rel="canonical" href="{{ site.url }}{{ page.url }}">
-  {%- if basePath %}
+  {%- if postSlug %}
+  {%- set versions = collections.posts | versionsOf(postSlug) %}
+  {%- for l in i18n.langs %}{% if versions[l.code] %}
+  <link rel="alternate" hreflang="{{ l.code }}" href="{{ site.url }}{{ versions[l.code] }}">
+  {%- endif %}{% endfor %}
+  {%- elif basePath %}
   {%- for l in i18n.langs %}
   <link rel="alternate" hreflang="{{ l.code }}" href="{{ site.url }}{{ l.prefix }}{{ basePath }}">
   {%- endfor %}
   <link rel="alternate" hreflang="x-default" href="{{ site.url }}{{ basePath }}">
   {%- endif %}
+  <link rel="alternate" type="application/atom+xml" title="ATKD Coding" href="/feed.xml">
   <meta name="color-scheme" content="light dark">
   <meta name="theme-color" content="#f4f5f8" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)">
@@ -40,7 +47,7 @@
       </nav>
       {% endif %}
       <nav class="langs" aria-label="{{ t.language }}">
-        {% for l in i18n.langs %}<a href="{{ l.prefix }}{{ basePath or '/' }}" hreflang="{{ l.code }}" lang="{{ l.code }}"{% if l.code == L.code %} aria-current="page"{% endif %}><span aria-hidden="true">{{ l.label }}</span><span class="visually-hidden">{{ l.name }}</span></a>{% endfor %}
+        {% for l in i18n.langs %}<a href="{% if postSlug %}{{ versions[l.code] or (l.prefix + '/blog/') }}{% else %}{{ l.prefix }}{{ basePath or '/' }}{% endif %}" hreflang="{{ l.code }}" lang="{{ l.code }}"{% if l.code == L.code %} aria-current="page"{% endif %}><span aria-hidden="true">{{ l.label }}</span><span class="visually-hidden">{{ l.name }}</span></a>{% endfor %}
       </nav>
       <div class="controls" data-js hidden>
         <button type="button" class="ctl ctl-wide" data-palette-open aria-keyshortcuts="Meta+K Control+K"><kbd>⌘K</kbd><span class="visually-hidden"> {{ t.palette }}</span></button>
