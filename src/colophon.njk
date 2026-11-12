@@ -31,8 +31,13 @@ eleventyComputed:
     <div class="tile"><span class="value">{{ craft.adrs.length }}</span><span class="label">{{ c.tiles.adrs }}</span></div>
     <div class="tile"><span class="value">{{ (craft.bytes.js / 1024) | round(1) }} KB</span><span class="label">{{ c.tiles.js }}</span></div>
     <div class="tile"><span class="value">{{ (craft.bytes.css / 1024) | round(1) }} KB</span><span class="label">{{ c.tiles.css }}</span></div>
+    {% if craft.ci %}
+    <div class="tile"><span class="value">{{ craft.ci.lighthouseMin }}</span><span class="label">{{ c.tiles.lighthouse | fmt({ pages: craft.ci.pages }) }}</span></div>
+    <div class="tile"><span class="value">{{ craft.ci.buildSeconds }} s</span><span class="label">{{ c.tiles.build }}</span></div>
+    {% endif %}
   </div>
   <p class="comment">{{ c.proofNote }}</p>
+  {% if craft.ci %}<p class="comment">{{ c.ciNote | fmt({ date: craft.ci.at | truncate(10, true, '') }) }} <a href="{{ craft.ci.run }}">{{ c.ciRun }}</a></p>{% endif %}
 </section>
 
 <section class="section" id="stack" aria-labelledby="stack-title">

@@ -20,8 +20,8 @@ for (const scheme of /** @type {const} */ (['light', 'dark'])) {
 test('colophon shows numbers read from the repo, and links to ADRs', async ({ page }) => {
   await page.goto('/colophon/');
   const values = await page.locator('#proof .tile .value').allTextContents();
-  expect(values).toHaveLength(6);
-  for (const v of values) expect(v).toMatch(/^\d+(\.\d)?( KB)?$/);
+  expect(values.length === 6 || values.length === 8).toBe(true);
+  for (const v of values) expect(v).toMatch(/^\d+(\.\d)?( KB| s)?$/);
   await expect(page.locator('#decisions a').first()).toHaveAttribute('href', /docs\/adr\/0001-/);
   await expect(page.locator('#pipeline table tbody tr')).not.toHaveCount(0);
 });
