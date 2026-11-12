@@ -144,7 +144,7 @@ Demo data phải có cờ `placeholder: true` và hiện nhãn "demo data" trên
 - [x] Workflow deploy Pages + workflow PR
 - [x] Hướng dẫn bật Pages source = GitHub Actions (chủ site tự bấm, xem README)
 - [x] LICENSE (CC BY 4.0 cho nội dung + MIT cho code), cập nhật README phần local dev
-- [ ] Trang placeholder lên được `atkd1890.github.io`
+- [x] Trang placeholder lên được `atkd1890.github.io` (2026-11-12, deploy qua Actions)
 - [ ] `[ops]` Branch protection cho `main`: bắt buộc qua PR, check `PR check` phải pass, cấm force-push
 - [ ] `[ops]` Pin mọi action theo commit SHA, `permissions` tối thiểu cho từng job; Dependabot cho npm + GitHub Actions
 - [ ] `[sec]` Bật secret scanning + push protection cho repo
@@ -157,7 +157,8 @@ Demo data phải có cờ `placeholder: true` và hiện nhãn "demo data" trên
 - [x] `github.js`: stats (ngôn ngữ, commit theo năm, heatmap, repo theo era/domain, hoạt động gần nhất → codename), tools (topic `atkd-tool`), releases, stars
 - [x] Không có token → fallback snapshot, không crash
 - [x] Hướng dẫn quyền tối thiểu của `SHOWCASE_TOKEN`: tất cả repo, **chỉ Metadata read-only** (ADR 0004). Số liệu theo năm lấy từ contribution calendar, không đếm commit theo từng repo
-- [ ] Chủ site tạo PAT + 4 secret (`LEAK_DENYLIST`, `SHOWCASE_REPOS`, `SHOWCASE_TOKEN`, `STARS_EXCLUDE_OWNERS`). **Deploy sẽ fail nếu thiếu `LEAK_DENYLIST`**
+- [x] PAT (chỉ Metadata) + secret `LEAK_DENYLIST`, `SHOWCASE_REPOS`, `SHOWCASE_TOKEN` đã đặt; CI xác nhận dữ liệu live, leak guard pass. `STARS_EXCLUDE_OWNERS` để sau
+- [ ] Bổ sung denylist: SĐT, địa chỉ, nơi làm hiện tại, khách hàng khác (cập nhật bằng `gh secret set LEAK_DENYLIST`)
 - [x] Heatmap: bật "Include private contributions" trên profile (2026-11-12). Kết quả từ 3 lên 133 lượt/năm, 34 ngày có hoạt động. Chỉ đếm commit có email khớp với tài khoản
 - [x] Leak guard script + chạy trong CI (khớp tên repo private theo nguyên từ, denylist không phân biệt dấu, EXIF, không in giá trị bị khớp)
 - [x] `[qa]` Unit test (`node --test`) cho schema validator, transform của `github.js` và leak guard
