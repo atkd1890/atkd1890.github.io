@@ -173,8 +173,9 @@ Làm trước Phase 3. Không code trang, chỉ chốt hướng. Nguồn chuẩn
 - [ ] `[design]` Type scale, grid, spacing, radius, elevation dưới dạng token; contrast đạt WCAG AA cả light lẫn dark
 - [ ] `[design]` Motion principles: thời lượng, easing, chỗ được dùng; bản reduced-motion
 - [ ] `[design]` Sound design: bộ âm click/hover nhỏ, âm lượng, chỗ được phát (mặc định tắt)
-- [ ] `[design]` Component inventory: repo card, evidence badge, era timeline, stat tile, heatmap, stream item, palette
-- [ ] `[design]` Mockup home ở 375px và 1280px, light và dark → chủ site duyệt
+- [x] `[design]` Component inventory (bản đầu, trên canvas): repo card, evidence badge, era timeline, stat tile, heatmap, stream item, palette
+- [x] `[design]` Mockup trên canvas [ATKD Coding Design](https://claude.ai/artifact/RXYDQoYg6Z91vRdaQEk6rR): home 390 + 1440, blog, case study, foundations; light/dark
+- [ ] `[design]` Chủ site duyệt canvas (comment trực tiếp trên artboard)
 - [ ] `[design]` Template OG image theo khuôn OG của hub (nền tối, tên lớn, dải màu persona slate `#5B6472`), dùng lại ở Phase 7
 - [ ] `[mkt]` Positioning: 1 câu định vị (câu hỏi 2), 3 thông điệp chính, đối tượng đọc (engineer, tech lead, founder)
 - [ ] `[mkt]` Style guide giọng văn: số liệu trước tính từ, độ dài câu, cách viết tiêu đề, từ cấm
