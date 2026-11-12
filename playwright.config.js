@@ -8,6 +8,8 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI ? 'line' : 'list',
   use: { baseURL: 'http://localhost:8090' },
+  snapshotPathTemplate: '{testDir}/__screenshots__/{projectName}/{arg}{ext}',
+  expect: { toHaveScreenshot: { maxDiffPixelRatio: 0.01, animations: 'disabled' } },
   webServer: { command: 'node scripts/serve.js', url: 'http://localhost:8090', reuseExistingServer: !process.env.CI },
   projects: [
     { name: 'mobile', use: { ...devices['Pixel 7'], viewport: { width: 375, height: 812 } } },
