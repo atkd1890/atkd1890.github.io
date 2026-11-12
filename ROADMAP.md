@@ -158,7 +158,7 @@ Demo data phải có cờ `placeholder: true` và hiện nhãn "demo data" trên
 - [x] Không có token → fallback snapshot, không crash
 - [x] Hướng dẫn quyền tối thiểu của `SHOWCASE_TOKEN` (README: Contents + Metadata read-only, chỉ chọn repo trong mapping)
 - [ ] Chủ site tạo PAT + 4 secret (`LEAK_DENYLIST`, `SHOWCASE_REPOS`, `SHOWCASE_TOKEN`, `STARS_EXCLUDE_OWNERS`). **Deploy sẽ fail nếu thiếu `LEAK_DENYLIST`**
-- [ ] Heatmap: contribution calendar công khai gần như trống (3 lượt/năm) vì profile tắt "Include private contributions". Hoặc bật setting đó, hoặc tự dựng heatmap từ ngày commit của repo trong mapping
+- [x] Heatmap: bật "Include private contributions" trên profile (2026-11-12). Kết quả từ 3 lên 133 lượt/năm, 34 ngày có hoạt động. Chỉ đếm commit có email khớp với tài khoản
 - [x] Leak guard script + chạy trong CI (khớp tên repo private theo nguyên từ, denylist không phân biệt dấu, EXIF, không in giá trị bị khớp)
 - [x] `[qa]` Unit test (`node --test`) cho schema validator, transform của `github.js` và leak guard
 - [x] `[qa]` Fixture "canary" cho leak guard: một chuỗi giả cố tình cài vào để chứng minh guard bắt được, chạy mỗi CI
