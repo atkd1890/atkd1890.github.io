@@ -34,3 +34,12 @@ test('where filters by nested path, so per-type feeds are not empty', () => {
   assert.equal(where(items, 'type', 'til').length, 1);
   assert.deepEqual(where(/** @type {any} */ (null), 'a', 1), []);
 });
+
+test('shellPath shows where the reader is, without the language prefix', async () => {
+  const { shellPath } = await import('../lib/filters.js');
+  assert.equal(shellPath('/', ''), '');
+  assert.equal(shellPath('/en/', '/en'), '');
+  assert.equal(shellPath('/ja/blog/x/', '/ja'), '/blog');
+  assert.equal(shellPath('/work/atkd-ui/', ''), '/work/atkd-ui');
+  assert.equal(shellPath('/404.html', ''), '/404');
+});

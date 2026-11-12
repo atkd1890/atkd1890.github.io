@@ -18,6 +18,7 @@ Tài liệu nguồn chuẩn cho giao diện của site. Lấy từ bản thiết
 - [8. Icon và OG image](#8-icon-và-og-image)
 - [9. Liên kết với hub](#9-liên-kết-với-hub)
 - [10. Phần site tự thiết kế thêm](#10-phần-site-tự-thiết-kế-thêm)
+- [11. Chênh lệch với canvas](#11-chênh-lệch-với-canvas)
 
 ## 1. Bản sắc: "Terminal"
 
@@ -110,3 +111,18 @@ Trên mobile: nhãn shell + ⌘K + âm thanh + theme, một hàng. Từ 1024px c
 ## 10. Phần site tự thiết kế thêm
 
 Repo card, badge tầng bằng chứng, timeline era, stat tile, heatmap, stream item, command palette, dialog phím tắt, layout bài blog/case study, bảng benchmark. Tất cả chỉ dùng token ở trên.
+
+## 11. Chênh lệch với canvas
+
+So các artboard Home (390, 1440), Blog và Case study với site đang chạy. Những chỗ còn khác:
+
+| Chỗ                          | Canvas                                                                 | Site                                                               | Hướng xử lý                                                           |
+| ---------------------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| Badge tầng bằng chứng        | Mọi badge viền màu accent                                              | Mỗi tầng một màu: thẻ muted, case study màu prompt, còn lại accent | Giữ, vì phân biệt được tầng; chờ chủ dự án duyệt canvas               |
+| Thanh tiêu đề                | Chỉ có ⌘K, âm thanh, theme                                             | Thêm VI · EN · JA                                                  | Giữ: canvas vẽ trước khi có 3 ngôn ngữ ([ADR 0006](adr/0006-i18n.md)) |
+| Heatmap trên mobile          | 26 tuần                                                                | 52 tuần, ô nhỏ hơn                                                 | Chờ chủ dự án chọn                                                    |
+| Footer                       | Danh sách dọc, mỗi link một dòng `->`, có YouTube và `archive: /2026/` | Một hàng link; chưa có YouTube (chưa có kênh) và archive (Phase 8) | Thêm khi có kênh và snapshot đầu tiên                                 |
+| Tools, Lab trên trang chủ    | Hàng tool kèm "built with", bảng xếp hạng benchmark                    | Trạng thái trống kèm link `/tools`, `/lab`                         | Tự đổi khi có tool và kết quả benchmark                               |
+| Thẻ số liệu trong case study | 4 ô `[TODO]`                                                           | Chỉ hiện khi `metrics` trong `showcase.yml` có số đã duyệt         | Giữ: site không hiện ô trống                                          |
+
+Đã sửa theo canvas: bài dài (deep-dive, case study) trong Stream và danh sách blog là khối nền panel, nhãn loại ở trên; thanh tiêu đề ghi đường dẫn của trang (`~/atkd-coding/blog`, `~/atkd-coding/work/<codename>`); footer có link RSS; trang case study theo đúng khung 01–07, cột "Khung" bên trái trên desktop.

@@ -63,7 +63,7 @@
 <body>
   <a class="skip" href="#main">{{ t.skip }}</a>
   <header class="titlebar">
-    <a class="titlebar-label" href="{{ home }}">~/atkd-coding — zsh<span class="visually-hidden"> · {{ t.items.home }}</span></a>
+    <a class="titlebar-label" href="{{ home }}">~/atkd-coding{{ page.url | shellPath(L.prefix) }} — zsh<span class="visually-hidden"> · {{ t.items.home }}</span></a>
     <div class="titlebar-right">
       {% if nav %}
       <nav class="sections" aria-label="{{ t.sections }}">
@@ -110,6 +110,7 @@
       <a href="{{ site.hub }}">atkd1890.me</a>
       <a href="{{ site.github }}">GitHub</a>
       <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+      <a href="/feed.xml">RSS</a>
       <a href="{{ L.prefix }}/uses/">/{{ t.usesLink }}</a>
       <a href="{{ L.prefix }}/colophon/">/{{ t.colophonLink }}</a>
     </nav>

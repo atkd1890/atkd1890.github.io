@@ -5,7 +5,7 @@ import markdownItAnchor from 'markdown-it-anchor';
 import { rssPlugin } from '@11ty/eleventy-plugin-rss';
 import { heatmap, topLanguages, eraSummary, selectedWork } from './lib/home.js';
 import { paletteItems } from './lib/palette.js';
-import { where } from './lib/filters.js';
+import { where, shellPath } from './lib/filters.js';
 import { validateCaseStudy, workNav, workUrl, mediaKind } from './lib/work.js';
 import { tr, fmt } from './lib/i18n.js';
 import { fold } from './lib/leak-guard.js';
@@ -155,6 +155,7 @@ export default function (eleventyConfig) {
   );
   // Nunjucks' selectattr only tests truthiness; `where` filters by equality. Keys may be paths: 'data.type'.
   eleventyConfig.addFilter('where', where);
+  eleventyConfig.addFilter('shellPath', shellPath);
   eleventyConfig.addFilter('limit', (/** @type {unknown[]} */ list, /** @type {number} */ n) =>
     (list ?? []).slice(0, n),
   );
