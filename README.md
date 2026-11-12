@@ -96,7 +96,7 @@ Hiện đang chạy: trang placeholder `/` và `/404`. Các trang khác làm the
 ### Stack
 
 - [Eleventy](https://www.11ty.dev/) v3 (ESM) + Nunjucks. Không dùng framework UI; chỉ dùng vanilla JS / Web Components khi cần.
-- CSS thuần, design tokens trên `:root`, light và dark. Đồng bộ ở mức core với design hub, persona "Coding — Terminal" ([docs/design/DESIGN.md](docs/design/DESIGN.md)).
+- CSS thuần, design tokens trên `:root`, light và dark. Đồng bộ ở mức core với design hub, persona "Coding — Terminal" ([docs/design.md](docs/design.md)).
 - Font duy nhất là JetBrains Mono, tự host (latin + vietnamese). Body dài dùng font hệ thống.
 - Mermaid render ra SVG lúc build. Pagefind cho tìm kiếm, index lúc build.
 - Dữ liệu GitHub qua GraphQL, cache 1 giờ bằng `@11ty/eleventy-fetch`. Không có token thì dùng snapshot.
@@ -184,7 +184,7 @@ scripts/            leak-guard.js (CLI), push-secrets.sh
 tests/              Unit test (node:test)
 types/              Khai báo type cho package không có type
 config/examples/    Template dữ liệu giả cho các file riêng tư
-docs/               design/DESIGN.md, adr/
+docs/               content.md, design.md, adr/
 .github/workflows/  deploy.yml, pr.yml
 eleventy.config.js  mise.toml  .nvmrc  tsconfig.json
 ```
@@ -265,13 +265,13 @@ Chưa có dữ liệu thì để `TODO`, không điền đoán. Có thể sửa 
 
 ### Sửa design
 
-Spec ở [docs/design/DESIGN.md](docs/design/DESIGN.md). Hình ở artifact [ATKD Coding Design](https://claude.ai/artifact/RXYDQoYg6Z91vRdaQEk6rR) (private, cần đúng tài khoản). Phần core đồng bộ với design hub.
+Spec ở [docs/design.md](docs/design.md). Hình ở artifact [ATKD Coding Design](https://claude.ai/artifact/RXYDQoYg6Z91vRdaQEk6rR) (private, cần đúng tài khoản). Phần core đồng bộ với design hub.
 
-| Muốn đổi                    | Sửa ở                                                        |
-| --------------------------- | ------------------------------------------------------------ |
-| Token màu, font, kích thước | `src/assets/css/main.css` (`:root`) và DESIGN.md mục 2–4     |
-| Khung trang, footer         | `src/_includes/layouts/base.njk`                             |
-| Font tự host                | `eleventy.config.js` (passthrough) và `@font-face` trong CSS |
+| Muốn đổi                    | Sửa ở                                                         |
+| --------------------------- | ------------------------------------------------------------- |
+| Token màu, font, kích thước | `src/assets/css/main.css` (`:root`) và docs/design.md mục 2–4 |
+| Khung trang, footer         | `src/_includes/layouts/base.njk`                              |
+| Font tự host                | `eleventy.config.js` (passthrough) và `@font-face` trong CSS  |
 
 Quy tắc giữ nguyên khi sửa: chỉ dùng token, góc vuông, vùng bấm tối thiểu 44px, tiếng Nhật dùng font hệ thống, đạt WCAG AA ở cả light và dark.
 
@@ -313,11 +313,13 @@ Leak guard fail thì không deploy, site giữ bản cũ. Workflow PR không bao
 
 ### Cấu hình GitHub
 
-| Ở đâu                                      | Cấu hình                                                                                          |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------- |
-| Settings → Pages                           | Source: **GitHub Actions**. Không dùng custom domain                                              |
-| Settings → Secrets and variables → Actions | `LEAK_DENYLIST` (bắt buộc), `SHOWCASE_REPOS`, `SHOWCASE_TOKEN`, `STARS_EXCLUDE_OWNERS` (tùy chọn) |
-| Profile → Contribution settings            | Bật **Private contributions**, để heatmap và số liệu theo năm có cả việc trong repo private       |
+| Ở đâu                                      | Cấu hình                                                                                                                                                              |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Settings → Pages                           | Source: **GitHub Actions**. Không dùng custom domain                                                                                                                  |
+| Settings → Branches → `main`               | Bắt buộc qua PR, check `check` và `gitleaks` phải xanh, nhánh phải mới nhất, lịch sử thẳng (squash/rebase), cấm force-push và xoá. Admin vẫn bypass được khi khẩn cấp |
+| Settings → Code security                   | Secret scanning và push protection bật                                                                                                                                |
+| Settings → Secrets and variables → Actions | `LEAK_DENYLIST` (bắt buộc), `SHOWCASE_REPOS`, `SHOWCASE_TOKEN`, `STARS_EXCLUDE_OWNERS` (tùy chọn)                                                                     |
+| Profile → Contribution settings            | Bật **Private contributions**, để heatmap và số liệu theo năm có cả việc trong repo private                                                                           |
 
 `GITHUB_TOKEN` do Actions tự cấp, dùng cho dữ liệu public: heatmap, contributions theo năm, tools, releases, stars.
 
@@ -357,17 +359,17 @@ gh run rerun <run-id-của-bản-tốt>
 
 Mọi thứ chủ site phải tự điền hoặc cập nhật đều có trong bảng này. Dữ liệu riêng tư **không bao giờ nằm trong repo**: file thật để ở `../.config/atkd1890.github.io/`, tức `~/git/atkd1890/.config/atkd1890.github.io/` ngay cạnh repo (quyền 600). Template dữ liệu giả để ở [`config/examples/`](config/examples/).
 
-| Mục                         | Nằm ở đâu                                                                       | Khi nào cần sửa                                         | Cách làm                                                                                   |
-| --------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| Denylist chống lộ thông tin | Secret `LEAK_DENYLIST` ← `leak-denylist.txt`                                    | Đổi việc, có khách hàng mới, đổi SĐT hay địa chỉ        | [Cập nhật denylist](#cập-nhật-denylist)                                                    |
-| Mapping codename → repo     | Secret `SHOWCASE_REPOS` ← `showcase-repos.json`                                 | Thêm hoặc bớt dự án trong showcase                      | Sửa file rồi `npm run secrets:push`                                                        |
-| Danh sách dự án             | [`src/_data/showcase.yml`](src/_data/showcase.yml)                              | Thêm dự án, đổi trạng thái, thêm số liệu hay bằng chứng | Sửa file, mở PR                                                                            |
-| Token đọc metadata          | Secret `SHOWCASE_TOKEN` (không có file)                                         | **Trước khi hết hạn** (xem ngày trên trang token)       | Tạo token mới theo [Cấu hình GitHub](#cấu-hình-github), rồi `gh secret set SHOWCASE_TOKEN` |
-| Loại owner khỏi feed stars  | Secret `STARS_EXCLUDE_OWNERS` ← `stars-exclude-owners.txt`                      | Khi vào org của công ty hoặc khách hàng                 | Sửa file rồi `npm run secrets:push`                                                        |
-| Câu định vị, email, link    | [`src/_data/site.js`](src/_data/site.js)                                        | Chốt tagline, có kênh YouTube                           | Sửa file, mở PR                                                                            |
-| Design                      | [`docs/design/DESIGN.md`](docs/design/DESIGN.md) + `main.css` + canvas thiết kế | Khi đổi design hub hoặc persona                         | Sửa cả ba cho khớp nhau                                                                    |
-| Phiên bản Node              | `mise.toml` + `.nvmrc`                                                          | Khi nâng Node                                           | Sửa cả hai, `mise install`, `npm run check`                                                |
-| Profile GitHub              | github.com/settings/profile                                                     | Trước khi giới thiệu site                               | Đổi name, ẩn email, tắt hireable                                                           |
+| Mục                         | Nằm ở đâu                                                         | Khi nào cần sửa                                         | Cách làm                                                                                   |
+| --------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| Denylist chống lộ thông tin | Secret `LEAK_DENYLIST` ← `leak-denylist.txt`                      | Đổi việc, có khách hàng mới, đổi SĐT hay địa chỉ        | [Cập nhật denylist](#cập-nhật-denylist)                                                    |
+| Mapping codename → repo     | Secret `SHOWCASE_REPOS` ← `showcase-repos.json`                   | Thêm hoặc bớt dự án trong showcase                      | Sửa file rồi `npm run secrets:push`                                                        |
+| Danh sách dự án             | [`src/_data/showcase.yml`](src/_data/showcase.yml)                | Thêm dự án, đổi trạng thái, thêm số liệu hay bằng chứng | Sửa file, mở PR                                                                            |
+| Token đọc metadata          | Secret `SHOWCASE_TOKEN` (không có file)                           | **Trước khi hết hạn** (xem ngày trên trang token)       | Tạo token mới theo [Cấu hình GitHub](#cấu-hình-github), rồi `gh secret set SHOWCASE_TOKEN` |
+| Loại owner khỏi feed stars  | Secret `STARS_EXCLUDE_OWNERS` ← `stars-exclude-owners.txt`        | Khi vào org của công ty hoặc khách hàng                 | Sửa file rồi `npm run secrets:push`                                                        |
+| Câu định vị, email, link    | [`src/_data/site.js`](src/_data/site.js)                          | Chốt tagline, có kênh YouTube                           | Sửa file, mở PR                                                                            |
+| Design                      | [`docs/design.md`](docs/design.md) + `main.css` + canvas thiết kế | Khi đổi design hub hoặc persona                         | Sửa cả ba cho khớp nhau                                                                    |
+| Phiên bản Node              | `mise.toml` + `.nvmrc`                                            | Khi nâng Node                                           | Sửa cả hai, `mise install`, `npm run check`                                                |
+| Profile GitHub              | github.com/settings/profile                                       | Trước khi giới thiệu site                               | Đổi name, ẩn email, tắt hireable                                                           |
 
 Các mục sẽ thêm vào bảng ở các phase sau: bài blog (Phase 5), `/uses` và đề bài benchmark (Phase 6).
 

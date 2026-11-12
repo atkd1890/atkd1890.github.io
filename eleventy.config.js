@@ -3,7 +3,7 @@
 export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ 'src/assets': 'assets' });
   eleventyConfig.addPassthroughCopy({ 'src/.nojekyll': '.nojekyll' });
-  // Self-hosted JetBrains Mono (OFL-1.1), latin + vietnamese subsets only. See docs/design/DESIGN.md.
+  // Self-hosted JetBrains Mono (OFL-1.1), latin + vietnamese subsets only. See docs/design.md.
   for (const sub of ['latin', 'vietnamese']) {
     for (const w of [400, 700]) {
       const f = `jetbrains-mono-${sub}-${w}-normal.woff2`;
