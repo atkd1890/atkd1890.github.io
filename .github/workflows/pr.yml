@@ -27,8 +27,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
           DRAFTS: '1'
-      - run: npm run budget
       - run: npx playwright install --with-deps chromium
+      - run: npm run og
+      - run: npm run budget
       - run: npx playwright test # e2e + axe on the built _site, 375px and 1280px
       - name: Leak guard (site, changed Markdown, commit authors)
         run: |

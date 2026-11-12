@@ -33,6 +33,8 @@ jobs:
           SHOWCASE_TOKEN: ${{ secrets.SHOWCASE_TOKEN }}
           SHOWCASE_REPOS: ${{ secrets.SHOWCASE_REPOS }}
           STARS_EXCLUDE_OWNERS: ${{ secrets.STARS_EXCLUDE_OWNERS }}
+      - run: npx playwright install --with-deps chromium
+      - run: npm run og # OG images, rendered from the built pages
       - run: npm run budget
       - name: Leak guard
         run: node scripts/leak-guard.js _site --require-denylist --fetch-private --commits=HEAD

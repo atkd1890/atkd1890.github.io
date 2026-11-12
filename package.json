@@ -21,11 +21,12 @@
     "start:live": "GITHUB_TOKEN=$(gh auth token) SHOWCASE_TOKEN=$(gh auth token) SHOWCASE_REPOS_FILE=../.config/atkd1890.github.io/showcase-repos.json eleventy --serve --quiet --port=8081",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test:e2e": "DRAFTS=1 npm run build && playwright test",
+    "test:e2e": "DRAFTS=1 npm run build && npm run og && playwright test",
     "budget": "node scripts/check-budget.js",
     "prepare": "git config core.hooksPath scripts/hooks || true",
     "diagrams": "node scripts/render-diagrams.js",
-    "screenshot": "node scripts/screenshot.js"
+    "screenshot": "node scripts/screenshot.js",
+    "og": "node scripts/og.js"
   },
   "devDependencies": {
     "@11ty/eleventy": "3.1.8",

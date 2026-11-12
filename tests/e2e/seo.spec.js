@@ -50,3 +50,13 @@ test('robots, sitemap and security.txt are served', async ({ request }) => {
   expect(sec).toMatch(/^Contact: mailto:hi@atkd1890\.me$/m);
   expect(new Date(sec.match(/^Expires: (.+)$/m)?.[1] ?? 0).getTime()).toBeGreaterThan(Date.now());
 });
+
+test('OG images exist for the pages that declare them', async ({ page, request }) => {
+  for (const path of ['/', '/ja/blog/', '/blog/blog-fixture/']) {
+    await page.goto(path);
+    const url = new URL((await page.locator('meta[property="og:image"]').getAttribute('content')) ?? '');
+    const res = await request.get(url.pathname);
+    expect(res.status(), url.pathname).toBe(200);
+    expect(res.headers()['content-type']).toBe('image/png');
+  }
+});
