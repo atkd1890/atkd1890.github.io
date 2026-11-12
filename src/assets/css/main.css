@@ -72,7 +72,8 @@
   --man: #1e2330;
 
   /* type */
-  --font-display: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --font-display:
+    'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas, 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', monospace;
   --font-body: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-ja: 'Hiragino Sans', 'Yu Gothic', 'Noto Sans JP', sans-serif;
 
@@ -201,8 +202,9 @@ body {
   color: var(--fg);
   font: 1rem/1.6 var(--font-body);
 }
+/* Japanese: system font for body text; display text keeps JetBrains Mono for Latin and falls back for kana/kanji. */
 :lang(ja) {
-  font-family: var(--font-ja);
+  --font-body: var(--font-ja);
 }
 a {
   color: var(--accent);
@@ -265,16 +267,35 @@ h3 {
   color: var(--muted);
 }
 .titlebar-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
   padding: 16px 0;
 }
 .titlebar-right {
+  flex: none;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: flex-end;
 }
-.titlebar nav {
+.titlebar .sections {
   display: none;
+}
+.titlebar .langs {
+  display: flex;
+}
+.titlebar .langs a {
+  min-width: 36px;
+  padding: 0 var(--sp-3);
+  justify-content: center;
+  color: var(--muted);
+  font-weight: 700;
+  font-size: var(--fs-12);
+}
+.titlebar .langs a[aria-current='page'] {
+  color: var(--accent);
 }
 .controls {
   display: flex;
@@ -844,9 +865,12 @@ kbd {
   :root {
     --gutter: 32px;
   }
-  .titlebar nav {
+  .titlebar .sections {
     display: flex;
     flex-wrap: wrap;
+  }
+  .titlebar .langs {
+    border-left: 1px solid var(--line);
   }
   .hero {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);

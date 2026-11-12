@@ -10,6 +10,14 @@ async function audit(page) {
   expect(serious.map((v) => `${v.id}: ${v.nodes.map((n) => n.target.join(' ')).join(', ')}`)).toEqual([]);
 }
 
+for (const path of ['/en/', '/ja/']) {
+  test(`axe: ${path} has no serious issues`, async ({ page }) => {
+    await page.goto(path);
+    await expect(page.locator('.controls')).toBeVisible();
+    await audit(page);
+  });
+}
+
 for (const scheme of /** @type {const} */ (['light', 'dark'])) {
   test(`axe: home in ${scheme} has no serious issues`, async ({ page }) => {
     await page.emulateMedia({ colorScheme: scheme });

@@ -1,8 +1,14 @@
 ---
 layout: layouts/base.njk
-title: Not found
+title: '404'
 permalink: /404.html
 eleventyExcludeFromCollections: true
 ---
-<h1>404</h1>
-<p>Nothing here. <a href="/">Back home</a>.</p>
+{#- GitHub Pages serves one 404 for every path, so it speaks all three languages. -#}
+<section class="section">
+  <p class="prompt">cd {{ page.url }}</p>
+  <h1>404</h1>
+  {% for l in i18n.langs %}
+  <p lang="{{ l.code }}">{{ i18n.t[l.code].notFound }} <a href="{{ l.prefix }}/">{{ i18n.t[l.code].backHome }}</a></p>
+  {% endfor %}
+</section>

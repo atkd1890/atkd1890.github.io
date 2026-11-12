@@ -6,12 +6,17 @@
 #               (JSON {codename: "owner/repo"}), see docs/adr/0002.
 #   null      → no GitHub stats (off-GitHub project or demo data).
 # Public repos go in `public_repo`.
+#
+# domain / role / summary: a string, or a {vi, en, ja} map (vi required, missing languages fall back to vi).
 
 - codename: atkd-os
   repo: '@secret'
   public_repo: null
   era: ai
-  domain: Personal AI lab across a Mac and a GPU box
+  domain:
+    vi: Lab AI cá nhân chạy trên một máy Mac và một máy GPU
+    en: Personal AI lab across a Mac and a GPU box
+    ja: Mac と GPU マシンで動かす個人の AI ラボ
   role: TODO
   stack: [TODO]
   years: '2026–'
@@ -29,7 +34,10 @@
   repo: '@secret'
   public_repo: null
   era: ai
-  domain: Signal bot for personal finance
+  domain:
+    vi: Bot tín hiệu cho tài chính cá nhân
+    en: Signal bot for personal finance
+    ja: 個人資産向けのシグナルボット
   role: TODO
   stack: [Python]
   years: '2026–'
@@ -47,7 +55,10 @@
   repo: '@secret'
   public_repo: null
   era: system
-  domain: Design system shared by every repo on the account
+  domain:
+    vi: Design system dùng chung cho mọi repo trong tài khoản
+    en: Design system shared by every repo on the account
+    ja: アカウント内の全リポジトリで共有するデザインシステム
   role: TODO
   stack: [CSS]
   years: '2026–'
@@ -65,7 +76,10 @@
   repo: '@secret'
   public_repo: null
   era: system
-  domain: A fleet of personal-finance automation bots
+  domain:
+    vi: Nhóm bot tự động hoá tài chính cá nhân
+    en: A fleet of personal-finance automation bots
+    ja: 個人資産を自動化するボット群
   role: TODO
   stack: [Python]
   years: '2026–'
@@ -83,7 +97,10 @@
   repo: '@secret'
   public_repo: null
   era: system
-  domain: Freelance attendance and shift product for a business client
+  domain:
+    vi: Sản phẩm chấm công và xếp ca làm freelance cho một khách hàng doanh nghiệp
+    en: Freelance attendance and shift product for a business client
+    ja: 企業クライアント向けに受託開発した勤怠・シフト管理プロダクト
   role: TODO
   stack: [JavaScript]
   years: '2026'
@@ -101,7 +118,10 @@
   repo: '@secret'
   public_repo: null
   era: indie-game
-  domain: UI and scripting kit for an MMO game client
+  domain:
+    vi: Bộ UI và script cho client một game MMO
+    en: UI and scripting kit for an MMO game client
+    ja: MMO ゲームクライアント向けの UI・スクリプトキット
   role: TODO
   stack: [Lua]
   years: '2016–2020'

@@ -30,6 +30,7 @@ Mức riêng tư là **kín đáo, không phải ẩn danh tuyệt đối** ([AD
 - Eleventy v3 (ESM), Nunjucks. CSS thuần chỉ dùng token, không hardcode màu, font, bo góc.
 - JS cho người xem: vanilla hoặc Web Components, chỉ tải ở trang cần dùng. Component cho explainer nằm ở `src/_includes/interactive/`. Mermaid và Pagefind chạy lúc build.
 - File trong `src/_data/*.js` chỉ được có `export default`; logic để ở `lib/` và có test.
+- Ba ngôn ngữ VI (mặc định), EN, JA ([ADR 0006](docs/adr/0006-i18n.md)). Không hardcode chữ giao diện trong template: thêm key vào `src/_data/i18n.js` cho cả 3 ngôn ngữ. Nội dung cần dịch dùng map `{vi, en, ja}` và filter `tr`. Trang mới phân trang theo `i18n.langs` (alias `L`) và khai báo `basePath`.
 - Dữ liệu GitHub chỉ đi qua `whitelist()` trong `lib/github-data.js`, mọi số liệu gắn theo codename. Không có token thì dùng snapshot (chỉ số liệu tổng hợp), không bao giờ crash.
 - Leak guard bắt buộc trong CI. Không ghi denylist hay tên repo private ra đĩa trong repo, kể cả log thành artifact. Log chỉ in `file:dòng` và số thứ tự luật.
 - Mỗi trang có link "Edit on GitHub" trỏ tới file nguồn.

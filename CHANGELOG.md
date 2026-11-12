@@ -2,6 +2,11 @@
 
 Thay đổi người xem thấy được trên atkd1890.github.io. Thay đổi nội bộ (test, CI, docs) xem ở git log.
 
+## 2026-11-12 — Ba ngôn ngữ
+
+- Site có 3 ngôn ngữ: tiếng Việt (mặc định), English ở `/en/`, 日本語 ở `/ja/`. Nút VI/EN/JA trên thanh tiêu đề, dùng được cả khi tắt JavaScript.
+- Bảng lệnh, phím tắt và thông báo theo ngôn ngữ của trang.
+
 ## 2026-11-12 — Nhận diện
 
 - Favicon `CO` tự đổi màu theo light/dark, touch icon và web app manifest từ mark `<CO/>`.
