@@ -1,0 +1,29 @@
+---
+layout: layouts/base.njk
+basePath: /uses/
+pagination:
+  data: i18n.langs
+  size: 1
+  alias: L
+permalink: '{{ L.prefix }}/uses/'
+eleventyComputed:
+  title: '{{ i18n.t[L.code].uses.title }}'
+  summary: '{{ i18n.t[L.code].uses.summary }}'
+---
+{%- set t = i18n.t[L.code] -%}
+<section class="section" aria-labelledby="uses-title">
+  <p class="prompt">cat uses.md</p>
+  <h1 id="uses-title">{{ t.uses.title }}</h1>
+  <p class="comment">{{ t.uses.intro }}</p>
+</section>
+{% for g in uses %}
+<section class="section" id="{{ g.id }}" aria-labelledby="uses-{{ g.id }}">
+  <h2 id="uses-{{ g.id }}">{{ t.uses.groups[g.id] }}</h2>
+  <ul class="kv kv-wide">
+    {% for item in g.items %}
+    {% if item == 'TODO' %}<li class="todo"><span>TODO</span><span></span></li>
+    {% else %}<li><span>{% if item.url %}<a href="{{ item.url }}">{{ item.name }}</a>{% else %}{{ item.name }}{% endif %}</span><span>{{ item.note | tr(L.code) }}</span></li>{% endif %}
+    {% endfor %}
+  </ul>
+</section>
+{% endfor %}

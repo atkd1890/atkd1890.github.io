@@ -1,0 +1,40 @@
+---
+layout: layouts/base.njk
+basePath: /lab/
+pagination:
+  data: i18n.langs
+  size: 1
+  alias: L
+permalink: '{{ L.prefix }}/lab/'
+eleventyComputed:
+  title: '{{ i18n.t[L.code].labPage.title }}'
+  summary: '{{ i18n.t[L.code].labPage.summary }}'
+---
+{%- set t = i18n.t[L.code] -%}
+{%- set p = t.labPage -%}
+{%- set suffix = '' if L.code == 'vi' else '.' + L.code -%}
+<section class="section" aria-labelledby="lab-title">
+  <p class="prompt">lab ls</p>
+  <h1 id="lab-title">{{ p.title }}</h1>
+  <p class="comment">{{ p.intro }}</p>
+</section>
+
+<section class="section" id="os" aria-labelledby="os-title">
+  <p class="prompt">lab show atkd-os</p>
+  <div class="section-head"><h2 id="os-title">{{ p.os }}</h2><span class="badge badge-hash">{{ p.osStatus }}</span></div>
+  <p>{{ p.osIntro }}</p>
+  {% diagram "lab/os" + suffix, p.osAlt %}
+</section>
+
+<section class="section" id="benchmark" aria-labelledby="benchmark-title">
+  <p class="prompt">lab show benchmark</p>
+  <div class="section-head"><h2 id="benchmark-title">{{ p.benchmark }}</h2><span class="badge badge-hash">{{ p.benchmarkStatus }}</span></div>
+  <p>{{ p.benchmarkBody }}</p>
+  <p><a href="https://github.com/{{ site.repo }}/blob/{{ site.branch }}/lab/benchmark/SPEC.md">-&gt; {{ p.spec }}</a></p>
+</section>
+
+<section class="section" id="experiments" aria-labelledby="experiments-title">
+  <p class="prompt">lab log</p>
+  <h2 id="experiments-title">{{ p.experiments }}</h2>
+  <p class="comment empty">{{ p.experimentsEmpty }}</p>
+</section>

@@ -1,0 +1,39 @@
+---
+layout: layouts/base.njk
+basePath: /tools/
+jsonLdKind: tools
+pagination:
+  data: i18n.langs
+  size: 1
+  alias: L
+permalink: '{{ L.prefix }}/tools/'
+eleventyComputed:
+  title: '{{ i18n.t[L.code].toolsPage.title }}'
+  summary: '{{ i18n.t[L.code].toolsPage.summary }}'
+---
+{#- Public repos tagged `atkd-tool` (GitHub search, lib/github-api.js fetchTools), with their releases. -#}
+{%- set t = i18n.t[L.code] -%}
+{%- set p = t.toolsPage -%}
+<section class="section" aria-labelledby="tools-title">
+  <p class="prompt">gh search repos --owner atkd1890 --topic atkd-tool</p>
+  <h1 id="tools-title">{{ p.title }}</h1>
+  <p class="comment">{{ p.intro }}</p>
+  {% if github.tools.length %}
+  <ul class="cards">
+    {% for tool in github.tools %}
+    {%- set rels = github.releases | where('repo', 'atkd1890/' + tool.name) -%}
+    <li class="card" id="tool-{{ tool.name }}">
+      <div class="card-head"><h2>{{ tool.name }}</h2><span class="meta-line"><time datetime="{{ tool.createdAt | isoDay }}">{{ tool.createdAt | isoDay }}</time></span></div>
+      <p>{{ tool.description or '' }}</p>
+      {% if rels.length %}<p class="meta-line">{{ p.releases }}: {% for r in rels | limit(3) %}<a href="/blog/release/{{ r.repo | replace('/', '-') | slugify }}-{{ r.tag | slugify }}/">{{ r.tag }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</p>{% endif %}
+      <p class="badges">
+        {% if tool.homepage %}<a class="badge badge-accent" href="{{ tool.homepage }}">{{ p.open }}</a>{% endif %}
+        <a class="badge badge-muted" href="{{ tool.url }}">{{ p.source }}</a>
+      </p>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="comment empty">{{ p.empty }}</p>
+  {% endif %}
+</section>

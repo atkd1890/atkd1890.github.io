@@ -1,0 +1,13 @@
+flowchart LR
+  subgraph stack["atkd-stack · private · planned"]
+    A1["showcase-sync agent"]
+    A2["blog agent"]
+    A3["benchmark runner"]
+  end
+  subgraph site["atkd1890.github.io · public"]
+    PR["pull request"] --> CI{"check · gitleaks · leak guard"}
+    CI -->|"owner merges"| D["Deploy → Pages"]
+  end
+  A1 -->|"showcase.yml + secret mapping"| PR
+  A2 -->|"post, source: agent"| PR
+  A3 -->|"benchmark results"| PR

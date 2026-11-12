@@ -750,6 +750,44 @@ kbd {
   font-size: var(--fs-13);
   color: var(--muted);
 }
+@media (min-width: 768px) {
+  .tiles-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* key–value lists: /colophon stack, /uses */
+.kv {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+.kv li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--sp-3) var(--sp-6);
+  padding: var(--sp-4) 0;
+  border-bottom: 1px solid var(--line);
+}
+.kv li > span:first-child {
+  font: 700 var(--fs-14) var(--font-display);
+}
+.kv li > span:last-child {
+  color: var(--muted);
+  font-family: var(--font-display);
+}
+.kv-wide li {
+  grid-template-columns: minmax(0, 1fr);
+}
+.kv-wide li > span:last-child {
+  font-family: var(--font-body);
+}
+@media (min-width: 768px) {
+  .kv-wide li {
+    grid-template-columns: minmax(0, 16rem) minmax(0, 1fr);
+  }
+}
 .langs {
   display: grid;
   gap: 8px;
