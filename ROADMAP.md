@@ -53,8 +53,6 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 
 ## Phase 1 — Hạ tầng còn thiếu
 
-- [ ] `[ops]` Branch protection cho `main`: bắt buộc qua PR, `PR check` phải pass, cấm force-push
-- [ ] `[sec]` Bật secret scanning + push protection của GitHub cho repo (gitleaks trong CI đã có)
 - [ ] `[eng]` Lint: Stylelint cho CSS, ESLint cho JS; chạy trong `npm run check` (Prettier đã có)
 - [ ] `[pm]` GitHub Project board: mỗi phase là một milestone, mỗi task là một issue có label vai trò
 

@@ -2,14 +2,14 @@
 
 Đọc trước khi làm việc: specs ở [README.md](README.md), việc còn mở ở [ROADMAP.md](ROADMAP.md), quyết định đã chốt ở [docs/adr](docs/adr/README.md).
 
-Design: spec ở [docs/design/DESIGN.md](docs/design/DESIGN.md), hình ở artifact https://claude.ai/artifact/RXYDQoYg6Z91vRdaQEk6rR (private, cần đăng nhập đúng tài khoản). Khi làm giao diện, đọc bằng tool Artifact (action `read`): `project/canvas.json` rồi chỉ các artboard liên quan.
+Design: spec ở [docs/design.md](docs/design.md), hình ở artifact https://claude.ai/artifact/RXYDQoYg6Z91vRdaQEk6rR (private, cần đăng nhập đúng tài khoản). Khi làm giao diện, đọc bằng tool Artifact (action `read`): `project/canvas.json` rồi chỉ các artboard liên quan.
 
 - Tokens, chữ, component: `Main.dc.html`
 - Home: `HomeMobile.dc.html` (390px), `HomeDesktop.dc.html` (1440px, có palette ⌘K)
 - Blog và bài viết: `Blog.dc.html`
 - Case study: `CaseStudy.dc.html`
 
-Phần core (token, font, góc vuông, motif terminal) đồng bộ với design hub atkd1890.me, persona "Coding — Terminal". DESIGN.md là spec, artifact chỉ tham khảo về hình ảnh; hai bên lệch nhau thì hỏi chủ dự án.
+Phần core (token, font, góc vuông, motif terminal) đồng bộ với design hub atkd1890.me, persona "Coding — Terminal". docs/design.md là spec, artifact chỉ tham khảo về hình ảnh; hai bên lệch nhau thì hỏi chủ dự án.
 
 ## Persona và quyền riêng tư
 
@@ -41,7 +41,7 @@ Thứ gì chủ dự án phải tự điền hoặc cập nhật về sau (secre
 
 Site phải chứng minh một người làm được mọi vai trò. Trước khi báo xong một task, tự kiểm tra đủ các vai trò dưới đây; vai trò nào không liên quan thì ghi "không áp dụng" trong báo cáo, không bỏ qua im lặng.
 
-- **design:** chỉ dùng token; đúng DESIGN.md và artifact hoặc đã hỏi khi lệch; kiểm tra ở 375px và 1280px, light và dark; tương phản đạt WCAG AA; focus nhìn rõ.
+- **design:** chỉ dùng token; đúng docs/design.md và artifact hoặc đã hỏi khi lệch; kiểm tra ở 375px và 1280px, light và dark; tương phản đạt WCAG AA; focus nhìn rõ.
 - **eng:** `npm run check` qua; trong ngân sách hiệu năng; không tải JS ở trang không cần.
 - **ops:** workflow `Deploy` và `PR check` xanh; action pin theo SHA; secret mới có ghi phạm vi trong README.
 - **qa:** logic mới có unit test; hành vi giao diện có e2e (khi đã có bộ e2e); không có lỗi axe mức serious hay critical.
@@ -62,5 +62,6 @@ Site phải chứng minh một người làm được mọi vai trò. Trước k
 - Identity của repo là `ATKD Coding <2776097+atkd1890@users.noreply.github.com>`. Kiểm tra `git config user.email` trước khi commit, không bao giờ commit bằng email cá nhân.
 - Nhánh mặc định là `main`. History cũ chỉ nằm trong bundle ở `../_archive/`, không push lại.
 - Commit nhỏ theo task, message dạng `type: mô tả` (`feat`, `fix`, `docs`, `test`, `ci`, `chore`), không chứa tên repo private.
-- Không push nếu chủ dự án chưa bảo.
+- `main` được bảo vệ: làm trên nhánh riêng, mở PR, chờ `check` và `gitleaks` xanh rồi squash merge. Không push thẳng lên `main`, kể cả khi admin bypass được.
+- Không push hay merge nếu chủ dự án chưa bảo.
 - Docs viết lại cho đúng hiện trạng, không nối thêm ghi chú hay ngày vào dòng cũ.
