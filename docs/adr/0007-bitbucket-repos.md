@@ -1,4 +1,4 @@
-# 0007. Repo cũ trên Bitbucket: import repo cá nhân, giữ nguyên repo khách hàng
+# 0007. Repo ngoài GitHub: import repo cá nhân, giữ nguyên repo khách hàng và đọc qua API
 
 Ngày: 2026-11-12
 
@@ -20,7 +20,7 @@ Site build trên GitHub Actions nên đọc được API của bất kỳ dịch
 ## Quyết định
 
 - **Repo của riêng chủ dự án** (dự án cá nhân, game indie) được **import sang GitHub dưới dạng private**, giữ nguyên lịch sử commit. Email cũ dùng để commit được thêm vào tài khoản GitHub (để private), để các commit cũ được tính vào contribution calendar.
-- **Repo của công ty hoặc khách hàng** **giữ nguyên trên Bitbucket**, không sao chép đi đâu. Nếu cần đưa vào showcase, chỉ ở mức thẻ hoặc case study trừu tượng (ADR 0005); số liệu, nếu có, đọc qua API Bitbucket bằng adapter riêng, làm sau.
+- **Repo của công ty hoặc khách hàng** **giữ nguyên chỗ cũ**, không sao chép đi đâu, và **sẽ được đọc qua API** để lấy số liệu (làm sau). Chúng nằm không chỉ trên Bitbucket mà còn ở các tài khoản khác, nên phần đọc dữ liệu được thiết kế cho nhiều nguồn, không riêng Bitbucket. Trên site, các dự án này chỉ ở mức thẻ hoặc case study trừu tượng (ADR 0005).
 - Không dựng site thứ hai; GitHub Pages vẫn là hosting duy nhất.
 - Repo import vào được đưa lên site đúng như mọi repo private khác: codename trong `showcase.yml`, mapping trong secret `SHOWCASE_REPOS`, leak guard tự biết tên repo nhờ token "All repositories".
 
@@ -29,4 +29,5 @@ Site build trên GitHub Actions nên đọc được API của bất kỳ dịch
 - Hai giai đoạn mobile và indie game có dữ liệu thật thay cho dữ liệu mẫu, sau khi import.
 - Contribution calendar chỉ tính commit có email đã xác minh trên tài khoản; email cũ nào không thể xác minh (hộp thư đã mất) thì commit đó không được tính.
 - Việc phân loại "của riêng" hay "của khách hàng" là của chủ dự án, từng repo một. Khi không chắc, mặc định là của khách hàng và giữ nguyên.
-- Adapter Bitbucket (token chỉ đọc, số commit theo năm, tên repo cho leak guard) chỉ làm khi có repo khách hàng thật sự cần số liệu.
+- Cần một lớp "nguồn dữ liệu" cho nhiều nơi (Bitbucket và các tài khoản khác): mỗi nguồn một token chỉ đọc nằm trong secret, mapping `SHOWCASE_REPOS` mở rộng để ghi nguồn (ví dụ `bitbucket:<workspace>/<repo>`), số liệu vẫn gắn theo codename, và tên repo của mọi nguồn được đưa vào leak guard.
+- Token của những nguồn này thường đọc được cả code (Bitbucket không có quyền chỉ metadata), nên chỉ được dùng trong job deploy, không bao giờ trong workflow PR, giống `SHOWCASE_TOKEN`.
