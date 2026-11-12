@@ -45,6 +45,7 @@ jobs:
           SHOWCASE_TOKEN: ${{ secrets.SHOWCASE_TOKEN }}
           SHOWCASE_REPOS: ${{ secrets.SHOWCASE_REPOS }}
           STARS_EXCLUDE_OWNERS: ${{ secrets.STARS_EXCLUDE_OWNERS }}
+      - run: node scripts/check-data.js # fails if a query needs more than Metadata: read-only (ADR 0004)
       - run: npx playwright install --with-deps chromium
       - run: npm run og # OG images, rendered from the built pages
       - run: sudo apt-get install -y --no-install-recommends fonts-noto-cjk # like real /ja/ readers (ADR 0008)
