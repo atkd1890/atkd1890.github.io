@@ -20,10 +20,11 @@ import {
   LONG_TYPES,
 } from './lib/blog.js';
 
-/** Heading ids that read well in VI/EN and stay ASCII: "Bài toán chính" → "bai-toan-chinh". @param {string} s */
+/** Heading ids: VI/EN become ASCII ("Bài toán chính" → "bai-toan-chinh"), Japanese letters are kept ("要点"). @param {string} s */
 export const slugify = (s) =>
   fold(String(s))
-    .replace(/[^a-z0-9\s-]/g, '')
+    .normalize('NFC') // re-compose Japanese kana after fold's NFD
+    .replace(/[^\p{L}\p{N}\s-]/gu, '')
     .trim()
     .replace(/\s+/g, '-')
     .replace(/-+/g, '-');

@@ -2,10 +2,12 @@
 // Renders every src/blog/**/*.mmd (Mermaid) to an .svg next to it (dev-time; outputs are committed).
 // Colors are rendered as unique placeholders, then swapped for CSS variables, so the inlined SVG
 // follows the site theme (light/dark, manual toggle) without two versions.
+// Element ids derive from the file path, so re-rendering an unchanged diagram gives the same SVG.
 // Usage: node scripts/render-diagrams.js
 import { chromium } from '@playwright/test';
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+import { createHash } from 'node:crypto';
 
 /** placeholder → CSS variable */
 const PALETTE = {
@@ -54,13 +56,14 @@ await page.addScriptTag({ path: 'node_modules/mermaid/dist/mermaid.min.js' });
 for (const file of files) {
   const src = readFileSync(file, 'utf8');
   /** @type {string} */
-  const svg = await page.evaluate(async ([code, themeVariables]) => {
+  const id = `d${createHash('sha1').update(file).digest('hex').slice(0, 10)}`;
+  const svg = await page.evaluate(async ([code, themeVariables, id]) => {
     // @ts-ignore mermaid is a global from the script tag
     mermaid.initialize({ startOnLoad: false, theme: 'base', themeVariables, securityLevel: 'strict' });
     // @ts-ignore
-    const { svg } = await mermaid.render(`d${Math.random().toString(36).slice(2)}`, code);
+    const { svg } = await mermaid.render(id, code);
     return svg;
-  }, /** @type {const} */ ([src, theme]));
+  }, /** @type {const} */ ([src, theme, id]));
   let out = svg;
   for (const [hex, cssVar] of Object.entries(PALETTE))
     out = out.replaceAll(hex, cssVar).replaceAll(hex.toUpperCase(), cssVar);

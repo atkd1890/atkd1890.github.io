@@ -76,7 +76,6 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 
 ## Phase 5 — Blog
 
-- [ ] Bài đầu tiên: "Dựng portfolio trên GitHub khi phần lớn công việc là private" (VI), rồi bản EN, JA
 - [ ] 1 bài `til` + 1 bài `link` thật, để thử luồng issue → PR → merge → publish
 - [ ] `[mkt]` Lịch nội dung: nhịp xuất bản mục tiêu cho từng type (vd til 3/tuần, log 1/tuần, deep-dive 1/quý)
 - [ ] `[mkt]` Cross-post có `canonical` trỏ về site (dev.to, Zenn/Qiita nếu có bài JA)

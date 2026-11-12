@@ -2,6 +2,12 @@
 
 Thay đổi người xem thấy được trên atkd1890.github.io. Thay đổi nội bộ (test, CI, docs) xem ở git log.
 
+## 2026-11-12 — Bản dịch và breadcrumb
+
+- Bài đầu tiên có bản tiếng Anh và tiếng Nhật, kèm sơ đồ và ảnh chụp theo đúng ngôn ngữ.
+- Breadcrumb `~ / blog / …` ở mọi trang trừ trang chủ; nhãn `~/atkd-coding` trên thanh tiêu đề dẫn về trang chủ.
+- Thời gian đọc chính xác hơn (không đếm chữ trong sơ đồ); mục lục bài tiếng Nhật đủ các mục.
+
 ## 2026-11-12 — Blog
 
 - `/blog/` với bộ lọc theo loại, thẻ, series và năm, ở cả 3 ngôn ngữ; feed Atom `/feed.xml` và `/feed/<type>.xml`.

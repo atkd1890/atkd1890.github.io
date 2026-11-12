@@ -930,6 +930,48 @@ kbd {
   }
 }
 
+/* breadcrumb: ~ / blog / title */
+.breadcrumb {
+  padding-top: var(--sp-6);
+  font: 400 var(--fs-13) var(--font-display);
+  color: var(--muted);
+}
+.breadcrumb ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.breadcrumb li {
+  min-width: 0;
+}
+.breadcrumb li + li::before {
+  content: '/';
+  padding: 0 var(--sp-4);
+  color: var(--line);
+}
+.breadcrumb a {
+  min-height: var(--tap-min);
+  display: inline-flex;
+  align-items: center;
+}
+.breadcrumb [aria-current='page'] {
+  color: var(--fg);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: min(60vw, 40ch);
+}
+.titlebar-label {
+  color: inherit;
+  text-decoration: none;
+}
+.titlebar-label:hover {
+  color: var(--accent);
+}
+
 /* ---------- blog ---------- */
 .only-dark {
   display: none;

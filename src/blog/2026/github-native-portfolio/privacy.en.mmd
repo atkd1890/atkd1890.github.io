@@ -1,0 +1,9 @@
+flowchart LR
+  repos[(Private repos)] -->|metadata-only token| fetch[Read languages, dates, contributions]
+  secret[[Secret: codename ↔ repo]] --> fetch
+  fetch --> codename[Key stats by codename]
+  codename --> wl{Field whitelist}
+  wl --> site[HTML]
+  site --> guard{Leak guard}
+  guard -->|clean| deploy[Deploy]
+  guard -->|banned string| stop[Stop the build]

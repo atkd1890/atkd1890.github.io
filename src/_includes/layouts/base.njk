@@ -39,7 +39,7 @@
 <body>
   <a class="skip" href="#main">{{ t.skip }}</a>
   <header class="titlebar">
-    <span class="titlebar-label" aria-hidden="true">~/atkd-coding — zsh</span>
+    <a class="titlebar-label" href="{{ home }}">~/atkd-coding — zsh<span class="visually-hidden"> · {{ t.items.home }}</span></a>
     <div class="titlebar-right">
       {% if nav %}
       <nav class="sections" aria-label="{{ t.sections }}">
@@ -61,6 +61,21 @@
       </div>
     </div>
   </header>
+  {#- Breadcrumb on every page except home: ~ / blog / <page>. -#}
+  {%- set isHome = page.url == home -%}
+  {%- if not isHome %}
+  <nav class="wrap{% if wide %} wide{% endif %} breadcrumb" aria-label="{{ t.breadcrumb }}">
+    <ol>
+      <li><a href="{{ home }}">~<span class="visually-hidden"> {{ t.items.home }}</span></a></li>
+      {%- if postSlug or bp %}
+      {%- if postSlug or bp.kind != 'all' %}<li><a href="{{ L.prefix }}/blog/">blog</a></li>{% else %}<li aria-current="page">blog</li>{% endif %}
+      {%- endif %}
+      {%- if postSlug %}<li aria-current="page">{{ title }}</li>
+      {%- elif bp and bp.kind != 'all' %}<li aria-current="page">{% if bp.kind == 'type' %}{{ t.blog.types[bp.value] }}{% elif bp.kind == 'tag' %}#{{ bp.value }}{% else %}{{ bp.value }}{% endif %}</li>
+      {%- elif not bp %}<li aria-current="page">{{ title | tr(L.code) }}</li>{% endif %}
+    </ol>
+  </nav>
+  {%- endif %}
   <main id="main" class="wrap{% if wide %} wide{% endif %}">
     {{ content | safe }}
   </main>
