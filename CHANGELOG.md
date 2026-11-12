@@ -2,6 +2,11 @@
 
 Thay đổi người xem thấy được trên atkd1890.github.io. Thay đổi nội bộ (test, CI, docs) xem ở git log.
 
+## 2026-11-12 — Nhận diện
+
+- Favicon `CO` tự đổi màu theo light/dark, touch icon và web app manifest từ mark `<CO/>`.
+- Màu 4 era trên timeline mới: khác nhau cả sắc lẫn độ sáng, dễ phân biệt hơn với người mù màu.
+
 ## 2026-11-12 — Accessibility
 
 - Nút mở palette và nút đóng palette có tên đọc được khớp với chữ hiển thị, cho trình đọc màn hình và điều khiển bằng giọng nói.

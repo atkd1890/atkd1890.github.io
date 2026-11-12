@@ -54,10 +54,11 @@
   --inv: #ffffff;
   --persona: #5b6472; /* hub swatch for CO */
   --sys: #5a6172;
-  --era-mobile: var(--hash);
-  --era-indie-game: var(--prompt);
-  --era-system: var(--sys);
-  --era-ai: var(--accent);
+  /* era: 4 hues that also differ in lightness (tests/contrast.test.js) */
+  --era-mobile: #9a3412;
+  --era-indie-game: #0f766e;
+  --era-system: #3f4656;
+  --era-ai: #312e81;
   --heat-0: #e7e9f0;
   --heat-1: #c7c9f0;
   --heat-2: #8f8be0;
@@ -85,6 +86,48 @@
   --wide: 75rem;
   --focus: 3px solid var(--accent);
   --dur: 150ms;
+
+  /* spacing: --sp-N = N × 2px */
+  --sp-1: 2px;
+  --sp-2: 4px;
+  --sp-3: 6px;
+  --sp-4: 8px;
+  --sp-5: 10px;
+  --sp-6: 12px;
+  --sp-7: 14px;
+  --sp-8: 16px;
+  --sp-9: 18px;
+  --sp-10: 20px;
+  --sp-12: 24px;
+  --sp-16: 32px;
+  --sp-20: 40px;
+  --sp-24: 48px;
+  --sp-32: 64px;
+
+  /* type scale: --fs-N = N px; headings fluid */
+  --fs-11: 11px;
+  --fs-12: 12px;
+  --fs-13: 13px;
+  --fs-14: 14px;
+  --fs-15: 15px;
+  --fs-16: 16px;
+  --fs-17: 17px;
+  --fs-18: 18px;
+  --fs-19: 19px;
+  --fs-20: 20px;
+  --fs-22: 22px;
+  --fs-24: 24px;
+  --fs-h1: clamp(1.75rem, 7.5vw, 3.5rem);
+  --fs-h2: clamp(1.5rem, 4vw, 2rem);
+  --fs-stat: clamp(1.375rem, 4vw, 1.875rem);
+
+  /* elevation */
+  --shadow-dialog: 0 24px 64px rgb(0 0 0 / 0.35);
+  --backdrop: rgb(13 17 23 / 0.55);
+
+  /* motion */
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --blink: 1.1s;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
@@ -98,6 +141,10 @@
     --hash: #fdba74;
     --inv: #0d1117;
     --sys: #c3cad5;
+    --era-mobile: #fed7aa;
+    --era-indie-game: #2dd4bf;
+    --era-system: #8f9aaa;
+    --era-ai: #7dd3fc;
     --heat-0: #161b22;
     --heat-1: #1e4a5f;
     --heat-2: #2c6c8a;
@@ -133,6 +180,10 @@
   --desk: #1d2530;
   --mon: #0a0e14;
   --man: #02040a;
+  --era-mobile: #fed7aa;
+  --era-indie-game: #2dd4bf;
+  --era-system: #8f9aaa;
+  --era-ai: #7dd3fc;
 }
 
 *,
@@ -156,7 +207,7 @@ body {
 a {
   color: var(--accent);
   text-underline-offset: 0.2em;
-  transition: color var(--dur);
+  transition: color var(--dur) var(--ease);
 }
 :focus-visible {
   outline: var(--focus);
@@ -210,7 +261,7 @@ h3 {
   padding-left: var(--gutter);
   background: var(--panel);
   border-bottom: 1px solid var(--line);
-  font: 400 12px/1 var(--font-display);
+  font: 400 var(--fs-12)/1 var(--font-display);
   color: var(--muted);
 }
 .titlebar-label {
@@ -241,7 +292,7 @@ h3 {
   border-radius: var(--radius);
   background: transparent;
   color: var(--fg);
-  font: 400 12px var(--font-display);
+  font: 400 var(--fs-12) var(--font-display);
   cursor: pointer;
 }
 .ctl:hover {
@@ -251,7 +302,7 @@ h3 {
   color: var(--accent);
 }
 kbd {
-  font: 400 12px var(--font-display);
+  font: 400 var(--fs-12) var(--font-display);
   padding: 1px 6px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
@@ -282,24 +333,24 @@ kbd {
   border-radius: var(--radius);
   background: var(--bg);
   color: var(--fg);
-  box-shadow: 0 24px 64px rgb(0 0 0 / 0.35);
+  box-shadow: var(--shadow-dialog);
 }
 .dialog::backdrop {
-  background: rgb(13 17 23 / 0.55);
+  background: var(--backdrop);
 }
 #shortcuts {
   padding: 20px;
 }
 #shortcuts h2 {
   margin: 0 0 12px;
-  font-size: 18px;
+  font-size: var(--fs-18);
 }
 .keys {
   display: grid;
   grid-template-columns: max-content 1fr;
   gap: 8px 16px;
   margin: 0 0 16px;
-  font-size: 14px;
+  font-size: var(--fs-14);
 }
 .keys dd {
   margin: 0;
@@ -314,7 +365,7 @@ kbd {
   gap: 10px;
   padding-left: 16px;
   border-bottom: 1px solid var(--line);
-  font: 700 16px var(--font-display);
+  font: 700 var(--fs-16) var(--font-display);
   color: var(--prompt);
 }
 .pal-input input {
@@ -325,7 +376,7 @@ kbd {
   outline: 0;
   background: transparent;
   color: var(--fg);
-  font: 400 16px var(--font-display);
+  font: 400 var(--fs-16) var(--font-display);
 }
 .pal-input form {
   margin: 0;
@@ -343,7 +394,7 @@ kbd {
   align-items: center;
   gap: 12px;
   cursor: pointer;
-  font-size: 15px;
+  font-size: var(--fs-15);
 }
 .palette li[aria-selected='true'] {
   background: var(--panel);
@@ -352,7 +403,7 @@ kbd {
 .pal-group {
   flex: none;
   width: 56px;
-  font: 700 11px var(--font-display);
+  font: 700 var(--fs-11) var(--font-display);
   text-transform: uppercase;
   color: var(--muted);
 }
@@ -368,7 +419,7 @@ kbd {
   margin: 0;
   padding: 10px 16px;
   border-top: 1px solid var(--line);
-  font: 400 11px var(--font-display);
+  font: 400 var(--fs-11) var(--font-display);
   color: var(--muted);
 }
 .titlebar nav a {
@@ -378,13 +429,13 @@ kbd {
   align-items: center;
   color: var(--fg);
   text-decoration: none;
-  font-size: 13px;
+  font-size: var(--fs-13);
 }
 .titlebar nav a:hover {
   color: var(--accent);
 }
 .prompt {
-  font: 400 14px/1.4 var(--font-display);
+  font: 400 var(--fs-14)/1.4 var(--font-display);
   color: var(--prompt);
   margin: 0;
 }
@@ -392,7 +443,7 @@ kbd {
   content: '$ ';
 }
 .comment {
-  font: 400 14px/1.5 var(--font-display);
+  font: 400 var(--fs-14)/1.5 var(--font-display);
   color: var(--muted);
   margin: 0;
 }
@@ -407,14 +458,14 @@ kbd {
   color: var(--accent);
   display: grid;
   place-items: center;
-  font: 700 15px var(--font-display);
+  font: 700 var(--fs-15) var(--font-display);
   border-radius: var(--radius);
 }
 .badge {
   display: inline-block;
   padding: 3px 8px;
   border: 1px solid currentColor;
-  font: 700 11px/1.2 var(--font-display);
+  font: 700 var(--fs-11)/1.2 var(--font-display);
   text-transform: uppercase;
   letter-spacing: 0.02em;
   border-radius: var(--radius);
@@ -444,7 +495,7 @@ kbd {
   gap: 16px;
   background: var(--accent);
   color: var(--inv);
-  font: 700 15px var(--font-display);
+  font: 700 var(--fs-15) var(--font-display);
   text-decoration: none;
   border-radius: var(--radius);
 }
@@ -457,7 +508,7 @@ kbd {
   width: 10px;
   height: 22px;
   background: currentColor;
-  animation: blink 1.1s steps(1) infinite;
+  animation: blink var(--blink) steps(1) infinite;
 }
 @keyframes blink {
   50% {
@@ -475,7 +526,7 @@ kbd {
 }
 .section > h2 {
   margin: 0;
-  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-size: var(--fs-h2);
   line-height: 1.15;
 }
 .section-head {
@@ -486,7 +537,7 @@ kbd {
 }
 .section-head h2 {
   margin: 0;
-  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-size: var(--fs-h2);
 }
 .empty {
   padding: 18px;
@@ -511,7 +562,7 @@ kbd {
   align-items: center;
 }
 .hero h1 {
-  font: 700 clamp(1.75rem, 7.5vw, 3.5rem) / 1.05 var(--font-display);
+  font: 700 var(--fs-h1) / 1.05 var(--font-display);
   white-space: nowrap;
   letter-spacing: -0.03em;
   margin: 0;
@@ -522,7 +573,7 @@ kbd {
   align-items: center;
   gap: 8px;
   margin: 0;
-  font: 400 13px var(--font-display);
+  font: 400 var(--fs-13) var(--font-display);
 }
 .now-dot {
   width: 8px;
@@ -564,18 +615,18 @@ kbd {
   display: flex;
   justify-content: space-between;
   gap: 8px;
-  font: 700 16px var(--font-display);
+  font: 700 var(--fs-16) var(--font-display);
 }
 .era-head .name {
   color: var(--era);
 }
 .era-head .years {
   font-weight: 400;
-  font-size: 13px;
+  font-size: var(--fs-13);
   color: var(--muted);
 }
 .era .stack {
-  font: 400 12px/1.5 var(--font-display);
+  font: 400 var(--fs-12)/1.5 var(--font-display);
   color: var(--muted);
 }
 .era p {
@@ -586,7 +637,7 @@ kbd {
   flex-wrap: wrap;
   align-items: center;
   gap: 6px 12px;
-  font: 400 13px var(--font-display);
+  font: 400 var(--fs-13) var(--font-display);
 }
 .era-foot .count {
   color: var(--hash);
@@ -627,10 +678,10 @@ kbd {
 }
 .card h3 {
   margin: 0;
-  font-size: 18px;
+  font-size: var(--fs-18);
 }
 .card .era-label {
-  font: 400 12px var(--font-display);
+  font: 400 var(--fs-12) var(--font-display);
   color: var(--era);
 }
 .card p {
@@ -638,7 +689,7 @@ kbd {
   color: var(--muted);
 }
 .card .meta-line {
-  font: 400 12px var(--font-display);
+  font: 400 var(--fs-12) var(--font-display);
   color: var(--muted);
 }
 .badges {
@@ -664,10 +715,10 @@ kbd {
   gap: 2px;
 }
 .tile .value {
-  font: 700 clamp(1.375rem, 4vw, 1.875rem) / 1.1 var(--font-display);
+  font: 700 var(--fs-stat) / 1.1 var(--font-display);
 }
 .tile .label {
-  font-size: 13px;
+  font-size: var(--fs-13);
   color: var(--muted);
 }
 .langs {
@@ -714,7 +765,7 @@ kbd {
   display: flex;
   flex-wrap: wrap;
   gap: 4px 16px;
-  font: 400 12px var(--font-display);
+  font: 400 var(--fs-12) var(--font-display);
 }
 .lang-legend li::before {
   content: '';
@@ -756,7 +807,7 @@ kbd {
   background: var(--heat-4);
 }
 .heatmap figcaption {
-  font: 400 12px var(--font-display);
+  font: 400 var(--fs-12) var(--font-display);
   color: var(--muted);
 }
 
@@ -767,7 +818,7 @@ kbd {
   padding-top: 1.5rem;
   padding-bottom: 3rem;
   color: var(--muted);
-  font: 400 13px/1.6 var(--font-display);
+  font: 400 var(--fs-13)/1.6 var(--font-display);
 }
 .site-footer nav {
   display: flex;
@@ -805,7 +856,7 @@ kbd {
   .hero .mark {
     width: 96px;
     height: 96px;
-    font-size: 19px;
+    font-size: var(--fs-19);
   }
   .decor {
     order: 0;
