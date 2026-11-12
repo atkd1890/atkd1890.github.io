@@ -119,14 +119,15 @@ npm start        # dev server tại http://localhost:8080
 npm run build    # build ra _site/
 ```
 
-`SHOWCASE_TOKEN` là tùy chọn. Không có token thì build dùng snapshot (từ Phase 2).
+`SHOWCASE_TOKEN` là tùy chọn khi chạy local. Không có token thì build dùng snapshot.
 
 ### Cấu trúc
 
 ```
 eleventy.config.js
 lib/                showcase-schema.js, github-api.js, github-data.js, leak-guard.js (logic thuần, có test)
-scripts/            leak-guard.js (CLI)
+scripts/            leak-guard.js (CLI), push-secrets.sh
+config/examples/    template dữ liệu giả cho các file riêng tư
 tests/              node --test
 docs/               design/DESIGN.md, adr/
 src/
@@ -159,55 +160,16 @@ Settings → Pages → Build and deployment → Source: **GitHub Actions**. Work
 - Repository permissions: **chỉ Metadata: Read-only**. **Không cấp Contents**, nên token không đọc được code. Account permissions: không cấp gì.
 - Token chỉ được truyền vào job deploy trên `main`, không bao giờ vào workflow PR.
 
-Không có token thì build dùng snapshot (từ Phase 2).
-
-### Cấu trúc
-
-```
-eleventy.config.js
-lib/                showcase-schema.js, github-api.js, github-data.js, leak-guard.js (logic thuần, có test)
-scripts/            leak-guard.js (CLI)
-tests/              node --test
-docs/               design/DESIGN.md, adr/
-src/
-  _data/            site.js, showcase.yml (+ showcase.js validate), github.js, snapshot/
-  _includes/        layouts/, interactive/ (Web Components cho explainer)
-  assets/           css/, js/, img/
-  blog/ work/ lab/ tools/
-.github/workflows/  deploy.yml (push main + cron + manual), pr.yml (build + preview artifact)
-```
-
-### Bật GitHub Pages (làm một lần)
-
-Settings → Pages → Build and deployment → Source: **GitHub Actions**. Workflow `Deploy` sẽ lo phần còn lại.
-
-### Secrets (Settings → Secrets and variables → Actions)
-
-| Secret | Bắt buộc | Nội dung |
-|---|---|---|
-| `LEAK_DENYLIST` | **Có** (deploy fail nếu thiếu) | Mỗi dòng một chuỗi cấm: tên thật, công ty/khách hàng, email cá nhân, SĐT, địa chỉ, path máy local, tên service nội bộ. Khớp không phân biệt hoa thường và dấu |
-| `SHOWCASE_REPOS` | Nên có | JSON `{"codename": "owner/repo"}`, hoặc một danh sách `["owner/a", "owner/b"]` khi một codename gồm nhiều repo, cho các mục `repo: "@secret"`. Xem [ADR 0002](docs/adr/0002-private-repo-mapping-in-secrets.md) |
-| `SHOWCASE_TOKEN` | Nên có | Fine-grained PAT, tất cả repo, chỉ Metadata read-only (xem bên dưới) |
-| `STARS_EXCLUDE_OWNERS` | Tùy chọn | Danh sách owner/org cách nhau bằng dấu phẩy, sẽ bị loại khỏi feed stars |
-
-`GITHUB_TOKEN` do Actions tự cấp, dùng cho dữ liệu public: heatmap, contributions theo năm (cả private, vì profile đã bật "Include private contributions"), tools, releases, stars.
-
-**Tạo `SHOWCASE_TOKEN` với quyền tối thiểu** (github.com → Settings → Developer settings → Fine-grained tokens):
-
-- Resource owner: `atkd1890`. Expiration: tối đa 1 năm, đặt lịch nhắc gia hạn.
-- Repository access: **Only select repositories**, chọn đúng các repo có trong `SHOWCASE_REPOS`.
-- Repository permissions: **Contents: Read-only** (để đếm commit và ngôn ngữ), **Metadata: Read-only** (bắt buộc). Không cấp quyền nào khác. Account permissions: không cấp gì.
-
 Không có token thì build dùng `src/_data/snapshot/github.json` và không bao giờ crash.
 
-**Chạy local với dữ liệu thật** (các file đặt **ngoài** repo):
+**Chạy local với dữ liệu thật** (đọc file ở `~/.config/atkd-coding/` và dùng token của `gh`):
 
 ```bash
-SHOWCASE_TOKEN=... SHOWCASE_REPOS_FILE=~/secrets/showcase-repos.json npm run build
+npm run build:live
 ```
 
 ```bash
-LEAK_DENYLIST_FILE=~/secrets/leak-denylist.txt SHOWCASE_REPOS_FILE=~/secrets/showcase-repos.json npm run leak-guard
+npm run leak-guard:local
 ```
 
 ### Kiểm tra
@@ -215,6 +177,53 @@ LEAK_DENYLIST_FILE=~/secrets/leak-denylist.txt SHOWCASE_REPOS_FILE=~/secrets/sho
 ```bash
 npm run check    # typecheck (tsc --checkJs) + unit test (node --test) + leak guard self-test
 ```
+
+## Tùy chỉnh và bảo trì (checklist cho chủ site)
+
+Mọi thứ chủ site phải tự điền hoặc cập nhật đều có trong bảng này. Dữ liệu riêng tư **không bao giờ nằm trong repo**: file thật để ở `~/.config/atkd-coding/` (quyền 600), còn template dữ liệu giả để ở [`config/examples/`](config/examples/).
+
+| Mục | Nằm ở đâu | Khi nào cần sửa | Cách làm |
+|---|---|---|---|
+| Denylist chống lộ thông tin | Secret `LEAK_DENYLIST` ← `~/.config/atkd-coding/leak-denylist.txt` | Đổi việc, có khách hàng mới, đổi SĐT hay địa chỉ, gặp chuỗi mới cần giấu | [Cập nhật denylist](#cập-nhật-denylist) |
+| Mapping codename → repo | Secret `SHOWCASE_REPOS` ← `~/.config/atkd-coding/showcase-repos.json` | Thêm hoặc bớt dự án trong showcase | Sửa file rồi `npm run secrets:push` |
+| Danh sách dự án | [`src/_data/showcase.yml`](src/_data/showcase.yml) | Thêm dự án, đổi trạng thái, thêm số liệu hay bằng chứng | Sửa file, mở PR. `repo` chỉ được là `"@secret"` hoặc `null` |
+| Token đọc metadata | Secret `SHOWCASE_TOKEN` (không có file) | **Trước khi hết hạn** (xem ngày trên trang token) | Tạo token mới như mục Secrets, rồi `gh secret set SHOWCASE_TOKEN` |
+| Loại owner khỏi feed stars | Secret `STARS_EXCLUDE_OWNERS` ← `~/.config/atkd-coding/stars-exclude-owners.txt` | Khi vào org của công ty hoặc khách hàng | Sửa file rồi `npm run secrets:push` |
+| Câu định vị, email, link | [`src/_data/site.js`](src/_data/site.js) | Chốt tagline, có kênh YouTube | Sửa file, mở PR |
+| Design (màu, font, component) | [`docs/design/DESIGN.md`](docs/design/DESIGN.md) + `src/assets/css/main.css` + canvas thiết kế | Khi đổi design hub hoặc persona | Sửa cả ba cho khớp nhau |
+| Profile GitHub | github.com/settings/profile | Trước khi giới thiệu site | Đổi name, ẩn email, tắt hireable (ROADMAP Phase 0) |
+
+Các mục sẽ thêm vào bảng ở các phase sau: bài blog (Phase 5), `/uses` và đề bài benchmark (Phase 6).
+
+### Cập nhật denylist
+
+1. Lần đầu trên máy mới, tạo file từ template:
+   ```bash
+   mkdir -p ~/.config/atkd-coding && chmod 700 ~/.config/atkd-coding
+   ```
+   ```bash
+   cp -n config/examples/leak-denylist.example.txt ~/.config/atkd-coding/leak-denylist.txt
+   ```
+2. Sửa `~/.config/atkd-coding/leak-denylist.txt`:
+   - Mỗi dòng một chuỗi. Dòng bắt đầu bằng `#` là ghi chú.
+   - Khớp theo chuỗi con, không phân biệt hoa thường hay dấu.
+   - **Không** bỏ qua khoảng trắng hay gạch nối, nên mỗi định dạng SĐT phải ghi một dòng riêng.
+   - Tránh từ quá chung chung, vì sẽ chặn nhầm và làm deploy fail.
+   - Không ghi những thứ site được phép hiện: `atkd1890`, `hi@atkd1890.me`, các codename.
+3. Kiểm tra trên máy trước:
+   ```bash
+   npm run build:live && npm run leak-guard:local
+   ```
+4. Đẩy lên GitHub. Lệnh này **ghi đè** toàn bộ secret, nên file phải chứa đủ mọi mục:
+   ```bash
+   npm run secrets:push
+   ```
+5. Chạy lại deploy để áp dụng ngay (nếu không thì chờ cron hằng ngày):
+   ```bash
+   gh workflow run Deploy
+   ```
+
+Khi deploy fail vì leak guard, log chỉ in `file:dòng` và số thứ tự mục (ví dụ `denylist entry #7`), không in giá trị. Số thứ tự đếm từ 0, chỉ tính các dòng có hiệu lực (bỏ ghi chú và dòng ngắn). Hãy sửa nội dung bị bắt. Chỉ xoá mục khỏi denylist khi chắc chắn đó là bắt nhầm.
 
 ## License
 

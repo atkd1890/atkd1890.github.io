@@ -80,6 +80,10 @@ The leak guard is required in CI, for the build and for PRs:
 - Filter the stars → `link` feed: no private repos, no work-related orgs (list in a secret).
 - Never write the denylist or private repo names to disk inside the repo, not even in logs that become artifacts.
 
+## Owner-maintained items
+
+Anything the owner must fill in or keep updated later (a secret, private config, `TODO` copy, an expiring token, a setting in some UI) MUST be added in the same change to README → "Tùy chỉnh và bảo trì": where it lives, when to update it, how. If it holds private data, also add a fake-data template under `config/examples/`. Real private files live in `~/.config/atkd-coding/` and are pushed with `npm run secrets:push`. Never commit them.
+
 ## Definition of done (every role)
 
 The site has to prove one person can do every role. A task is done only when it holds up from each angle that applies. Roadmap tasks are tagged `[design]`, `[eng]`, `[ops]`, `[qa]`, `[sec]`, `[mkt]` or `[pm]`.
