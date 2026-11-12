@@ -5,10 +5,13 @@ import { test, expect } from '@playwright/test';
 test('blog index lists posts, filters by type, and every filter page exists', async ({ page }) => {
   await page.goto('/blog/');
   await expect(page.locator('#blog-title')).toHaveText('Blog');
-  await expect(page.locator('.stream-item')).toHaveCount(2);
+  // Fixtures are drafts; real posts may exist too, so assert on the fixtures, not on totals.
+  await expect(page.locator('.stream-title', { hasText: 'Bài kiểm thử hạ tầng blog' })).toBeVisible();
+  await expect(page.locator('.stream-title', { hasText: 'Bài kiểm thử thứ hai' })).toBeVisible();
   await page.locator('.chips a', { hasText: 'TIL' }).click();
   await expect(page).toHaveURL(/\/blog\/type\/til\/$/);
-  await expect(page.locator('.stream-item')).toHaveCount(1);
+  await expect(page.locator('.stream-item').filter({ hasText: 'Bài kiểm thử thứ hai' })).toHaveCount(1);
+  await expect(page.locator('.stream-item').filter({ hasText: 'Bài kiểm thử hạ tầng blog' })).toHaveCount(0);
   for (const path of [
     '/blog/tag/testing/',
     '/blog/series/fixture/',
@@ -54,7 +57,7 @@ test('series navigation and home stream', async ({ page }) => {
   await page.goto('/blog/blog-fixture/');
   await expect(page.locator('.series-nav a[rel="next"]')).toContainText('Bài kiểm thử thứ hai');
   await page.goto('/');
-  await expect(page.locator('#stream .stream-item')).toHaveCount(2);
+  await expect(page.locator('#stream .stream-title', { hasText: 'Bài kiểm thử thứ hai' })).toBeVisible();
 });
 
 test('Atom feeds are well-formed and list posts', async ({ page, request }) => {
@@ -64,9 +67,13 @@ test('Atom feeds are well-formed and list posts', async ({ page, request }) => {
   await page.setContent('<p></p>');
   const parsed = await page.evaluate((x) => {
     const doc = new DOMParser().parseFromString(x, 'application/xml');
-    return { error: !!doc.querySelector('parsererror'), entries: doc.querySelectorAll('entry').length };
+    return {
+      error: !!doc.querySelector('parsererror'),
+      titles: [...doc.querySelectorAll('entry > title')].map((t) => t.textContent),
+    };
   }, xml);
-  expect(parsed).toEqual({ error: false, entries: 3 });
+  expect(parsed.error).toBe(false);
+  expect(parsed.titles).toEqual(expect.arrayContaining(['Bài kiểm thử hạ tầng blog', 'Bài kiểm thử thứ hai']));
   expect((await request.get('/feed/til.xml')).status()).toBe(200);
 });
 

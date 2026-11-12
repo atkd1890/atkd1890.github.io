@@ -36,7 +36,8 @@ test('Markdown links and anchors resolve', () => {
   for (const file of mdFiles(ROOT)) {
     const text = readFileSync(file, 'utf8').replace(/```[\s\S]*?```/g, '');
     for (const [, target] of text.matchAll(/\]\(([^)\s]+)\)/g)) {
-      if (/^(https?:|mailto:)/.test(target)) continue;
+      // External links, and site URLs inside posts (/feed.xml, /blog/…), are not repository files.
+      if (/^(https?:|mailto:|\/)/.test(target)) continue;
       const [path, hash] = target.split('#');
       const dest = path ? resolve(dirname(file), path) : file;
       if (!existsSync(dest)) {
