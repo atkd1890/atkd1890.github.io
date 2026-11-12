@@ -1,28 +1,31 @@
-# ADR 0004 — SHOWCASE_TOKEN: all repositories, Metadata read-only
+# 0004. `SHOWCASE_TOKEN` cho mọi repo nhưng chỉ có quyền Metadata
 
-- Status: accepted
-- Date: 2026-11-12
-- Supersedes: the scoped "Contents + Metadata on selected repos" token first described in the README
+Ngày: 2026-11-12
 
-## Context
+## Bối cảnh
 
-The first plan gave the token Contents read on a hand-picked list of repos, so it could count commits per repo per year. That had two costs. Every new showcase repo meant editing the token. And the leak guard only learned the names of the listed repos, so any other private repo had to be added to the denylist by hand. The owner wanted no upkeep.
+Kế hoạch đầu cho token quyền Contents trên một danh sách repo chọn tay, để đếm commit theo từng repo và từng năm. Cách này có hai cái giá:
 
-## Options
+- Mỗi lần thêm repo vào showcase phải sửa token.
+- Leak guard chỉ biết tên các repo trong danh sách, repo private khác phải tự thêm vào denylist.
 
-| Option | Upkeep | Can read code | Leak guard knows all private names | Per-codename commit counts |
-|---|---|---|---|---|
-| Selected repos, Contents + Metadata | edit token per showcase repo | yes, listed repos | no | yes |
-| All repos, Contents + Metadata | none | **yes, every repo** | yes | yes |
-| **All repos, Metadata only** | none | **no** | yes | no |
+Chủ dự án muốn không phải bảo trì.
 
-## Decision
+## Các phương án
 
-All repositories, **Metadata: read-only** only. Yearly totals come from the public contribution calendar instead. The owner turned on "Include private contributions", so private work shows up there as anonymous counts. Any token can read those counts, including Actions' `GITHUB_TOKEN`.
+| Phương án                       | Bảo trì                    | Đọc được code         | Leak guard biết mọi tên private | Số commit theo codename |
+| ------------------------------- | -------------------------- | --------------------- | ------------------------------- | ----------------------- |
+| Chọn repo, Contents + Metadata  | Sửa token mỗi repo mới     | Có, repo đã chọn      | Không                           | Có                      |
+| Mọi repo, Contents + Metadata   | Không                      | **Có, mọi repo**      | Có                              | Có                      |
+| **Mọi repo, chỉ Metadata**      | Không                      | **Không**             | Có                              | Không                   |
 
-## Consequences
+## Quyết định
 
-- No token edits when repos are added. The leak guard lists every private repo name automatically.
-- A leaked token exposes repo names, languages and dates, never code.
-- Per-codename numbers are limited to languages, created and last-pushed dates. Signals report contributions per year, not commits, and the copy must say "contributions".
-- Contributions only count when the commit email is linked to the account. Old work under unlinked emails doesn't appear.
+Mọi repo, **chỉ Metadata: Read-only**. Số liệu theo năm lấy từ contribution calendar công khai. Chủ dự án đã bật "Include private contributions", nên việc trong repo private hiện ở đó dưới dạng con số; token nào cũng đọc được, kể cả `GITHUB_TOKEN` của Actions.
+
+## Hệ quả
+
+- Không phải sửa token khi thêm repo. Leak guard tự liệt kê mọi tên repo private.
+- Token bị lộ chỉ lộ tên repo, ngôn ngữ và ngày tháng, không lộ code.
+- Số liệu theo codename chỉ còn ngôn ngữ, ngày tạo và ngày push gần nhất. Signals báo contributions theo năm, không phải commit; chữ trên site phải ghi "contributions".
+- Contributions chỉ tính commit có email gắn với tài khoản, việc cũ dưới email chưa gắn không hiện.

@@ -1,19 +1,25 @@
-# ADR 0001 — GitHub-native site on Eleventy
+# 0001. Site GitHub-native trên Eleventy
 
-- Status: accepted
-- Date: 2026-11-12
+Ngày: 2026-11-12
 
-## Context
+## Bối cảnh
 
-The site has to show a lead engineer's range while most of the work behind it is private. It also has to run with almost no upkeep, and agents should be able to publish to it without holding the site's secrets.
+Site phải cho thấy năng lực của một lead engineer, trong khi phần lớn công việc nằm trong repo private. Site cũng phải gần như không tốn công vận hành, và agent phải xuất bản được mà không cần giữ secret của site.
 
-## Decision
+## Quyết định
 
-GitHub does every job. The repo is the CMS (issues hold ideas, PRs hold drafts, a merge publishes). The GraphQL API is the data source. Actions is the CI. Pages is the host. The generator is Eleventy v3 (ESM) with Nunjucks, with no UI framework. Client JS is vanilla or Web Components, loaded only where a page needs it.
+GitHub đảm nhận mọi vai trò:
 
-## Consequences
+- Repo là CMS: issue là ý tưởng, PR là bản nháp, merge là xuất bản.
+- GraphQL API là nguồn dữ liệu.
+- Actions là CI.
+- Pages là hosting.
 
-- No server, no database and no CMS login. Every content change is a reviewable diff.
-- The repo is public, so it is part of the showcase. That makes leak prevention a build-time concern (see ADR 0002 and ADR 0003).
-- Editing happens in GitHub's web or mobile editor, or locally. There's no WYSIWYG.
-- Eleventy ships no TypeScript types, so the config is typed loosely (`any`).
+Generator là Eleventy v3 (ESM) với Nunjucks, không dùng framework UI. JS cho người xem là vanilla hoặc Web Components, chỉ tải ở trang cần dùng.
+
+## Hệ quả
+
+- Không có server, database hay trang đăng nhập CMS. Mọi thay đổi nội dung là một diff có thể review.
+- Repo public nên bản thân nó là một phần của showcase. Vì vậy chống lộ thông tin phải làm lúc build (ADR 0002, 0003).
+- Sửa nội dung bằng trình soạn của GitHub (web, mobile, github.dev) hoặc ở local, không có WYSIWYG.
+- Eleventy không có type, nên config chỉ type lỏng (`any`).
