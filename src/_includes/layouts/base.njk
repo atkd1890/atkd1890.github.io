@@ -27,6 +27,7 @@
       Content <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · Code MIT ·
       <a href="https://github.com/{{ site.repo }}/edit/{{ site.branch }}/{{ page.inputPath | replace('./', '') }}">Edit on GitHub</a> ·
       Built <time datetime="{{ site.buildTime | isoDate }}">{{ site.buildTime | isoDate | truncate(10, true, '') }}</time>
+      · Data {{ github.source }}{% if github.demo %} (demo){% endif %}, {{ github.signals.totalContributions }} contributions
     </p>
   </footer>
 </body>
