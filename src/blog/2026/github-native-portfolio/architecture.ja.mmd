@@ -1,0 +1,11 @@
+flowchart LR
+  subgraph gh[GitHub]
+    issue[Issue: アイデア] --> pr[PR: 下書き]
+    pr --> ci{Actions: チェック}
+    ci -->|すべて成功| merge[マージ]
+    merge --> build[Actions: ビルド]
+    cron[毎日の cron] --> build
+    api[(GraphQL API)] --> build
+    build --> pages[Pages]
+  end
+  priv[(非公開リポジトリ)] -. 数字だけ .-> api

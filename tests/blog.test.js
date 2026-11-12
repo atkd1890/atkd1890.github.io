@@ -100,8 +100,23 @@ test('seriesNav links neighbours in date order', () => {
 test('readingTime and toc', () => {
   assert.equal(readingTime(`<p>${'từ '.repeat(440)}</p><pre>${'code '.repeat(999)}</pre>`, 'vi'), 2);
   assert.equal(readingTime('<p>短い</p>', 'ja'), 1);
+  assert.equal(
+    readingTime(`<p>a</p><svg><style>${'x '.repeat(5000)}</style></svg>`, 'en'),
+    1,
+    'inline SVG is not prose',
+  );
   assert.deepEqual(toc('<h2 id="a">Một <code>x</code></h2><h3 id="b">no</h3><h2 id="c" tabindex="-1">Hai</h2>'), [
     { id: 'a', text: 'Một x' },
     { id: 'c', text: 'Hai' },
   ]);
+});
+
+import { slugify } from '../eleventy.config.js';
+
+test('heading slugs: ASCII for VI/EN, Japanese letters kept', () => {
+  assert.equal(slugify('Bài toán chính'), 'bai-toan-chinh');
+  assert.equal(slugify('TL;DR'), 'tldr');
+  assert.equal(slugify('要点'), '要点');
+  assert.equal(slugify('4 つの原則'), '4-つの原則');
+  assert.equal(slugify('GitHub がすべての役割を担う'), 'github-がすべての役割を担う');
 });

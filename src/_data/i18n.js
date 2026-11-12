@@ -10,6 +10,7 @@ export default {
   ],
   t: {
     vi: {
+      breadcrumb: 'Đường dẫn',
       blog: {
         title: 'Blog',
         intro: 'TIL, link hay, build log và bài phân tích sâu về những gì đang làm.',
@@ -115,6 +116,7 @@ export default {
       backHome: 'Về trang chủ',
     },
     en: {
+      breadcrumb: 'Breadcrumb',
       blog: {
         title: 'Blog',
         intro: 'TILs, links, build logs and deep-dives on what I am building.',
@@ -220,6 +222,7 @@ export default {
       backHome: 'Back home',
     },
     ja: {
+      breadcrumb: 'パンくずリスト',
       blog: {
         title: 'ブログ',
         intro: '作っているものについての TIL、リンク、ビルドログ、深掘り記事。',

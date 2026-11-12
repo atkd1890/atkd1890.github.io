@@ -1,0 +1,11 @@
+flowchart LR
+  subgraph gh[GitHub]
+    issue[Issue: idea] --> pr[PR: draft]
+    pr --> ci{Actions: checks}
+    ci -->|green| merge[Merge]
+    merge --> build[Actions: build]
+    cron[Daily cron] --> build
+    api[(GraphQL API)] --> build
+    build --> pages[Pages]
+  end
+  priv[(Private repos)] -. numbers only .-> api

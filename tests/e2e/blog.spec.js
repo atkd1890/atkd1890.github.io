@@ -84,3 +84,40 @@ test('g b opens the blog in the current language', async ({ page }) => {
   await page.keyboard.press('b');
   await expect(page).toHaveURL(/\/ja\/blog\/$/);
 });
+
+test('breadcrumb on inner pages leads home and to the blog; none on home', async ({ page }) => {
+  await page.goto('/blog/blog-fixture/');
+  const crumbs = page.locator('nav.breadcrumb');
+  await expect(crumbs.locator('li')).toHaveCount(3);
+  await expect(crumbs.locator('[aria-current="page"]')).toHaveText('Bài kiểm thử hạ tầng blog');
+  await crumbs.locator('a', { hasText: 'blog' }).click();
+  await expect(page).toHaveURL(/\/blog\/$/);
+  await expect(page.locator('nav.breadcrumb [aria-current="page"]')).toHaveText('blog');
+  await page.locator('nav.breadcrumb a').first().click();
+  await expect(page).toHaveURL(/:8090\/$/);
+  await expect(page.locator('nav.breadcrumb')).toHaveCount(0);
+
+  await page.goto('/ja/blog/type/til/');
+  await expect(page.locator('nav.breadcrumb [aria-current="page"]')).toHaveText('TIL');
+  await page.locator('nav.breadcrumb a').first().click();
+  await expect(page).toHaveURL(/\/ja\/$/);
+});
+
+test('the titlebar label links home in the current language', async ({ page }) => {
+  await page.goto('/en/blog/');
+  await page.locator('.titlebar-label').click();
+  await expect(page).toHaveURL(/\/en\/$/);
+});
+
+test('the first post exists in all three languages and links them', async ({ page }) => {
+  for (const [path, lang] of [
+    ['/blog/github-native-portfolio/', 'vi'],
+    ['/en/blog/github-native-portfolio/', 'en'],
+    ['/ja/blog/github-native-portfolio/', 'ja'],
+  ]) {
+    await page.goto(path);
+    await expect(page.locator('html')).toHaveAttribute('lang', lang);
+    await expect(page.locator('link[rel="alternate"][hreflang]')).toHaveCount(3);
+    await expect(page.locator('.post-toc li')).toHaveCount(10);
+  }
+});

@@ -1,0 +1,9 @@
+flowchart LR
+  repos[(非公開リポジトリ)] -->|メタデータのみのトークン| fetch[言語・日付・コントリビューションを取得]
+  secret[[Secret: コードネーム ↔ リポジトリ]] --> fetch
+  fetch --> codename[コードネーム単位で集計]
+  codename --> wl{許可したフィールドのみ}
+  wl --> site[HTML]
+  site --> guard{リークガード}
+  guard -->|問題なし| deploy[デプロイ]
+  guard -->|禁止文字列あり| stop[ビルドを止める]
