@@ -46,6 +46,7 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 
 ## Chủ dự án tự làm
 
+- [ ] `[mkt]` Điền `src/_data/eras.js`: khoảng năm và 1 câu "đã làm gì" cho từng era; `role` và `summary` trong `showcase.yml`.
 - [ ] `[sec]` Sửa profile GitHub: name, ẩn email, location, bio, twitter, tắt hireable. Phải xong trước khi giới thiệu site.
 - [ ] `[sec]` Bổ sung denylist: SĐT, địa chỉ, nơi làm hiện tại, khách hàng khác ([hướng dẫn](README.md#cập-nhật-denylist)).
 - [ ] `[sec]` Xem lại các mục denylist ngắn dễ chặn nhầm (mục #6 trùng một từ tiếng Nhật thông dụng, mục #7 ngắn); cân nhắc đổi sang dạng domain.
@@ -73,7 +74,7 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 
 ## Phase 3 — Home + craft
 
-- [ ] Đủ 8 section theo [docs/content.md](docs/content.md#home). Mobile-first, kiểm tra ở 375px
+- [ ] Stream, Tools, Lab hiện trạng thái trống; nối dữ liệu khi Phase 5 và 6 xong
 - [ ] Command palette ⌘K, phím tắt (`g h`, `g b`, `/`, `?`)
 - [ ] Nút âm thanh (mặc định tắt), theme toggle
 - [ ] `[eng]` Ngân sách hiệu năng: JS mỗi trang ≤ 30 KB gzip, CSS ≤ 20 KB, không font chặn render; CI fail nếu vượt
