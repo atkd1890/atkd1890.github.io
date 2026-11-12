@@ -123,7 +123,7 @@
       <span aria-hidden="true">$</span>
       <label for="pal-q" class="visually-hidden">{{ t.paletteInput }}</label>
       <input id="pal-q" type="text" role="combobox" aria-expanded="true" aria-controls="pal-list" aria-autocomplete="list" autocomplete="off" spellcheck="false" placeholder="{{ t.palettePlaceholder }}">
-      <form method="dialog"><button class="ctl">esc<span class="visually-hidden"> {{ t.close }}</span></button></form>
+      <form method="dialog"><button type="submit" class="ctl">esc<span class="visually-hidden"> {{ t.close }}</span></button></form>
     </div>
     <ul id="pal-list" role="listbox" aria-label="{{ t.results }}" data-no-match="{{ t.noMatch }}" data-search-group="{{ t.groups.search }}"></ul>
     <p class="pal-foot">{{ t.paletteFoot }}</p>
@@ -140,7 +140,7 @@
       <dt><kbd>?</kbd></dt><dd>{{ t.shortcuts.help }}</dd>
       <dt><kbd>esc</kbd></dt><dd>{{ t.shortcuts.close }}</dd>
     </dl>
-    <form method="dialog"><button class="ctl ctl-wide">{{ t.close }}</button></form>
+    <form method="dialog"><button type="submit" class="ctl ctl-wide">{{ t.close }}</button></form>
   </dialog>
   <script type="application/json" id="palette-items">{{ showcase | paletteItems(site, t, L.prefix) | dump | safe }}</script>
 </body>

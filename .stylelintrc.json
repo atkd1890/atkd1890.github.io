@@ -1,0 +1,26 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "rules": {
+    "declaration-property-value-disallowed-list": {
+      "/^(color|background|background-color|border|border-top|border-right|border-bottom|border-left|border-color|outline|outline-color|fill|stroke|box-shadow|text-decoration-color|caret-color|accent-color)$/": [
+        "/#[0-9a-fA-F]{3,8}\\b/",
+        "/\\b(rgb|rgba|hsl|hsla|oklch|lab|lch)\\(/"
+      ],
+      "font-family": ["/^(?!var\\(|'JetBrains Mono'$).*/"],
+      "border-radius": ["/^(?!var\\(|0$).*/"]
+    },
+    "rule-empty-line-before": null,
+    "comment-empty-line-before": null,
+    "custom-property-empty-line-before": null,
+    "declaration-empty-line-before": null,
+    "no-descending-specificity": null,
+    "media-feature-range-notation": null,
+    "at-rule-empty-line-before": null,
+    "function-url-quotes": null,
+    "value-keyword-case": null,
+    "color-hex-length": null,
+    "alpha-value-notation": null,
+    "property-no-vendor-prefix": null,
+    "property-no-deprecated": null
+  }
+}

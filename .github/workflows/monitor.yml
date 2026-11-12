@@ -1,0 +1,85 @@
+name: Monitor
+
+# Uptime every 6 hours and external links every Monday. Each opens one issue when something breaks
+# (never a duplicate) and closes it again once the problem is gone.
+on:
+  schedule:
+    - cron: '23 */6 * * *' # uptime
+    - cron: '41 0 * * 1' # links, Monday 09:41 JST
+  workflow_dispatch:
+    inputs:
+      check:
+        description: Which check to run
+        type: choice
+        options: [uptime, links]
+        default: uptime
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  uptime:
+    if: github.event.schedule == '23 */6 * * *' || inputs.check == 'uptime'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      TITLE: Site is down
+    steps:
+      - name: Check pages
+        id: probe
+        run: |
+          failed=""
+          for path in / /blog/ /feed.xml /sitemap.xml; do
+            code=$(curl -sS -o /dev/null -w '%{http_code}' --retry 2 --retry-delay 20 --max-time 30 "https://atkd1890.github.io$path" || echo 000)
+            echo "$path $code"
+            [ "$code" = "200" ] || failed="$failed $path=$code"
+          done
+          echo "failed=$failed" >> "$GITHUB_OUTPUT"
+      - name: Open or close the issue
+        env:
+          FAILED: ${{ steps.probe.outputs.failed }}
+        run: |
+          open=$(gh issue list --state open --search "\"$TITLE\" in:title" --json number --jq '.[0].number')
+          if [ -n "$FAILED" ]; then
+            if [ -z "$open" ]; then
+              gh issue create --title "$TITLE" --body "Monitor got non-200 responses:$FAILED
+
+          Check the latest \`Deploy\` run and https://www.githubstatus.com. To roll back, re-run \`Deploy\` on the last good commit (README → Deploy và sự cố)."
+            fi
+            exit 1
+          elif [ -n "$open" ]; then
+            gh issue close "$open" --comment "Back to 200 on every checked page."
+          fi
+
+  links:
+    if: github.event.schedule == '41 0 * * 1' || inputs.check == 'links'
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      TITLE: Broken links
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Check links
+        id: check
+        run: node scripts/check-links.js --external --report=links.md || echo "broken=1" >> "$GITHUB_OUTPUT"
+      - name: Open, update or close the issue
+        env:
+          BROKEN: ${{ steps.check.outputs.broken }}
+        run: |
+          open=$(gh issue list --state open --search "\"$TITLE\" in:title" --json number --jq '.[0].number')
+          if [ -n "$BROKEN" ]; then
+            if [ -n "$open" ]; then gh issue edit "$open" --body-file links.md; else gh issue create --title "$TITLE" --body-file links.md; fi
+          elif [ -n "$open" ]; then
+            gh issue close "$open" --comment "Every link works again."
+          fi

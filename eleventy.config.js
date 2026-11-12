@@ -147,9 +147,11 @@ export default function (eleventyConfig) {
   // {% diagram "blog/2026/<slug>/architecture", "Mô tả" %} inlines a pre-rendered Mermaid SVG
   // (scripts/render-diagrams.js) whose colors are CSS variables, so it follows the theme toggle.
   eleventyConfig.addShortcode('diagram', (/** @type {string} */ path, /** @type {string} */ alt) => {
+    // Mermaid sets its own role; replace it so the figure reads as one image with the caption as its name.
     const svg = readFileSync(`src/${path}.svg`, 'utf8').replace(
-      /<svg\b/,
-      `<svg role="img" aria-label="${alt.replace(/"/g, '&quot;')}"`,
+      /<svg\b[^>]*>/,
+      (tag) =>
+        `${tag.slice(0, -1).replace(/\srole="[^"]*"/, '')} role="img" aria-label="${alt.replace(/"/g, '&quot;')}">`,
     );
     return `<figure class="diagram" tabindex="0">${svg}<figcaption>${alt}</figcaption></figure>`;
   });

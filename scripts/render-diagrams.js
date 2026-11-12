@@ -4,6 +4,7 @@
 // follows the site theme (light/dark, manual toggle) without two versions.
 // Element ids derive from the file path, so re-rendering an unchanged diagram gives the same SVG.
 // Usage: node scripts/render-diagrams.js
+/* global mermaid -- loaded into the page by addScriptTag */
 import { chromium } from '@playwright/test';
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
