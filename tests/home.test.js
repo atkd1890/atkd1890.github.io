@@ -84,3 +84,20 @@ test('selectedWork skips demo data and caps the list', () => {
     ['y', 'x'],
   );
 });
+
+import { paletteItems } from '../lib/palette.js';
+
+test('paletteItems lists featured real work only, with unique ids', () => {
+  const items = paletteItems(
+    [
+      { codename: 'b', featured: true, placeholder: false, order: 2 },
+      { codename: 'a', featured: true, placeholder: false, order: 1 },
+      { codename: 'demo', featured: true, placeholder: true, order: 3 },
+    ],
+    { hub: 'https://hub', github: 'https://gh', repo: 'o/r', email: 'x@y' },
+  );
+  const work = items.filter((i) => i.group === 'Work').map((i) => i.label);
+  assert.deepEqual(work, ['a', 'b']);
+  assert.equal(new Set(items.map((i) => i.id)).size, items.length);
+  assert.ok(items.every((i) => i.href || i.action));
+});

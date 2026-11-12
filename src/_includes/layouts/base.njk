@@ -7,18 +7,32 @@
   <meta name="description" content="{{ summary or site.tagline }}">
   <link rel="canonical" href="{{ site.url }}{{ page.url }}">
   <meta name="color-scheme" content="light dark">
+  <script>try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
   <link rel="preload" href="/assets/fonts/jetbrains-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/main.css">
+  <script type="module" src="/assets/js/craft.js"></script>
 </head>
 <body>
   <a class="skip" href="#main">Skip to content</a>
   <header class="titlebar">
     <span class="titlebar-label" aria-hidden="true">~/atkd-coding — zsh</span>
-    {% if nav %}
-    <nav aria-label="Sections">
-      {% for item in nav %}<a href="{{ item.href }}">{{ item.label }}</a>{% endfor %}
-    </nav>
-    {% endif %}
+    <div class="titlebar-right">
+      {% if nav %}
+      <nav aria-label="Sections">
+        {% for item in nav %}<a href="{{ item.href }}">{{ item.label }}</a>{% endfor %}
+      </nav>
+      {% endif %}
+      <div class="controls" data-js hidden>
+        <button type="button" class="ctl ctl-wide" data-palette-open aria-keyshortcuts="Meta+K Control+K" aria-label="Open command palette"><kbd>⌘K</kbd></button>
+        <button type="button" class="ctl" data-sound-toggle aria-pressed="false" aria-label="Sound">
+          <svg data-sound-off width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M17 9l4 6M21 9l-4 6"/></svg>
+          <svg data-sound-on hidden width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>
+        </button>
+        <button type="button" class="ctl" data-theme-toggle aria-label="Switch theme">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+        </button>
+      </div>
+    </div>
   </header>
   <main id="main" class="wrap{% if wide %} wide{% endif %}">
     {{ content | safe }}
@@ -34,8 +48,34 @@
       Content <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> · Code MIT ·
       <a href="https://github.com/{{ site.repo }}/edit/{{ site.branch }}/{{ page.inputPath | replace('./', '') }}">Edit on GitHub</a> ·
       Built <time datetime="{{ site.buildTime | isoDate }}">{{ site.buildTime | isoDate | truncate(10, true, '') }}</time>
+      <span data-js hidden>· <button type="button" class="linklike" data-help-open>press ? for shortcuts</button></span>
       · Data {{ github.source }}{% if github.demo %} (demo){% endif %}, {{ github.signals.totalContributions }} contributions
     </p>
   </footer>
+  <dialog id="palette" class="dialog palette" aria-label="Command palette">
+    <div class="pal-input">
+      <span aria-hidden="true">$</span>
+      <label for="pal-q" class="visually-hidden">Search pages, work and actions</label>
+      <input id="pal-q" type="text" role="combobox" aria-expanded="true" aria-controls="pal-list" aria-autocomplete="list" autocomplete="off" spellcheck="false" placeholder="go to, open, toggle…">
+      <form method="dialog"><button class="ctl" aria-label="Close">esc</button></form>
+    </div>
+    <ul id="pal-list" role="listbox" aria-label="Results"></ul>
+    <p class="pal-foot">↑↓ move · ↵ open · esc close · ? shortcuts</p>
+  </dialog>
+  <dialog id="shortcuts" class="dialog" aria-labelledby="shortcuts-title">
+    <h2 id="shortcuts-title">Keyboard shortcuts</h2>
+    <dl class="keys">
+      <dt><kbd>⌘K</kbd> / <kbd>Ctrl K</kbd></dt><dd>Command palette</dd>
+      <dt><kbd>/</kbd></dt><dd>Search (palette)</dd>
+      <dt><kbd>g</kbd> <kbd>h</kbd></dt><dd>Home</dd>
+      <dt><kbd>g</kbd> <kbd>w</kbd></dt><dd>Selected work</dd>
+      <dt><kbd>g</kbd> <kbd>s</kbd></dt><dd>Signals</dd>
+      <dt><kbd>g</kbd> <kbd>b</kbd></dt><dd>Blog (Stream for now)</dd>
+      <dt><kbd>?</kbd></dt><dd>This list</dd>
+      <dt><kbd>esc</kbd></dt><dd>Close</dd>
+    </dl>
+    <form method="dialog"><button class="ctl ctl-wide">close</button></form>
+  </dialog>
+  <script type="application/json" id="palette-items">{{ showcase | paletteItems(site) | dump | safe }}</script>
 </body>
 </html>

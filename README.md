@@ -268,11 +268,12 @@ Chưa có dữ liệu thì để `TODO`, không điền đoán. Có thể sửa 
 
 Spec ở [docs/design.md](docs/design.md). Hình ở artifact [ATKD Coding Design](https://claude.ai/artifact/RXYDQoYg6Z91vRdaQEk6rR) (private, cần đúng tài khoản). Phần core đồng bộ với design hub.
 
-| Muốn đổi                    | Sửa ở                                                         |
-| --------------------------- | ------------------------------------------------------------- |
-| Token màu, font, kích thước | `src/assets/css/main.css` (`:root`) và docs/design.md mục 2–4 |
-| Khung trang, footer         | `src/_includes/layouts/base.njk`                              |
-| Font tự host                | `eleventy.config.js` (passthrough) và `@font-face` trong CSS  |
+| Muốn đổi                              | Sửa ở                                                                                                          |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| Token màu, font, kích thước           | `src/assets/css/main.css` (`:root`) và docs/design.md mục 2–4                                                  |
+| Khung trang, titlebar, dialog, footer | `src/_includes/layouts/base.njk`                                                                               |
+| Font tự host                          | `eleventy.config.js` (passthrough) và `@font-face` trong CSS                                                   |
+| Palette, phím tắt, theme, âm thanh    | `src/assets/js/craft.js` (DOM), `src/assets/js/core.js` (logic thuần, có test), mục palette ở `lib/palette.js` |
 
 Quy tắc giữ nguyên khi sửa: chỉ dùng token, góc vuông, vùng bấm tối thiểu 44px, tiếng Nhật dùng font hệ thống, đạt WCAG AA ở cả light và dark.
 
