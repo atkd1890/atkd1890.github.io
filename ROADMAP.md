@@ -145,7 +145,7 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 
 ## Định kỳ
 
-- Trước ngày hết hạn của `SHOWCASE_TOKEN` `[sec]`: tạo token mới, `gh secret set SHOWCASE_TOKEN`. Hết hạn thì site tự quay về snapshot.
+- Khi có issue "SHOWCASE_TOKEN expires…" `[sec]`: tạo token mới theo hướng dẫn trong issue, rồi đóng issue. Issue tự mở 14 ngày trước hạn.
 - Khi đổi việc, có khách hàng mới hoặc đổi thông tin liên lạc `[sec]`: cập nhật denylist, `npm run secrets:push`.
 - Khi thêm dự án vào showcase `[pm]`: thêm vào `showcase.yml` và mapping, `npm run secrets:push`.
 - Khi repo không có commit 60 ngày `[ops]`: GitHub tắt cron, bật lại workflow `Deploy` ở tab Actions.
