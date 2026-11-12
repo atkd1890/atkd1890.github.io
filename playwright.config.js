@@ -14,5 +14,12 @@ export default defineConfig({
   projects: [
     { name: 'mobile', use: { ...devices['Pixel 7'], viewport: { width: 375, height: 812 } } },
     { name: 'desktop', use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 900 } } },
+    // Other engines run the smoke spec only.
+    { name: 'safari-ios', testMatch: /smoke\.spec\.js/, use: { ...devices['iPhone 13'] } },
+    {
+      name: 'firefox',
+      testMatch: /smoke\.spec\.js/,
+      use: { ...devices['Desktop Firefox'], viewport: { width: 1280, height: 900 } },
+    },
   ],
 });
