@@ -67,5 +67,5 @@ Site phải chứng minh một người làm được mọi vai trò. Trước k
 - Nhánh mặc định là `main`. History cũ chỉ nằm trong bundle ở `../_archive/`, không push lại.
 - Commit nhỏ theo task, message dạng `type: mô tả` (`feat`, `fix`, `docs`, `test`, `ci`, `chore`), không chứa tên repo private.
 - `main` được bảo vệ: làm trên nhánh riêng, mở PR, chờ `check` và `gitleaks` xanh rồi squash merge. Không push thẳng lên `main`, kể cả khi admin bypass được. Nhánh trên GitHub tự xoá sau khi merge; ở local `fetch.prune` đã bật, nhánh local tự xoá sau merge.
-- Không push hay merge nếu chủ dự án chưa bảo.
+- Không push hay merge nếu chủ dự án chưa bảo. Ngoại lệ duy nhất: PR patch và minor của Dependabot tự merge khi CI xanh ([ADR 0010](docs/adr/0010-dependabot-auto-merge.md)); bản major vẫn chờ chủ dự án.
 - Docs viết lại cho đúng hiện trạng, không nối thêm ghi chú hay ngày vào dòng cũ.
