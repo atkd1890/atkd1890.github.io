@@ -2,6 +2,13 @@
 
 Thay đổi người xem thấy được trên atkd1890.github.io. Thay đổi nội bộ (test, CI, docs) xem ở git log.
 
+## 2026-11-12 — Case study, colophon và bản lưu theo năm
+
+- Trang case study `/work/<codename>/` theo khung Bối cảnh → Bài học, đủ 3 ngôn ngữ; thẻ dự án trên trang chủ và ⌘K dẫn thẳng tới case study khi có.
+- `/colophon` có thêm điểm Lighthouse thấp nhất và thời gian build của lần deploy trước.
+- Bài dài trong mục Bài viết và danh sách blog nổi bật thành khối riêng; thanh tiêu đề ghi đường dẫn của trang; footer có link RSS.
+- Bản lưu theo năm ở `/YYYY/`, có tìm kiếm riêng và banner dẫn về site hiện tại.
+
 ## 2026-11-12 — Tìm kiếm, chia sẻ và các trang mới
 
 - Bảng lệnh ⌘K tìm được trong nội dung mọi bài viết, theo ngôn ngữ của trang; phím `/` mở thẳng ô tìm.

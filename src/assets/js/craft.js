@@ -159,8 +159,13 @@ async function search() {
   const q = input?.value.trim() ?? '';
   if (q.length < SEARCH_MIN) return;
   try {
-    const url = '/pagefind/pagefind.js'; // variable, so bundlers and the budget check leave it alone
-    pagefind ??= import(url);
+    // Relative to this file, so search also works in yearly snapshots under /YYYY/ (a variable, so the
+    // budget check does not count it as a static import).
+    const url = new URL('../../pagefind/pagefind.js', import.meta.url).href;
+    pagefind ??= import(url).then(async (pf) => {
+      await pf.options({ baseUrl: new URL('../../', import.meta.url).pathname });
+      return pf;
+    });
     const pf = await pagefind;
     const res = await pf.debouncedSearch(q, {}, 150);
     if (!res || seq !== searchSeq) return; // a newer query took over

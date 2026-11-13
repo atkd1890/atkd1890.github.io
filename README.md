@@ -78,7 +78,7 @@ Từ yếu đến mạnh:
 
 ```
 /                   Home (one-page): Hero → Trajectory → Selected work → Signals → Stream → Tools → Lab → Footer
-/work/<codename>    Case study / postmortem
+/work/<codename>    Case study theo khung 01–07; facts lấy từ showcase.yml (bản dịch ở /en/work/, /ja/work/)
 /blog               Mọi bài; /blog/type/<type>/, /blog/tag/<tag>/, /blog/series/<id>/, /blog/<năm>/
 /blog/<slug>        Bài viết (bản dịch ở /en/blog/<slug>/, /ja/blog/<slug>/)
 /tools              Repo public có topic atkd-tool, kèm release mới nhất (mỗi tool → /<repo>)
@@ -87,14 +87,14 @@ Từ yếu đến mạnh:
 /colophon           Site này được build thế nào: proof of craft đọc từ repo, workflow, ADR, changelog, license
 /sitemap.xml        Sinh sau build từ các trang thật; /robots.txt; /.well-known/security.txt
 /<repo>             Project page của repo public (GitHub tự serve)
-/<YYYY>/            Snapshot theo năm, đóng băng từ tag snapshot-YYYY
+/<YYYY>/            Snapshot theo năm, đóng băng từ tag snapshot-YYYY (nhánh snapshots, ADR 0009)
 /feed.xml           Atom feed mọi bài (mọi ngôn ngữ); /feed/<type>.xml cho từng loại
 /404
 /en/...             Bản tiếng Anh của các trang trên
 /ja/...             Bản tiếng Nhật của các trang trên
 ```
 
-Tiếng Việt là mặc định, không có tiền tố URL ([ADR 0006](docs/adr/0006-i18n.md)). Hiện đang chạy: home, blog (index, bộ lọc, lưu trữ, series, feed), `/tools`, `/lab`, `/uses`, `/colophon`, `/404`, mỗi trang đủ 3 ngôn ngữ. Mỗi trang có OG image riêng, JSON-LD, và được tìm thấy qua ⌘K (Pagefind). Cách viết bài: [docs/content.md → Viết một bài](docs/content.md#viết-một-bài). Các trang khác làm theo phase trong ROADMAP.
+Tiếng Việt là mặc định, không có tiền tố URL ([ADR 0006](docs/adr/0006-i18n.md)). Hiện đang chạy: home, blog (index, bộ lọc, lưu trữ, series, feed), case study `/work/<codename>` (khi có bài), `/tools`, `/lab`, `/uses`, `/colophon`, `/404`, mỗi trang đủ 3 ngôn ngữ. Mỗi trang có OG image riêng, JSON-LD, và được tìm thấy qua ⌘K (Pagefind). Cách viết bài: [docs/content.md → Viết một bài](docs/content.md#viết-một-bài). Các trang khác làm theo phase trong ROADMAP.
 
 ### Stack
 
@@ -186,6 +186,7 @@ src/_data/          site.js, i18n.js, showcase.yml (+ showcase.js validate), era
 src/_includes/      layouts/, partials/, interactive/ (Web Components cho explainer)
 src/assets/         css/, js/, icons/; font copy lúc build từ @fontsource
 src/blog/           Bài viết; ảnh và sơ đồ của bài ở src/blog/YYYY/<slug>/
+src/work/           Case study: <codename>.md (+ .en.md, .ja.md); media ở src/work/<codename>/
 src/lab/            Sơ đồ của /lab (.mmd → .svg)
 src/*.njk           Trang: index, blog-index, colophon, uses, tools, lab, releases, feed, robots, security-txt, 404
 lib/                Logic thuần, có test: blog, seo, craft, links, lighthouse, leak-guard, github-*, palette, i18n, …
@@ -195,7 +196,7 @@ lab/benchmark/      SPEC.md: đề bài benchmark (nháp, chờ duyệt)
 types/              Khai báo type cho package không có type
 config/examples/    Template dữ liệu giả cho các file riêng tư
 docs/               content.md, design.md, positioning.md, style-guide.md, adr/
-.github/workflows/  deploy.yml, pr.yml, gitleaks.yml, monitor.yml
+.github/workflows/  deploy.yml, pr.yml, gitleaks.yml, monitor.yml, snapshot.yml
 eleventy.config.js  eslint.config.js  .stylelintrc.json  .htmlvalidate.json  playwright.config.js  mise.toml  .nvmrc
 ```
 
@@ -343,9 +344,10 @@ E2E và axe đã kiểm palette, tìm kiếm, phím tắt, theme, âm thanh, CSP
 | PR vào `main`                       | `PR check`    | Check, build bằng dữ liệu public, OG, budget, HTML, link nội bộ, Lighthouse, e2e trên 4 trình duyệt, leak guard; preview và báo cáo Lighthouse làm artifact 7 ngày |
 | Push lên `main` hoặc PR             | `Secret scan` | gitleaks quét secret trong toàn bộ history                                                                                                                         |
 | Mỗi 6 giờ                           | `Monitor`     | Gọi `/`, `/blog/`, `/feed.xml`, `/sitemap.xml`; không trả 200 thì mở issue "Site is down", hết lỗi thì tự đóng                                                     |
+| Đẩy tag `snapshot-YYYY`             | `Snapshot`    | Build ở tag đó với dữ liệu thật, leak guard, đặt dưới `/YYYY/`, lưu vào nhánh `snapshots`, chạy lại `Deploy`                                                       |
 | Thứ Hai 09:41 JST                   | `Monitor`     | Kiểm tra link ra ngoài; có link chết thì mở hoặc cập nhật issue "Broken links", hết thì tự đóng                                                                    |
 
-Leak guard fail thì không deploy, site giữ bản cũ. Workflow PR không bao giờ nhận `SHOWCASE_TOKEN`. Action pin theo commit SHA, Dependabot cập nhật npm và action hằng tuần.
+`Deploy` còn: fail nếu một query GitHub cần nhiều hơn quyền Metadata (`scripts/check-data.js`), ghép các bản lưu từ nhánh `snapshots`, và đo Lighthouse để `/colophon` của lần sau hiện điểm và thời gian build (artifact `craft-stats`, 30 ngày). Leak guard fail thì không deploy, site giữ bản cũ. Workflow PR không bao giờ nhận `SHOWCASE_TOKEN`. Action pin theo commit SHA, Dependabot cập nhật npm và action hằng tuần.
 
 ### Cấu hình GitHub
 
@@ -396,21 +398,23 @@ gh run rerun <run-id-của-bản-tốt>
 
 Mọi thứ chủ site phải tự điền hoặc cập nhật đều có trong bảng này. Dữ liệu riêng tư **không bao giờ nằm trong repo**: file thật để ở `../.config/atkd1890.github.io/`, tức `~/git/atkd1890/.config/atkd1890.github.io/` ngay cạnh repo (quyền 600). Template dữ liệu giả để ở [`config/examples/`](config/examples/).
 
-| Mục                         | Nằm ở đâu                                                         | Khi nào cần sửa                                                                                        | Cách làm                                                                                   |
-| --------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
-| Denylist chống lộ thông tin | Secret `LEAK_DENYLIST` ← `leak-denylist.txt`                      | Đổi việc, có khách hàng mới, đổi SĐT hay địa chỉ                                                       | [Cập nhật denylist](#cập-nhật-denylist)                                                    |
-| Mapping codename → repo     | Secret `SHOWCASE_REPOS` ← `showcase-repos.json`                   | Thêm hoặc bớt dự án trong showcase                                                                     | Sửa file rồi `npm run secrets:push`                                                        |
-| Danh sách dự án             | [`src/_data/showcase.yml`](src/_data/showcase.yml)                | Thêm dự án, đổi trạng thái, thêm số liệu hay bằng chứng                                                | Sửa file, mở PR                                                                            |
-| Token đọc metadata          | Secret `SHOWCASE_TOKEN` (không có file)                           | **Trước khi hết hạn**: workflow `Deploy` tự mở issue nhắc 14 ngày trước, và khi token hết hạn hoặc sai | Tạo token mới theo [Cấu hình GitHub](#cấu-hình-github), rồi `gh secret set SHOWCASE_TOKEN` |
-| Loại owner khỏi feed stars  | Secret `STARS_EXCLUDE_OWNERS` ← `stars-exclude-owners.txt`        | Khi vào org của công ty hoặc khách hàng                                                                | Sửa file rồi `npm run secrets:push`                                                        |
-| Câu định vị, email, link    | [`src/_data/site.js`](src/_data/site.js)                          | Chốt tagline, có kênh YouTube                                                                          | Sửa file, mở PR                                                                            |
-| Design                      | [`docs/design.md`](docs/design.md) + `main.css` + canvas thiết kế | Khi đổi design hub hoặc persona                                                                        | Sửa cả ba cho khớp nhau                                                                    |
-| Phiên bản Node              | `mise.toml` + `.nvmrc`                                            | Khi nâng Node                                                                                          | Sửa cả hai, `mise install`, `npm run check`                                                |
-| Profile GitHub              | github.com/settings/profile                                       | Trước khi giới thiệu site                                                                              | Đổi name, ẩn email, tắt hireable                                                           |
-| Trang `/uses`               | [`src/_data/uses.js`](src/_data/uses.js)                          | Có thời gian điền editor, terminal, phần cứng                                                          | Thay mỗi `'TODO'` bằng `{ name, note: { vi, en, ja } }`, mở PR                             |
-| Đề bài benchmark            | [`lab/benchmark/SPEC.md`](lab/benchmark/SPEC.md)                  | Trước lần chạy benchmark đầu tiên                                                                      | Chọn hướng đề bài, chốt giới hạn và trọng số rubric, bỏ dòng "nháp" ở đầu file, mở PR      |
-| Issue "Broken links"        | Tab Issues, do workflow `Monitor` mở thứ Hai hằng tuần            | Khi issue xuất hiện                                                                                    | Sửa hoặc bỏ link trong nội dung, mở PR; issue tự đóng ở lần kiểm tra sau                   |
-| Baseline visual regression  | `tests/e2e/__screenshots__/`                                      | Sau khi đổi giao diện có chủ đích                                                                      | `npm run test:visual -- -u` trên macOS, commit ảnh mới                                     |
+| Mục                         | Nằm ở đâu                                                         | Khi nào cần sửa                                                                                        | Cách làm                                                                                                                  |
+| --------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| Denylist chống lộ thông tin | Secret `LEAK_DENYLIST` ← `leak-denylist.txt`                      | Đổi việc, có khách hàng mới, đổi SĐT hay địa chỉ                                                       | [Cập nhật denylist](#cập-nhật-denylist)                                                                                   |
+| Mapping codename → repo     | Secret `SHOWCASE_REPOS` ← `showcase-repos.json`                   | Thêm hoặc bớt dự án trong showcase                                                                     | Sửa file rồi `npm run secrets:push`                                                                                       |
+| Danh sách dự án             | [`src/_data/showcase.yml`](src/_data/showcase.yml)                | Thêm dự án, đổi trạng thái, thêm số liệu hay bằng chứng                                                | Sửa file, mở PR                                                                                                           |
+| Token đọc metadata          | Secret `SHOWCASE_TOKEN` (không có file)                           | **Trước khi hết hạn**: workflow `Deploy` tự mở issue nhắc 14 ngày trước, và khi token hết hạn hoặc sai | Tạo token mới theo [Cấu hình GitHub](#cấu-hình-github), rồi `gh secret set SHOWCASE_TOKEN`                                |
+| Loại owner khỏi feed stars  | Secret `STARS_EXCLUDE_OWNERS` ← `stars-exclude-owners.txt`        | Khi vào org của công ty hoặc khách hàng                                                                | Sửa file rồi `npm run secrets:push`                                                                                       |
+| Câu định vị, email, link    | [`src/_data/site.js`](src/_data/site.js)                          | Chốt tagline, có kênh YouTube                                                                          | Sửa file, mở PR                                                                                                           |
+| Design                      | [`docs/design.md`](docs/design.md) + `main.css` + canvas thiết kế | Khi đổi design hub hoặc persona                                                                        | Sửa cả ba cho khớp nhau                                                                                                   |
+| Phiên bản Node              | `mise.toml` + `.nvmrc`                                            | Khi nâng Node                                                                                          | Sửa cả hai, `mise install`, `npm run check`                                                                               |
+| Profile GitHub              | github.com/settings/profile                                       | Trước khi giới thiệu site                                                                              | Đổi name, ẩn email, tắt hireable                                                                                          |
+| Case study                  | `src/work/<codename>.md` + facts trong `showcase.yml`             | Khi có dữ liệu thật cho một dự án                                                                      | Theo [docs/content.md → Viết một case study](docs/content.md#viết-một-case-study); khung mẫu `src/work/atkd-ui.md` (nháp) |
+| Bản lưu cuối năm            | Tag `snapshot-YYYY`, nhánh `snapshots`                            | Cuối mỗi năm                                                                                           | `git tag snapshot-2026 && git push origin snapshot-2026`, xem workflow `Snapshot` xanh                                    |
+| Trang `/uses`               | [`src/_data/uses.js`](src/_data/uses.js)                          | Có thời gian điền editor, terminal, phần cứng                                                          | Thay mỗi `'TODO'` bằng `{ name, note: { vi, en, ja } }`, mở PR                                                            |
+| Đề bài benchmark            | [`lab/benchmark/SPEC.md`](lab/benchmark/SPEC.md)                  | Trước lần chạy benchmark đầu tiên                                                                      | Chọn hướng đề bài, chốt giới hạn và trọng số rubric, bỏ dòng "nháp" ở đầu file, mở PR                                     |
+| Issue "Broken links"        | Tab Issues, do workflow `Monitor` mở thứ Hai hằng tuần            | Khi issue xuất hiện                                                                                    | Sửa hoặc bỏ link trong nội dung, mở PR; issue tự đóng ở lần kiểm tra sau                                                  |
+| Baseline visual regression  | `tests/e2e/__screenshots__/`                                      | Sau khi đổi giao diện có chủ đích                                                                      | `npm run test:visual -- -u` trên macOS, commit ảnh mới                                                                    |
 
 ### Cập nhật denylist
 

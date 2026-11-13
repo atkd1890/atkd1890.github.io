@@ -48,3 +48,31 @@ test('collectCraft reads this repo without throwing and finds real numbers', () 
   assert.ok(c.changelog.length > 0);
   assert.ok(c.bytes.js > 0 && c.bytes.css > 0);
 });
+
+test('ciStats keeps only well-formed numbers from the previous Deploy run', async () => {
+  const { ciStats } = await import('../lib/craft.js');
+  const { lowestScores } = await import('../lib/lighthouse.js');
+  const scores = lowestScores([
+    { performance: { score: 1 }, accessibility: { score: 1 }, 'best-practices': { score: 0.96 }, seo: { score: 1 } },
+    { performance: { score: 0.99 }, accessibility: { score: 1 }, 'best-practices': { score: 1 }, seo: { score: 1 } },
+  ]);
+  assert.deepEqual(scores, { performance: 99, accessibility: 100, 'best-practices': 96, seo: 100 });
+  const good = {
+    at: '2026-11-12T09:00:00Z',
+    run: 'https://github.com/atkd1890/atkd1890.github.io/actions/runs/123',
+    buildSeconds: 41.6,
+    lighthouse: { pages: 6, scores },
+  };
+  assert.deepEqual(ciStats(good), {
+    at: good.at,
+    run: good.run,
+    buildSeconds: 42,
+    lighthouse: scores,
+    lighthouseMin: 96,
+    pages: 6,
+  });
+  assert.equal(ciStats(null), null);
+  assert.equal(ciStats({ ...good, run: 'https://evil.test/x' }), null);
+  assert.equal(ciStats({ ...good, lighthouse: { pages: 6, scores: { ...scores, seo: '<b>' } } }), null);
+  assert.equal(ciStats({ ...good, buildSeconds: -1 }), null);
+});

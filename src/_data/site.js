@@ -15,4 +15,6 @@ export default {
   hub: 'https://atkd1890.me',
   github: 'https://github.com/atkd1890',
   buildTime: new Date(),
+  // Set only by the Snapshot workflow (tag snapshot-YYYY): the build is frozen under /YYYY/.
+  snapshot: process.env.SNAPSHOT_YEAR || null,
 };

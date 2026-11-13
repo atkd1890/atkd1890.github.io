@@ -11,6 +11,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
+  actions: read # previous run's craft-stats artifact, for /colophon
 
 concurrency:
   group: pages
@@ -27,14 +28,49 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check # typecheck + unit tests + leak guard self-test
-      - run: npm run build
+      - name: Previous craft stats (Lighthouse, build time) for /colophon
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          id=$(gh run list -R "$GITHUB_REPOSITORY" --workflow Deploy --status success --limit 1 --json databaseId --jq '.[0].databaseId')
+          if [ -n "$id" ]; then gh run download "$id" -R "$GITHUB_REPOSITORY" -n craft-stats -D .cache/craft-ci || echo "no craft-stats yet"; fi
+      - name: Build
+        id: build
+        run: |
+          start=$(date +%s)
+          npm run build
+          echo "seconds=$(( $(date +%s) - start ))" >> "$GITHUB_OUTPUT"
         env:
           GITHUB_TOKEN: ${{ github.token }}
           SHOWCASE_TOKEN: ${{ secrets.SHOWCASE_TOKEN }}
           SHOWCASE_REPOS: ${{ secrets.SHOWCASE_REPOS }}
           STARS_EXCLUDE_OWNERS: ${{ secrets.STARS_EXCLUDE_OWNERS }}
+      - run: node scripts/check-data.js # fails if a query needs more than Metadata: read-only (ADR 0004)
       - run: npx playwright install --with-deps chromium
       - run: npm run og # OG images, rendered from the built pages
+      - name: Yearly snapshots (/YYYY/ from the snapshots branch, ADR 0009)
+        run: |
+          if git fetch -q --depth 1 origin snapshots 2>/dev/null; then
+            git archive FETCH_HEAD | tar -x -C _site
+            echo "snapshots: $(git ls-tree --name-only FETCH_HEAD | tr '\n' ' ')"
+          else
+            echo "no snapshots yet"
+          fi
+      - run: sudo apt-get install -y --no-install-recommends fonts-noto-cjk # like real /ja/ readers (ADR 0008)
+      - name: Lighthouse for the next /colophon (does not block; PRs gate on it)
+        env:
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          BUILD_SECONDS: ${{ steps.build.outputs.seconds }}
+        run: |
+          mkdir -p craft-stats
+          node scripts/lighthouse.js --summary=craft-stats/lighthouse.json --no-fail
+          jq -n --arg at "$(date -u +%Y-%m-%dT%H:%M:%SZ)" --arg run "$RUN_URL" --argjson s "$BUILD_SECONDS" \
+            --slurpfile lh craft-stats/lighthouse.json '{at: $at, run: $run, buildSeconds: $s, lighthouse: $lh[0]}' > craft-stats/craft-ci.json
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: craft-stats
+          path: craft-stats
+          retention-days: 30
       - run: npm run budget
       - name: Leak guard
         run: node scripts/leak-guard.js _site --require-denylist --fetch-private --commits=HEAD

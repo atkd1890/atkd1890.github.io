@@ -1,11 +1,12 @@
 // Eleventy v3 config (ESM). See CLAUDE.md for conventions.
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { load as parseYaml } from 'js-yaml';
 import markdownItAnchor from 'markdown-it-anchor';
 import { rssPlugin } from '@11ty/eleventy-plugin-rss';
 import { heatmap, topLanguages, eraSummary, selectedWork } from './lib/home.js';
 import { paletteItems } from './lib/palette.js';
-import { where } from './lib/filters.js';
+import { where, shellPath } from './lib/filters.js';
+import { validateCaseStudy, workNav, workUrl, mediaKind } from './lib/work.js';
 import { tr, fmt } from './lib/i18n.js';
 import { fold } from './lib/leak-guard.js';
 import { ogPath, jsonLd, inlineJson, cspHash } from './lib/seo.js';
@@ -88,6 +89,17 @@ export default function (eleventyConfig) {
     return posts.sort((/** @type {any} */ a, /** @type {any} */ b) => b.date - a.date);
   });
 
+  // Case studies: src/work/<codename>[.en|.ja].md, validated against showcase.yml.
+  eleventyConfig.addCollection('caseStudies', (/** @type {any} */ api) => {
+    const studies = api.getFilteredByGlob('src/work/*.md');
+    const showcase = api.getAll()[0]?.data.showcase ?? [];
+    const problems = studies.flatMap((/** @type {any} */ s) =>
+      validateCaseStudy(readFrontmatter(s.inputPath), s.inputPath.replace(/^\.\/src\/work\//, ''), showcase),
+    );
+    if (problems.length) throw new Error(`Case study frontmatter is invalid:\n  - ${problems.join('\n  - ')}`);
+    return studies;
+  });
+
   // Posts plus GitHub releases of public tools, newest first: blog index, feeds and the home stream.
   const stream = (/** @type {any} */ api) =>
     [...api.getFilteredByGlob('src/blog/*/*.md'), ...releaseEntries(api.getAll()[0]?.data.github?.releases ?? [])].sort(
@@ -112,6 +124,9 @@ export default function (eleventyConfig) {
     }).format(d),
   );
   eleventyConfig.addFilter('releaseUrl', releaseUrl);
+  eleventyConfig.addFilter('workNav', workNav);
+  eleventyConfig.addFilter('workUrl', workUrl);
+  eleventyConfig.addFilter('mediaKind', (/** @type {string} */ path) => mediaKind(path, existsSync));
   eleventyConfig.addFilter('ogPath', ogPath);
   eleventyConfig.addFilter('jsonLd', (/** @type {any} */ page, /** @type {any} */ site) =>
     inlineJson(jsonLd(page, site)),
@@ -140,6 +155,7 @@ export default function (eleventyConfig) {
   );
   // Nunjucks' selectattr only tests truthiness; `where` filters by equality. Keys may be paths: 'data.type'.
   eleventyConfig.addFilter('where', where);
+  eleventyConfig.addFilter('shellPath', shellPath);
   eleventyConfig.addFilter('limit', (/** @type {unknown[]} */ list, /** @type {number} */ n) =>
     (list ?? []).slice(0, n),
   );

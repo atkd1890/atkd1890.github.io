@@ -16,8 +16,11 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' {{ themeScript | cspHash | safe }} 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'">
   <title>{{ pageTitle }}</title>
   <meta name="description" content="{{ description }}">
+  {%- if site.snapshot %}
+  <meta name="robots" content="noindex">
+  {%- endif %}
   <link rel="canonical" href="{{ site.url }}{{ page.url }}">
-  <meta property="og:type" content="{{ 'article' if postSlug else 'website' }}">
+  <meta property="og:type" content="{{ 'article' if (postSlug or workSlug) else 'website' }}">
   <meta property="og:site_name" content="{{ site.title }}">
   <meta property="og:title" content="{{ pageTitle }}">
   <meta property="og:description" content="{{ description }}">
@@ -28,19 +31,17 @@
   <meta property="og:image:alt" content="{{ pageTitle }}">
   <meta property="og:locale" content="{{ L.locale }}">
   <meta name="twitter:card" content="summary_large_image">
-  {%- if postSlug %}
+  {%- if postSlug or workSlug %}
   <meta property="article:published_time" content="{{ date | isoDay }}">
-  <meta property="article:section" content="{{ t.blog.types[type] }}">
-  {%- endif %}
-  {%- if postSlug %}
-  <script type="application/ld+json">{{ { kind: 'post', url: page.url, title: title, description: description, lang: L.code, date: date, image: site.url + (page.url | ogPath) } | jsonLd(site) | safe }}</script>
+  <meta property="article:section" content="{{ t.blog.types[type] if postSlug else t.blog.types['case-study'] }}">
+  <script type="application/ld+json">{{ { kind: 'post' if postSlug else 'article', url: page.url, title: title, description: description, lang: L.code, date: date, image: site.url + (page.url | ogPath) } | jsonLd(site) | safe }}</script>
   {%- elif page.url == home %}
   <script type="application/ld+json">{{ { kind: 'home', url: page.url, description: description, lang: L.code } | jsonLd(site) | safe }}</script>
   {%- elif jsonLdKind == 'tools' %}
   <script type="application/ld+json">{{ { kind: 'tools', url: page.url, tools: github.tools } | jsonLd(site) | safe }}</script>
   {%- endif %}
-  {%- if postSlug %}
-  {%- set versions = collections.posts | versionsOf(postSlug) %}
+  {%- if postSlug or workSlug %}
+  {%- set versions = collections.posts | versionsOf(postSlug) if postSlug else collections.caseStudies | versionsOf(workSlug) %}
   {%- for l in i18n.langs %}{% if versions[l.code] %}
   <link rel="alternate" hreflang="{{ l.code }}" href="{{ site.url }}{{ versions[l.code] }}">
   {%- endif %}{% endfor %}
@@ -64,8 +65,12 @@
 </head>
 <body>
   <a class="skip" href="#main">{{ t.skip }}</a>
+  {%- if site.snapshot %}
+  {#- Protocol-relative on purpose: the snapshot rewrite leaves it alone, so it always leads to the live site. -#}
+  <p class="snapshot-banner">{{ t.snapshotBanner | fmt({ year: site.snapshot }) }} <a href="//{{ site.url | replace('https://', '') }}{{ L.prefix }}/">{{ t.snapshotLive }}</a></p>
+  {%- endif %}
   <header class="titlebar">
-    <a class="titlebar-label" href="{{ home }}">~/atkd-coding — zsh<span class="visually-hidden"> · {{ t.items.home }}</span></a>
+    <a class="titlebar-label" href="{{ home }}">~/atkd-coding{{ page.url | shellPath(L.prefix) }} — zsh<span class="visually-hidden"> · {{ t.items.home }}</span></a>
     <div class="titlebar-right">
       {% if nav %}
       <nav class="sections" aria-label="{{ t.sections }}">
@@ -73,7 +78,7 @@
       </nav>
       {% endif %}
       <nav class="langs" aria-label="{{ t.language }}">
-        {% for l in i18n.langs %}<a href="{% if postSlug %}{{ versions[l.code] or (l.prefix + '/blog/') }}{% else %}{{ l.prefix }}{{ basePath or '/' }}{% endif %}" hreflang="{{ l.code }}" lang="{{ l.code }}"{% if l.code == L.code %} aria-current="page"{% endif %}><span aria-hidden="true">{{ l.label }}</span><span class="visually-hidden">{{ l.name }}</span></a>{% endfor %}
+        {% for l in i18n.langs %}<a href="{% if postSlug %}{{ versions[l.code] or (l.prefix + '/blog/') }}{% elif workSlug %}{{ versions[l.code] or (l.prefix + '/#work-' + workSlug) }}{% else %}{{ l.prefix }}{{ basePath or '/' }}{% endif %}" hreflang="{{ l.code }}" lang="{{ l.code }}"{% if l.code == L.code %} aria-current="page"{% endif %}><span aria-hidden="true">{{ l.label }}</span><span class="visually-hidden">{{ l.name }}</span></a>{% endfor %}
       </nav>
       <div class="controls" data-js hidden>
         <button type="button" class="ctl ctl-wide" data-palette-open aria-keyshortcuts="Meta+K Control+K"><kbd>⌘K</kbd><span class="visually-hidden"> {{ t.palette }}</span></button>
@@ -96,7 +101,8 @@
       {%- if postSlug or bp %}
       {%- if postSlug or bp.kind != 'all' %}<li><a href="{{ L.prefix }}/blog/">blog</a></li>{% else %}<li aria-current="page">blog</li>{% endif %}
       {%- endif %}
-      {%- if postSlug %}<li aria-current="page">{{ title }}</li>
+      {%- if workSlug %}<li><a href="{{ home }}#work">work</a></li>{% endif %}
+      {%- if postSlug or workSlug %}<li aria-current="page">{{ title }}</li>
       {%- elif bp and bp.kind != 'all' %}<li aria-current="page">{% if bp.kind == 'type' %}{{ t.blog.types[bp.value] }}{% elif bp.kind == 'tag' %}#{{ bp.value }}{% else %}{{ bp.value }}{% endif %}</li>
       {%- elif not bp %}<li aria-current="page">{{ title | tr(L.code) }}</li>{% endif %}
     </ol>
@@ -111,6 +117,7 @@
       <a href="{{ site.hub }}">atkd1890.me</a>
       <a href="{{ site.github }}">GitHub</a>
       <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+      <a href="/feed.xml">RSS</a>
       <a href="{{ L.prefix }}/uses/">/{{ t.usesLink }}</a>
       <a href="{{ L.prefix }}/colophon/">/{{ t.colophonLink }}</a>
     </nav>
@@ -146,6 +153,6 @@
     </dl>
     <form method="dialog"><button type="submit" class="ctl ctl-wide">{{ t.close }}</button></form>
   </dialog>
-  <script type="application/json" id="palette-items">{{ showcase | paletteItems(site, t, L.prefix) | dump | safe }}</script>
+  <script type="application/json" id="palette-items">{{ showcase | paletteItems(site, t, L.prefix, collections.caseStudies) | dump | safe }}</script>
 </body>
 </html>
