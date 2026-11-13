@@ -24,7 +24,7 @@ Tài liệu nguồn chuẩn cho giao diện của site. Lấy từ bản thiết
 
 - Mỗi khối nội dung là **một lệnh terminal**: nhãn section viết dạng prompt (`$ whoami`, `$ ls work/`, `$ git log --oneline`, `$ cat`, `$ mail`).
 - Logo mark: `<CO/>` trong khung vuông viền accent. Wordmark: "ATKD Coding" **một dòng**.
-- Thanh tiêu đề kiểu cửa sổ shell: `~/atkd-coding — zsh`.
+- Thanh tiêu đề kiểu cửa sổ shell, ghi đường dẫn của trang: `~/atkd-coding — zsh` ở trang chủ, `~/atkd-coding/blog — zsh`, `~/atkd-coding/work/<codename> — zsh`.
 - Con trỏ khối nhấp nháy ở CTA chính (tắt khi `prefers-reduced-motion`).
 - Link trong danh sách có tiền tố `->` màu accent.
 - Commit hash và các số liệu nhỏ dùng màu `--hash`.
@@ -81,7 +81,7 @@ Theo theme contract của hub, mỗi persona bắt buộc có đủ `--bg --fg -
 
 ## 5. Thanh điều khiển
 
-Trên mobile: nhãn shell + ⌘K + âm thanh + theme, một hàng. Từ 1024px có thêm điều hướng section. Nút ngôn ngữ `VI EN JA` như hub chỉ thêm khi chốt câu hỏi ngôn ngữ trong ROADMAP.
+Trên mobile: nhãn shell + `VI EN JA` + ⌘K + âm thanh + theme, một hàng. Từ 1024px có thêm điều hướng section ở trang chủ. Nút ngôn ngữ dẫn tới cùng trang ở ngôn ngữ kia, chạy được cả khi tắt JavaScript ([ADR 0006](adr/0006-i18n.md)).
 
 ## 6. Motion
 
@@ -110,7 +110,7 @@ Trên mobile: nhãn shell + ⌘K + âm thanh + theme, một hàng. Từ 1024px c
 
 ## 10. Phần site tự thiết kế thêm
 
-Repo card, badge tầng bằng chứng, timeline era, stat tile, heatmap, stream item, command palette, dialog phím tắt, layout bài blog/case study, bảng benchmark. Tất cả chỉ dùng token ở trên.
+Repo card, badge tầng bằng chứng, timeline era, stat tile, heatmap, stream item (bài dài là khối panel), command palette có kết quả tìm kiếm, dialog phím tắt, layout bài blog, layout case study (dải facts, cột "Khung" đánh số), banner bản lưu theo năm, bảng benchmark. Tất cả chỉ dùng token ở trên, Stylelint chặn giá trị viết thẳng.
 
 ## 11. Chênh lệch với canvas
 

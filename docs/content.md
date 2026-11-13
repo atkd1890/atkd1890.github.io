@@ -10,6 +10,7 @@ Spec về nội dung của site: chiến lược, từng section của home, cá
   - [Loại bài](#loại-bài)
   - [Series](#series)
   - [Explainer tương tác](#explainer-tương-tác)
+  - [Bình luận](#bình-luận)
 - [Viết một bài](#viết-một-bài)
 - [Viết một case study](#viết-một-case-study)
 - [Tools](#tools)
@@ -30,7 +31,7 @@ Theo thứ tự, mockup ở artboard `HomeMobile` và `HomeDesktop`:
 2. **Trajectory**: timeline 4 era. Mỗi era có khoảng năm, stack, 1 câu "đã làm gì", số liệu tổng hợp và 1 dự án tiêu biểu. Gợi ý stack lấy từ site cũ: Obj-C/Swift, Android, Unity, React Native, HTML/CSS, React, Node, PHP, Python, MySQL, REST, AWS, GCP.
 3. **Selected work**: 4–6 repo card, có badge tầng bằng chứng.
 4. **Signals**: dashboard tự cập nhật hằng ngày. Era mobile và indie-game không có dữ liệu trên GitHub, nên Signals chủ yếu phản ánh giai đoạn AI; hai era đó tạm dùng demo data có nhãn.
-5. **Stream**: dòng thời gian trộn mọi type. Deep-dive nổi lên đầu, bên dưới là til/link/log dạng gọn.
+5. **Stream**: dòng thời gian trộn mọi type, kể cả release của tool. Bài dài (deep-dive, case study, cross) là khối nền panel, nhãn loại ở trên; til/link/log/note dạng một dòng gọn.
 6. **Tools & playground**: tool mới nhất + demo/game chơi được.
 7. **Lab (teaser)**: kết quả benchmark mới nhất + 1–2 thí nghiệm AI.
 8. **Footer**: link về atkd1890.me, GitHub, YouTube ATKD Coding (TODO), hi@atkd1890.me, RSS, /uses, /colophon, các năm lưu trữ.
@@ -39,16 +40,16 @@ Theo thứ tự, mockup ở artboard `HomeMobile` và `HomeDesktop`:
 
 ### Loại bài
 
-| type         | Nguồn                                                         | Công sức của chủ site |
-| ------------ | ------------------------------------------------------------- | --------------------- |
-| `til`        | Commit, session Claude Code, ý tưởng 1 dòng                   | 0–1 dòng              |
-| `link`       | Link/repo hay + 1–3 câu nhận xét (GitHub stars, bookmark)     | 0, chỉ merge          |
-| `log`        | Build log hằng tuần, map hoạt động sang codename              | 0, chỉ merge          |
-| `release`    | Tự sinh từ GitHub Releases của repo public                    | 0                     |
-| `note`       | Ghi chú/ý kiến ngắn                                           | 1 dòng                |
-| `deep-dive`  | Bài kỹ thuật dài, có thể là explainer tương tác               | Duyệt kỹ / tự viết    |
-| `case-study` | Từ `showcase.yml` + tài liệu dự án, gồm cả postmortem game cũ | Duyệt kỹ              |
-| `cross`      | Chuyển thể video YouTube ATKD Coding (từ transcript)          | 0, chỉ merge          |
+| type         | Nguồn                                                                          | Công sức của chủ site |
+| ------------ | ------------------------------------------------------------------------------ | --------------------- |
+| `til`        | Commit, session Claude Code, ý tưởng 1 dòng                                    | 0–1 dòng              |
+| `link`       | Link/repo hay + 1–3 câu nhận xét (GitHub stars, bookmark)                      | 0, chỉ merge          |
+| `log`        | Build log hằng tuần, map hoạt động sang codename                               | 0, chỉ merge          |
+| `release`    | Tự sinh từ GitHub Releases của repo public                                     | 0                     |
+| `note`       | Ghi chú/ý kiến ngắn                                                            | 1 dòng                |
+| `deep-dive`  | Bài kỹ thuật dài, có thể là explainer tương tác                                | Duyệt kỹ / tự viết    |
+| `case-study` | Bài dẫn tới case study đầy đủ ở `/work/<codename>/`, gồm cả postmortem game cũ | Duyệt kỹ              |
+| `cross`      | Chuyển thể video YouTube ATKD Coding (từ transcript)                           | 0, chỉ merge          |
 
 ### Series
 
@@ -59,6 +60,10 @@ Theo thứ tự, mockup ở artboard `HomeMobile` và `HomeDesktop`:
 
 - Bài `deep-dive` được nhúng Web Components từ `src/_includes/interactive/`. JS chỉ load trên trang có dùng.
 - Mục tiêu: 1–2 bài đinh về game/system (đề tài chốt sau).
+
+### Bình luận
+
+- giscus cho `/blog/*` và `/work/*` là tuỳ chọn, chờ chủ dự án quyết định (ROADMAP).
 
 ## Viết một bài
 
@@ -96,4 +101,3 @@ Theo thứ tự, mockup ở artboard `HomeMobile` và `HomeDesktop`:
 
 - Cuối năm, đẩy tag `snapshot-YYYY` lên `main`. Workflow `Snapshot` build site ở tag đó với dữ liệu thật, đặt dưới `/YYYY/`, lưu vào nhánh `snapshots` rồi chạy lại Deploy ([ADR 0009](adr/0009-yearly-snapshots.md)).
 - Bản lưu có banner "Bản lưu năm YYYY" dẫn về site đang chạy, có `noindex`, tìm kiếm riêng của năm đó, và không đổi theo code hay dữ liệu về sau.
-- giscus (tùy chọn) cho `/blog/*`, `/work/*`.

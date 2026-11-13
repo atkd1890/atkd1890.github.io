@@ -13,7 +13,9 @@ Site được build từ nguồn private và một phần do agent viết. Chỉ
 - **tên repo private**, khớp nguyên từ, lấy từ `SHOWCASE_REPOS` và mọi repo private mà token liệt kê được (ADR 0004);
 - **mục trong denylist**, không phân biệt hoa thường và dấu, lấy từ secret `LEAK_DENYLIST` (tên, nơi làm việc, khách hàng, email, SĐT, địa chỉ, path local);
 - **EXIF** trong ảnh JPEG, PNG, WebP;
-- **chuỗi canary** cài sẵn. Self-test cài nó vào mỗi lần CI để chứng minh guard vẫn hoạt động.
+- **chuỗi canary** cài sẵn. Self-test cài nó vào mỗi lần CI để chứng minh guard vẫn hoạt động;
+- **email ngoài các domain được phép và số điện thoại VN/JP** trong file văn bản (HTML, XML, Markdown), theo cùng mẫu với PII scan của hub;
+- **tác giả và committer của commit** không dùng email noreply của GitHub (PR và `main`).
 
 Log chỉ in file, dòng và số thứ tự luật, không in giá trị bị khớp, vì log CI là public. Deploy trên `main` cũng fail nếu chưa có denylist.
 
