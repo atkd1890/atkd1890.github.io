@@ -1,3 +1,6 @@
+# Weekly updates, grouped so there is about one PR per ecosystem per week.
+# Patch and minor PRs merge themselves once `check` and `gitleaks` are green (ADR 0010,
+# .github/workflows/dependabot-auto-merge.yml). Major updates get their own PR and wait for a human.
 version: 2
 updates:
   - package-ecosystem: npm
@@ -5,16 +8,8 @@ updates:
     schedule:
       interval: weekly
     groups:
-      eleventy:
-        patterns:
-          - '@11ty/*'
-      fonts:
-        patterns:
-          - '@fontsource*'
-      types:
-        patterns:
-          - '@types/*'
-          - typescript
+      npm-minor-patch:
+        update-types: [minor, patch]
     ignore:
       # @types/node follows the Node major pinned in mise.toml / .nvmrc; bump it together with Node.
       - dependency-name: '@types/node'
@@ -23,3 +18,6 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    groups:
+      actions-minor-patch:
+        update-types: [minor, patch]

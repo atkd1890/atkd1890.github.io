@@ -13,6 +13,7 @@ Mỗi quyết định mới một file `NNNN-tieu-de.md`: bối cảnh, quyết 
 | [0007](0007-bitbucket-repos.md)                 | Repo ngoài GitHub: import repo cá nhân, giữ nguyên repo khách hàng và đọc qua API |
 | [0008](0008-build-time-search-og-csp.md)        | Tìm kiếm, OG image và CSP sinh lúc build, không có dịch vụ chạy                   |
 | [0009](0009-yearly-snapshots.md)                | Snapshot theo năm nằm ở nhánh `snapshots`, Deploy ghép vào mỗi lần build          |
+| [0010](0010-dependabot-auto-merge.md)           | Dependabot: gộp theo tuần, tự merge bản patch và minor                            |
 
 ## Quyết định trước khi có ADR
 
