@@ -54,6 +54,7 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 - [ ] `[mkt]` Điền `src/_data/eras.js`: khoảng năm và 1 câu "đã làm gì" cho từng era; `role` và `summary` trong `showcase.yml`.
 - [ ] `[sec]` Gửi GitHub Support yêu cầu xoá các commit cũ còn truy cập được qua mã hash (3 squash commit trước khi viết lại history có tên và email cá nhân; history Jekyll cũ).
 - [ ] `[sec]` Bổ sung denylist: SĐT, địa chỉ, nơi làm hiện tại, khách hàng khác ([hướng dẫn](README.md#cập-nhật-denylist)).
+- [ ] `[ops]` Gỡ GitHub App DeepSource còn sót (github.com/settings/installations): check của nó đỏ ở mọi PR, không bắt buộc nhưng gây nhiễu.
 - [ ] `[sec]` Xem lại các mục denylist ngắn dễ chặn nhầm (mục #6 trùng một từ tiếng Nhật thông dụng, mục #7 ngắn); cân nhắc đổi sang dạng domain.
 
 ## Phase 1 — Hạ tầng còn thiếu
@@ -72,9 +73,7 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 
 ## Phase 4 — Case study
 
-- [ ] Case study đầu tiên từ dữ liệu chủ dự án đưa, không bịa số (khung nháp: `src/work/atkd-ui.md`)
-- [ ] `[design]` Case study `atkd-ui`: vấn đề → token → component → áp dụng cho nhiều repo
-- [ ] `[mkt]` Mỗi case study có 1 câu tóm tắt dùng được cho mạng xã hội + OG riêng
+- [ ] `[design]` Case study đầu tiên, `atkd-ui` (vấn đề → token → component → áp dụng cho nhiều repo), từ dữ liệu chủ dự án đưa, không bịa số. Khung nháp đã có: `src/work/atkd-ui.md`
 
 ## Phase 5 — Blog
 
@@ -99,7 +98,7 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 ## Phase 10 — Launch và tăng trưởng
 
 - [ ] `[mkt]` Điều kiện launch: profile GitHub đã sửa, có ít nhất 1 case study, 5 bài blog, 1 tool
-- [ ] `[mkt]` Bài launch: "Building a GitHub-native site" (deep-dive, chính site là case study)
+- [ ] `[mkt]` Bài launch: dùng bài deep-dive đã có (`/blog/github-native-portfolio/`), cập nhật số liệu trong bài trước khi đăng
 - [ ] `[mkt]` Kênh: Show HN, Reddit (r/webdev, r/gamedev tùy bài), X, cộng đồng VN/JP, YouTube ATKD Coding
 - [ ] `[mkt]` Đo lường không analytics: GitHub traffic API (views/clones/referrers), stars, ước lượng RSS; tổng hợp tự động vào `log` hằng tuần
 - [ ] `[mkt]` Profile README `atkd1890/atkd1890` đồng bộ dữ liệu với site

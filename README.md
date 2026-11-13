@@ -94,7 +94,7 @@ Từ yếu đến mạnh:
 /ja/...             Bản tiếng Nhật của các trang trên
 ```
 
-Tiếng Việt là mặc định, không có tiền tố URL ([ADR 0006](docs/adr/0006-i18n.md)). Hiện đang chạy: home, blog (index, bộ lọc, lưu trữ, series, feed), case study `/work/<codename>` (khi có bài), `/tools`, `/lab`, `/uses`, `/colophon`, `/404`, mỗi trang đủ 3 ngôn ngữ. Mỗi trang có OG image riêng, JSON-LD, và được tìm thấy qua ⌘K (Pagefind). Cách viết bài: [docs/content.md → Viết một bài](docs/content.md#viết-một-bài). Các trang khác làm theo phase trong ROADMAP.
+Tiếng Việt là mặc định, không có tiền tố URL ([ADR 0006](docs/adr/0006-i18n.md)). Hiện đang chạy: home, blog (index, bộ lọc, lưu trữ, series, feed), case study `/work/<codename>` (khi có bài), `/tools`, `/lab`, `/uses`, `/colophon`, `/404`, mỗi trang đủ 3 ngôn ngữ. Mỗi trang có OG image riêng, JSON-LD, và được tìm thấy qua ⌘K (Pagefind). Cách viết bài và case study: [docs/content.md](docs/content.md#viết-một-bài).
 
 ### Stack
 
@@ -104,9 +104,9 @@ Tiếng Việt là mặc định, không có tiền tố URL ([ADR 0006](docs/ad
 - Mermaid render ra SVG lúc dev (file `.svg` được commit). Pagefind index lúc build, bảng lệnh ⌘K chỉ tải index khi người xem gõ từ 2 ký tự.
 - OG image 1200×630 cho mọi trang, chụp bằng Playwright từ HTML đã build, dùng token của site (theme tối).
 - Content-Security-Policy qua `<meta>`: script chỉ từ chính site, script inline duy nhất (chống nháy theme) cho phép bằng hash tính lúc build; style inline được phép vì sơ đồ Mermaid và thanh ngôn ngữ cần.
-- Dữ liệu GitHub qua GraphQL, cache 1 giờ bằng `@11ty/eleventy-fetch`. Không có token thì dùng snapshot.
+- Dữ liệu GitHub qua GraphQL, cache 1 giờ bằng `@11ty/eleventy-fetch` khi có token. Không có token thì luôn dùng snapshot, kể cả khi cache còn dữ liệu thật từ lần `build:live` trước.
 - Kiểm thử: `node:test` cho unit test; Playwright + axe-core cho e2e và accessibility trên Chromium (375px, 1280px), smoke test trên Safari iOS (WebKit) và Firefox; visual regression chạy ở local; Lighthouse ≥ 95 mọi hạng mục; html-validate; kiểm tra link nội bộ và `#anchor`; ngân sách hiệu năng theo từng trang; `tsc --checkJs`; ESLint; Stylelint (cấm màu, font, bo góc không qua token); Prettier (cùng cấu hình với hub); gitleaks quét secret trong commit.
-- Không có file CNAME. Không dùng analytics, tối đa là beacon Cloudflare Web Analytics.
+- Không có file CNAME. Không dùng analytics: CSP chặn mọi script ngoài; đo lường dự kiến qua GitHub traffic API (ROADMAP Phase 10).
 
 ### Hợp đồng nội dung
 
@@ -190,7 +190,7 @@ src/work/           Case study: <codename>.md (+ .en.md, .ja.md); media ở src/
 src/lab/            Sơ đồ của /lab (.mmd → .svg)
 src/*.njk           Trang: index, blog-index, colophon, uses, tools, lab, releases, feed, robots, security-txt, 404
 lib/                Logic thuần, có test: blog, seo, craft, links, lighthouse, leak-guard, github-*, palette, i18n, …
-scripts/            build (postbuild, og), kiểm tra (leak-guard, check-links, lighthouse, check-budget), dev (diagrams, screenshot)
+scripts/            build (postbuild, og, snapshot), kiểm tra (leak-guard, check-links, check-data, lighthouse, check-budget), dev (diagrams, screenshot, serve)
 tests/              Unit test (node:test); e2e/ (Playwright), e2e/__screenshots__/ (baseline visual, macOS)
 lab/benchmark/      SPEC.md: đề bài benchmark (nháp, chờ duyệt)
 types/              Khai báo type cho package không có type
@@ -253,7 +253,7 @@ Muốn chạy với dữ liệu thật thì cần thêm `gh` đã đăng nhập 
 
 ### Tái hiện production ở local
 
-Production build trên GitHub Actions với 3 secret. Ở local, `gh auth token` thay cho `GITHUB_TOKEN` và `SHOWCASE_TOKEN`, còn file trong `../.config/atkd1890.github.io/` thay cho `SHOWCASE_REPOS` và `LEAK_DENYLIST`.
+Production build trên GitHub Actions với 4 secret (xem [Cấu hình GitHub](#cấu-hình-github)). Ở local, `gh auth token` thay cho `GITHUB_TOKEN` và `SHOWCASE_TOKEN`, còn file trong `../.config/atkd1890.github.io/` thay cho `SHOWCASE_REPOS`, `LEAK_DENYLIST` và `STARS_EXCLUDE_OWNERS`.
 
 1. Lần đầu trên máy mới, tạo thư mục riêng tư từ template, rồi điền giá trị thật:
    ```sh
@@ -263,9 +263,9 @@ Production build trên GitHub Actions với 3 secret. Ở local, `gh auth token`
    ```
 2. Chạy đúng các bước như workflow `Deploy`:
    ```sh
-   npm ci && npm run check && npm run clean && npm run build:live && npm run leak-guard:local
+   npm ci && npm run check && npm run clean && npm run build:live && node scripts/check-data.js && npm run og && npm run leak-guard:local
    ```
-3. Xem kết quả: `npm run start:live`, mở http://localhost:8080. Footer ghi `Data live, N contributions` là đang dùng dữ liệu thật; `Data snapshot (demo)` là không lấy được dữ liệu.
+3. Xem kết quả: `node scripts/serve.js`, mở http://localhost:8090 (có cả tìm kiếm và OG). Footer ghi `Dữ liệu live, N lượt đóng góp` là đang dùng dữ liệu thật; `Dữ liệu snapshot (demo)` là không lấy được dữ liệu.
 
 Xem bản preview của một PR mà không cần build: tải artifact rồi mở bằng server tĩnh bất kỳ.
 
@@ -285,6 +285,7 @@ Khác biệt còn lại so với production: token của `gh` có nhiều quyề
 | Bản dịch EN/JA                          | [`src/_data/i18n.js`](src/_data/i18n.js) (chữ giao diện), các map `{vi, en, ja}` trong `site.js`, `eras.js`, `showcase.yml`, `uses.js`; test báo nếu một ngôn ngữ thiếu key |
 | Timeline 4 era (năm, 1 câu "đã làm gì") | [`src/_data/eras.js`](src/_data/eras.js)                                                                                                                                    |
 | Trang `/uses`                           | [`src/_data/uses.js`](src/_data/uses.js)                                                                                                                                    |
+| Case study                              | `src/work/<codename>.md`, facts trong `showcase.yml` ([docs/content.md → Viết một case study](docs/content.md#viết-một-case-study))                                         |
 | Đề bài benchmark ở `/lab`               | [`lab/benchmark/SPEC.md`](lab/benchmark/SPEC.md); sơ đồ ATKD OS ở `src/lab/os*.mmd` (rồi `npm run diagrams`)                                                                |
 | Trang chủ                               | `src/index.njk`                                                                                                                                                             |
 | Snapshot dùng khi không có token        | `src/_data/snapshot/github.json`, chỉ chứa số liệu tổng hợp                                                                                                                 |
@@ -321,7 +322,7 @@ E2E và axe đã kiểm palette, tìm kiếm, phím tắt, theme, âm thanh, CSP
 | ----------------------------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------- |
 | `node` sai phiên bản                            | Shell chưa kích hoạt mise                                 | `mise install`, hoặc chạy `mise exec -- npm …`                          |
 | Build fail, báo `showcase.yml is invalid`       | Sai schema, codename trùng, `repo` là tên thật            | Sửa theo dòng báo lỗi                                                   |
-| Footer ghi `Data snapshot (demo)`               | Không có token, hoặc gọi API lỗi                          | Xem dòng `[github] …` trong output; kiểm tra `gh auth status`           |
+| Footer ghi `Dữ liệu snapshot (demo)`            | Không có token, hoặc gọi API lỗi                          | Xem dòng `[github] …` trong output; kiểm tra `gh auth status`           |
 | Log `[github] no mapping for codename …`        | Codename có `repo: "@secret"` nhưng chưa có trong mapping | Thêm vào `showcase-repos.json`                                          |
 | Dữ liệu không đổi sau khi sửa                   | Cache 1 giờ trong `.cache/`                               | `npm run clean`                                                         |
 | ⌘K không tìm thấy bài khi chạy `npm start`      | Index Pagefind chỉ sinh ở `npm run build`                 | `npm run build && node scripts/serve.js`, mở http://localhost:8090      |
@@ -344,8 +345,8 @@ E2E và axe đã kiểm palette, tìm kiếm, phím tắt, theme, âm thanh, CSP
 | PR vào `main`                       | `PR check`    | Check, build bằng dữ liệu public, OG, budget, HTML, link nội bộ, Lighthouse, e2e trên 4 trình duyệt, leak guard; preview và báo cáo Lighthouse làm artifact 7 ngày |
 | Push lên `main` hoặc PR             | `Secret scan` | gitleaks quét secret trong toàn bộ history                                                                                                                         |
 | Mỗi 6 giờ                           | `Monitor`     | Gọi `/`, `/blog/`, `/feed.xml`, `/sitemap.xml`; không trả 200 thì mở issue "Site is down", hết lỗi thì tự đóng                                                     |
-| Đẩy tag `snapshot-YYYY`             | `Snapshot`    | Build ở tag đó với dữ liệu thật, leak guard, đặt dưới `/YYYY/`, lưu vào nhánh `snapshots`, chạy lại `Deploy`                                                       |
 | Thứ Hai 09:41 JST                   | `Monitor`     | Kiểm tra link ra ngoài; có link chết thì mở hoặc cập nhật issue "Broken links", hết thì tự đóng                                                                    |
+| Đẩy tag `snapshot-YYYY`             | `Snapshot`    | Build ở tag đó với dữ liệu thật, leak guard, đặt dưới `/YYYY/`, lưu vào nhánh `snapshots`, chạy lại `Deploy`                                                       |
 
 `Deploy` còn: fail nếu một query GitHub cần nhiều hơn quyền Metadata (`scripts/check-data.js`), ghép các bản lưu từ nhánh `snapshots`, và đo Lighthouse để `/colophon` của lần sau hiện điểm và thời gian build (artifact `craft-stats`, 30 ngày). Leak guard fail thì không deploy, site giữ bản cũ. Workflow PR không bao giờ nhận `SHOWCASE_TOKEN`. Action pin theo commit SHA. Dependabot gộp các bản patch và minor thành một PR mỗi tuần cho npm và cho action; workflow `Dependabot auto-merge` bật auto-merge cho PR đó, GitHub merge khi `check` và `gitleaks` xanh. Bản major, và nhóm gói đổi giao diện (Eleventy, font, Mermaid), chờ người ([ADR 0010](docs/adr/0010-dependabot-auto-merge.md)).
 
@@ -363,7 +364,7 @@ E2E và axe đã kiểm palette, tìm kiếm, phím tắt, theme, âm thanh, CSP
 
 **`SHOWCASE_TOKEN`** là fine-grained PAT, quyền tối thiểu theo [ADR 0004](docs/adr/0004-metadata-only-token.md):
 
-- Resource owner `atkd1890`, có hạn dùng (đặt lịch nhắc gia hạn).
+- Resource owner `atkd1890`, có hạn dùng. Job `token-expiry` của `Deploy` tự mở issue nhắc 14 ngày trước hạn.
 - Repository access: **All repositories**. Không phải sửa token khi tạo repo mới, và leak guard tự biết tên mọi repo private.
 - Repository permissions: **chỉ Metadata: Read-only**, không cấp Contents nên token không đọc được code. Account permissions: không cấp gì.
 
@@ -384,15 +385,16 @@ gh run list --workflow Deploy --limit 5
 gh run rerun <run-id-của-bản-tốt>
 ```
 
-| Hiện tượng                      | Nguyên nhân thường gặp                                             | Cách xử lý                                                                                                        |
-| ------------------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
-| Deploy fail ở bước `Leak guard` | Nội dung chứa chuỗi cấm, hoặc thiếu `LEAK_DENYLIST`                | Đọc `file:dòng` trong log, sửa nội dung; thiếu secret thì đặt lại                                                 |
-| Deploy fail ở `npm run check`   | Sai format, test hoặc type-check lỗi                               | Chạy `npm run check` ở local                                                                                      |
-| Toàn site 404                   | Pages source không phải GitHub Actions                             | Settings → Pages → Source: GitHub Actions, rồi chạy lại `Deploy`                                                  |
-| Footer ghi `Data snapshot`      | `SHOWCASE_TOKEN` hết hạn hoặc thiếu quyền                          | Xem dòng `[github]` trong log build, tạo token mới                                                                |
-| Số liệu cũ                      | Cron không chạy (repo không hoạt động 60 ngày thì GitHub tắt cron) | Bật lại workflow ở tab Actions, chạy tay một lần                                                                  |
-| Lộ thông tin cá nhân            | Nội dung lọt qua leak guard                                        | Revert, chạy lại `Deploy`, thêm chuỗi đó vào denylist, gỡ khỏi Google bằng công cụ Removals                       |
-| Có issue "Site is down"         | Pages lỗi, hoặc bản deploy mới hỏng                                | Xem https://www.githubstatus.com và run `Deploy` gần nhất; khôi phục như trên. Issue tự đóng khi site trả 200 lại |
+| Hiện tượng                      | Nguyên nhân thường gặp                                             | Cách xử lý                                                                                                               |
+| ------------------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| Deploy fail ở bước `Leak guard` | Nội dung chứa chuỗi cấm, hoặc thiếu `LEAK_DENYLIST`                | Đọc `file:dòng` trong log, sửa nội dung; thiếu secret thì đặt lại                                                        |
+| Deploy fail ở `npm run check`   | Sai format, test hoặc type-check lỗi                               | Chạy `npm run check` ở local                                                                                             |
+| Toàn site 404                   | Pages source không phải GitHub Actions                             | Settings → Pages → Source: GitHub Actions, rồi chạy lại `Deploy`                                                         |
+| Footer ghi `Dữ liệu snapshot`   | `SHOWCASE_TOKEN` hết hạn hoặc thiếu quyền                          | Xem dòng `[github]` và cảnh báo `GitHub data` trong log build; tạo token mới                                             |
+| Deploy fail ở `check-data.js`   | Một query GitHub cần quyền ngoài Metadata                          | Sửa query cho chỉ dùng field Metadata đọc được ([ADR 0004](docs/adr/0004-metadata-only-token.md)), không nới quyền token |
+| Số liệu cũ                      | Cron không chạy (repo không hoạt động 60 ngày thì GitHub tắt cron) | Bật lại workflow ở tab Actions, chạy tay một lần                                                                         |
+| Lộ thông tin cá nhân            | Nội dung lọt qua leak guard                                        | Revert, chạy lại `Deploy`, thêm chuỗi đó vào denylist, gỡ khỏi Google bằng công cụ Removals                              |
+| Có issue "Site is down"         | Pages lỗi, hoặc bản deploy mới hỏng                                | Xem https://www.githubstatus.com và run `Deploy` gần nhất; khôi phục như trên. Issue tự đóng khi site trả 200 lại        |
 
 ## Tùy chỉnh và bảo trì
 
