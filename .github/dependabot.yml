@@ -1,6 +1,9 @@
 # Weekly updates, grouped so there is about one PR per ecosystem per week.
 # Patch and minor PRs merge themselves once `check` and `gitleaks` are green (ADR 0010,
-# .github/workflows/dependabot-auto-merge.yml). Major updates get their own PR and wait for a human.
+# .github/workflows/dependabot-auto-merge.yml). Two kinds wait for a human:
+#   - major updates, each in its own PR;
+#   - npm-visual: packages that change how the site looks (generator, fonts, diagrams). CI has no
+#     visual regression (baselines are macOS-only), so run `npm run test:visual` before merging.
 version: 2
 updates:
   - package-ecosystem: npm
@@ -8,8 +11,13 @@ updates:
     schedule:
       interval: weekly
     groups:
+      # First match wins, so these never land in npm-minor-patch.
+      npm-visual:
+        patterns: ['@11ty/*', '@fontsource/*', 'mermaid']
+        update-types: [minor, patch]
       npm-minor-patch:
         update-types: [minor, patch]
+        exclude-patterns: ['@11ty/*', '@fontsource/*', 'mermaid']
     ignore:
       # @types/node follows the Node major pinned in mise.toml / .nvmrc; bump it together with Node.
       - dependency-name: '@types/node'

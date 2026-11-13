@@ -2,7 +2,8 @@ name: Dependabot auto-merge
 
 # Turns on auto-merge (squash) for Dependabot patch and minor PRs. GitHub merges them only after the
 # required checks (`check`, `gitleaks`) pass, so they go through the same gates as any change.
-# Major updates are left for a human (ADR 0010).
+# Left for a human (ADR 0010): major updates, and packages that change how the site looks
+# (Eleventy, fonts, Mermaid), because CI has no visual regression.
 on: pull_request
 
 permissions:
@@ -16,8 +17,18 @@ jobs:
     steps:
       - id: meta
         uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
-      - if: steps.meta.outputs.update-type != 'version-update:semver-major'
-        run: gh pr merge --auto --squash "$PR_URL"
+      - name: Enable auto-merge unless a human must look
         env:
           PR_URL: ${{ github.event.pull_request.html_url }}
           GH_TOKEN: ${{ github.token }}
+          UPDATE_TYPE: ${{ steps.meta.outputs.update-type }}
+          GROUP: ${{ steps.meta.outputs.dependency-group }}
+          NAMES: ${{ steps.meta.outputs.dependency-names }}
+          ACTION: ${{ github.event.action }}
+        run: |
+          if [ "$UPDATE_TYPE" = "version-update:semver-major" ]; then echo "major: waiting for review"; exit 0; fi
+          if [ "$GROUP" = "npm-visual" ] || printf '%s' "$NAMES" | grep -qE '(^|, *)(@11ty/|@fontsource/|mermaid($|,))'; then
+            [ "$ACTION" = "opened" ] && gh pr comment "$PR_URL" --body "Changes how the site looks, so it waits for review: run \`npm run test:visual\` on macOS, then merge (ADR 0010)."
+            exit 0
+          fi
+          gh pr merge --auto --squash "$PR_URL"
