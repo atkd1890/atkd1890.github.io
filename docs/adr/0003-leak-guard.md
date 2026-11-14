@@ -10,7 +10,7 @@ Site được build từ nguồn private và một phần do agent viết. Chỉ
 
 `scripts/leak-guard.js` chạy trên `_site/` đã build và trên các file Markdown mà PR thay đổi. Fail khi gặp:
 
-- **tên repo private**, khớp nguyên từ, lấy từ `SHOWCASE_REPOS` và mọi repo private mà token liệt kê được (ADR 0004);
+- **tên repo private**, khớp nguyên từ, lấy từ `SHOWCASE_REPOS` và mọi repo private mà token liệt kê được (ADR 0004), trừ repo hạ tầng của hệ atkd1890 được phép nhắc tên (`ALLOWED_REPO_NAMES` trong `lib/leak-guard.js`, hiện là repo ops);
 - **mục trong denylist**, không phân biệt hoa thường và dấu, lấy từ secret `LEAK_DENYLIST` (tên, nơi làm việc, khách hàng, email, SĐT, địa chỉ, path local);
 - **EXIF** trong ảnh JPEG, PNG, WebP;
 - **chuỗi canary** cài sẵn. Self-test cài nó vào mỗi lần CI để chứng minh guard vẫn hoạt động;
