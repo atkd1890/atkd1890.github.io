@@ -49,12 +49,14 @@ GitHub đảm nhận mọi vai trò. Repo public nên bản thân repo cũng là
 
 atkd1890.me (hub tổng, repo khác) chỉ link sang đây. Repo này không đụng tới repo hub.
 
+Trong hệ atkd1890, đây là **site pro của skill Coding**. Web thế giới của avatar ATKD (`atkd.world`, repo khác, chưa dựng) dành cho fan; phòng Coding ở đó chỉ hiện card trỏ về case study, tools và bài viết ở đây. Site này giữ địa chỉ `atkd1890.github.io`, không gắn custom domain.
+
 ### Nguyên tắc
 
 Phần lớn công việc nằm trong repo private và không được public. Vì vậy:
 
 1. **Chỉ hiện những gì được khai báo.** Site chỉ hiển thị nội dung có trong `src/_data/showcase.yml`, không tự động liệt kê repo private.
-2. **Dùng codename.** Tên repo private không bao giờ xuất hiện trong HTML hay trong repo. Mỗi dự án có một codename dạng kebab-case.
+2. **Dùng codename.** Tên repo private của dự án không bao giờ xuất hiện trong HTML hay trong repo. Mỗi dự án có một codename dạng kebab-case. Repo hạ tầng của hệ atkd1890 (repo ops) thì được nhắc tên.
 3. **Repo private chỉ đóng góp số liệu.** Chỉ có số liệu tổng hợp, không có code.
 4. **Code chỉ ở hai dạng.** Hoặc là đoạn trích viết lại, hoặc nằm trong repo public (thư viện tách ra, tools, demo mới).
 5. **Dự án công ty/khách hàng chỉ mô tả trừu tượng.** Nêu domain, quy mô, vai trò; không nêu tên.
@@ -106,11 +108,11 @@ Tiếng Việt là mặc định, không có tiền tố URL ([ADR 0006](docs/ad
 - Content-Security-Policy qua `<meta>`: script chỉ từ chính site, script inline duy nhất (chống nháy theme) cho phép bằng hash tính lúc build; style inline được phép vì sơ đồ Mermaid và thanh ngôn ngữ cần.
 - Dữ liệu GitHub qua GraphQL, cache 1 giờ bằng `@11ty/eleventy-fetch` khi có token. Không có token thì luôn dùng snapshot, kể cả khi cache còn dữ liệu thật từ lần `build:live` trước.
 - Kiểm thử: `node:test` cho unit test; Playwright + axe-core cho e2e và accessibility trên Chromium (375px, 1280px), smoke test trên Safari iOS (WebKit) và Firefox; visual regression chạy ở local; Lighthouse ≥ 95 mọi hạng mục; html-validate; kiểm tra link nội bộ và `#anchor`; ngân sách hiệu năng theo từng trang; `tsc --checkJs`; ESLint; Stylelint (cấm màu, font, bo góc không qua token); Prettier (cùng cấu hình với hub); gitleaks quét secret trong commit.
-- Không có file CNAME. Không dùng analytics: CSP chặn mọi script ngoài; đo lường dự kiến qua GitHub traffic API (ROADMAP Phase 10).
+- Không có file CNAME. Không dùng analytics: CSP chặn mọi script ngoài; đo lường qua GitHub traffic API do worker `github-traffic-history` của repo ops thu và giữ lịch sử; site không gọi API này (ROADMAP Phase 10).
 
 ### Hợp đồng nội dung
 
-Site chỉ biết đến hợp đồng này, không biết gì về agent viết bài. Agent nằm ở repo khác (`atkd-stack`).
+Site chỉ biết đến hợp đồng này, không biết gì về agent viết bài. Agent nằm ở repo ops private `atkd.world-ops`.
 
 - Bài viết đặt tại `src/blog/YYYY/YYYY-MM-DD-<slug>.md`, ảnh đặt tại `src/blog/YYYY/<slug>/`.
 - Frontmatter được validate lúc build; sai thì build fail:
@@ -144,6 +146,8 @@ Bài `release` được sinh lúc build từ GitHub Releases của các repo pub
 
 Validate lúc build bằng `lib/showcase-schema.js`. Sai thì build fail kèm tên field.
 
+Thêm hoặc sửa dự án qua PR từ nhánh `showcase/<codename>`, dù người hay worker `showcase-sync` của repo ops mở. Tên nhánh chỉ dùng codename; mapping sang repo thật ghi vào secret `SHOWCASE_REPOS`, không nằm trong PR.
+
 ```yaml
 - codename: signal-desk # kebab-case, không giống tên repo private
   repo: '@secret' # hoặc null. Không bao giờ là tên thật: mapping nằm trong secret SHOWCASE_REPOS
@@ -169,7 +173,7 @@ Validate lúc build bằng `lib/showcase-schema.js`. Sai thì build fail kèm t�
 Bắt buộc. Vi phạm thì build hoặc PR fail. Lý do ở [ADR 0003](docs/adr/0003-leak-guard.md).
 
 - Quét `_site/` và mọi file `.md` thay đổi trong PR, tìm:
-  - tên repo private, khớp nguyên từ (lấy từ `SHOWCASE_REPOS` và từ API, không lưu trong repo);
+  - tên repo private, khớp nguyên từ (lấy từ `SHOWCASE_REPOS` và từ API, không lưu trong repo), trừ repo hạ tầng trong `ALLOWED_REPO_NAMES` của `lib/leak-guard.js`;
   - các mục trong denylist, không phân biệt hoa thường và dấu (secret `LEAK_DENYLIST`);
   - EXIF trong ảnh JPEG, PNG, WebP;
   - chuỗi canary cài sẵn (self-test chạy mỗi lần CI);

@@ -21,7 +21,7 @@ So các model và agent trên cùng một việc có thật: dựng một protot
 - Agent được tự chạy và tự sửa lỗi; giới hạn thời gian và số lượt do chủ dự án chốt (`TODO`).
 - Mỗi model chạy 3 lần, lấy điểm trung vị.
 - Ghi lại: model, phiên bản, ngày chạy, công cụ (CLI, IDE, API), thời gian, chi phí nếu có.
-- Runner nằm ở atkd-stack (Phase 5 của repo đó); repo này chỉ giữ đề bài và hiển thị kết quả.
+- Runner (`benchmark-runner`) nằm ở repo ops private `atkd.world-ops`; repo này chỉ giữ đề bài và hiển thị kết quả.
 
 ## Đề bài
 

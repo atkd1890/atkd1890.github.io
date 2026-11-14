@@ -100,13 +100,14 @@ Tag vai trò, Definition of done của từng vai trò ở CLAUDE.md. Task khôn
 - [ ] `[mkt]` Điều kiện launch: profile GitHub đã sửa, có ít nhất 1 case study, 5 bài blog, 1 tool
 - [ ] `[mkt]` Bài launch: dùng bài deep-dive đã có (`/blog/github-native-portfolio/`), cập nhật số liệu trong bài trước khi đăng
 - [ ] `[mkt]` Kênh: Show HN, Reddit (r/webdev, r/gamedev tùy bài), X, cộng đồng VN/JP, YouTube ATKD Coding
-- [ ] `[mkt]` Đo lường không analytics: GitHub traffic API (views/clones/referrers), stars, ước lượng RSS; tổng hợp tự động vào `log` hằng tuần
+- [ ] `[mkt]` Đo lường không analytics: worker `github-traffic-history` ở repo ops giữ lịch sử traffic (API chỉ giữ 14 ngày: views, clones, referrers), stars, ước lượng RSS, rồi mở PR bài `log` hằng tuần theo hợp đồng nội dung. Site không gọi traffic API; việc ở repo này chỉ là duyệt PR đó
 - [ ] `[mkt]` Profile README `atkd1890/atkd1890` đồng bộ dữ liệu với site
+- [ ] `[mkt]` Khi web thế giới ATKD (`atkd.world`) lên: link sang phòng Coding ở footer và `/colophon`; cung cấp feed bài, case study, tools để phòng Coding hiện card
 - [ ] `[pm]` Retro sau launch: viết thành 1 bài `note` hoặc postmortem
 
 ## Định kỳ
 
 - Khi có issue "SHOWCASE_TOKEN expires…" `[sec]`: tạo token mới theo hướng dẫn trong issue, rồi đóng issue. Issue tự mở 14 ngày trước hạn.
 - Khi đổi việc, có khách hàng mới hoặc đổi thông tin liên lạc `[sec]`: cập nhật denylist, `npm run secrets:push`.
-- Khi thêm dự án vào showcase `[pm]`: thêm vào `showcase.yml` và mapping, `npm run secrets:push`.
+- Khi thêm dự án vào showcase `[pm]`: PR từ nhánh `showcase/<codename>` sửa `showcase.yml`, thêm mapping, `npm run secrets:push`.
 - Khi repo không có commit 60 ngày `[ops]`: GitHub tắt cron, bật lại workflow `Deploy` ở tab Actions.

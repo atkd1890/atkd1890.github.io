@@ -14,6 +14,13 @@ test('repo names match as whole tokens only', () => {
   assert.equal(scanText('a', 'my-widget-kits', rules).length, 0, 'longer identifiers are not hits');
 });
 
+test('allowed infrastructure repos are not hits, project repos still are', () => {
+  const rules = buildRules({ repoNames: ['someone/atkd.world-ops', 'someone/widget-kit'] });
+  assert.equal(scanText('a', 'agent lives in atkd.world-ops', rules).length, 0);
+  assert.equal(scanText('a', 'someone/atkd.world-ops', rules).length, 0);
+  assert.equal(scanText('a', 'uses widget-kit', rules).length, 1);
+});
+
 test('denylist matches case- and diacritic-insensitively', () => {
   const rules = buildRules({ denylist: ['Nguyễn Văn Test', 'secret@example.com'] });
   assert.equal(scanText('a', 'by NGUYEN VAN TEST', rules).length, 1);

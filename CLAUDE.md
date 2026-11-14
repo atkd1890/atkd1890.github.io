@@ -17,13 +17,14 @@ Mức riêng tư là **kín đáo, không phải ẩn danh tuyệt đối** ([AD
 
 - Không ghi tên thật, nơi làm việc cũ hay hiện tại, tên khách hàng, email cá nhân, SĐT, địa chỉ, path máy local vào nội dung site hay file được commit. Liên hệ chỉ dùng `hi@atkd1890.me`.
 - Tác giả và committer của mọi commit dùng email noreply của GitHub. Leak guard kiểm tra cả metadata commit trong PR và trên `main`.
-- Tên repo private không bao giờ xuất hiện trong HTML, feed, JSON, OG image, commit message, PR, docs hay `showcase.yml`. Dùng codename dạng kebab-case, không trùng hay gần giống tên repo. Mapping codename → repo chỉ nằm trong secret `SHOWCASE_REPOS` ([ADR 0002](docs/adr/0002-private-repo-mapping-in-secrets.md)).
+- Tên repo private của dự án (công việc, khách hàng, dự án cá nhân) không bao giờ xuất hiện trong HTML, feed, JSON, OG image, commit message, PR, docs hay `showcase.yml`. Repo hạ tầng của hệ atkd1890 thì được nhắc tên; danh sách nằm ở `ALLOWED_REPO_NAMES` trong `lib/leak-guard.js` để leak guard bỏ qua. Dự án dùng codename dạng kebab-case, không trùng hay gần giống tên repo. Mapping codename → repo chỉ nằm trong secret `SHOWCASE_REPOS` ([ADR 0002](docs/adr/0002-private-repo-mapping-in-secrets.md)).
 - Chỉ hiện những gì `showcase.yml` khai báo. Repo private chỉ đóng góp số liệu, không commit code, dữ liệu hay chữ copy từ repo private.
 - Dự án công ty/khách hàng chỉ mô tả trừu tượng: domain, quy mô, vai trò.
 - THN là org riêng, không nằm trong tài khoản này. Tool hay dự án của THN chỉ đưa vào khi chủ dự án duyệt từng cái.
 - Không bịa link, số liệu, trích dẫn hay chi tiết dự án. Chưa có thì để `TODO`, hoặc dùng demo data có `placeholder: true` và nhãn "demo data" trên site; ghi việc còn thiếu vào ROADMAP.
-- Site không gọi LLM và không chứa secret của agent. Agent viết blog nằm ở repo `atkd-stack`; repo này chỉ định nghĩa hợp đồng nội dung và CI gác cổng.
-- Không đụng tới repo atkd1890.me (hub); hub chỉ link sang đây. Muốn đổi bên đó thì đề xuất cho chủ dự án.
+- Site không gọi LLM và không chứa secret của agent. Agent viết blog nằm ở repo ops private `atkd.world-ops`; repo này chỉ định nghĩa hợp đồng nội dung và CI gác cổng.
+- Site này là site pro của skill Coding trong hệ atkd1890: dành cho dân nghề, không dành cho fan của avatar ATKD. Nội dung cho fan (nhân vật, lore, artwork, Making-of avatar, thử nghiệm chơi được) thuộc web `atkd.world`; không đưa vào đây. Ngược lại, case study, tools, uses, bài kỹ thuật có nhà gốc ở đây, `atkd.world` chỉ hiện card trỏ về.
+- Không đụng tới repo của hub atkd1890.me và của web `atkd.world` (web thế giới ATKD); hai bên chỉ link sang đây. Muốn đổi bên đó thì đề xuất cho chủ dự án.
 
 ## Code
 

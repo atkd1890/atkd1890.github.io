@@ -2,6 +2,10 @@
 
 Thay đổi người xem thấy được trên atkd1890.github.io. Thay đổi nội bộ (test, CI, docs) xem ở git log.
 
+## 2026-11-14 — Sơ đồ ATKD OS
+
+- Sơ đồ ATKD OS ở `/lab` ghi đúng nơi agent sẽ chạy: repo ops private `atkd.world-ops`, cả 3 ngôn ngữ.
+
 ## 2026-11-13 — Case study, colophon và bản lưu theo năm
 
 - Trang case study `/work/<codename>/` theo khung Bối cảnh → Bài học, đủ 3 ngôn ngữ; thẻ dự án trên trang chủ và ⌘K dẫn thẳng tới case study khi có.
